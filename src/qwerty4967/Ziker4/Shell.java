@@ -10,12 +10,13 @@ public class Shell
 	// I've got to say, I'm excited to get started on something new.
 	// Hopefully it won't take months...
 	// Started 4/30/21, for Computer Science II final project.
-	// Hopefully there aren't any requirements in there that will be a challenge... I can shoe-horn some stuff in if need-be.
+	// Hopefully there aren't any requirements in there that will be a challenge... 
+	// I can shoe-horn some stuff in if need-be.
 	
 	
 	// Project Information
 	// 4/30/21 Started
-	// 5/1/21 Shell class probably finished
+	// 5/1/21 Shell class probably finished, aside from errors
 	
 	
 	private static final int build = 17;
