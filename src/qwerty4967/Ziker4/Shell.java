@@ -1,4 +1,3 @@
-
 package qwerty4967.Ziker4;
 
 import java.util.Scanner;
