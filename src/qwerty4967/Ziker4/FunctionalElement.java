@@ -56,10 +56,7 @@ public abstract class FunctionalElement
 		// in this case the element has no container as a parent, and is directly part of the group.
 		int id = group.addChild(this);
 		
-		if( id==-1)
-		{
-			throw new Exception("Could not add FunctionalElement to Group "+group.getName());
-		}
+	
 		
 		this.group=group;
 		this.ID=id;
@@ -84,7 +81,7 @@ public abstract class FunctionalElement
 	
 	public boolean addTo( ElementContainer newParent)
 	{
-		int id=newParent.addChild();
+		int id=newParent.addChild(this);
 		if( id==-1)
 		{
 			return false;
@@ -102,6 +99,7 @@ public abstract class FunctionalElement
 		
 		this.ID=id;
 		this.parent=newParent;
+		return true;
 	}
 	
 	public void remove()

@@ -35,6 +35,12 @@ public class FunctionalGroup implements HasChildren
 		return children.size()-1;
 	}
 	
+	@Override
+	public String toString() {
+		return "FunctionalGroup [allChildren=" + allChildren + ", children=" + children + ", name=" + name
+				+ ", returnType=" + returnType + ", perameters=" + perameters + "]";
+	}
+
 	public void removeChild(FunctionalElement child)
 	{
 		if(child instanceof ElementContainer)

@@ -18,7 +18,7 @@ public class Shell
 	// 5/1/21 Shell class probably finished, aside from errors
 	
 	
-	private static final int build = 17;
+	private static final int build = 23;
 	
 	private static int debugLevel = 1; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=3; // may as well make it public, it's final.
@@ -68,7 +68,7 @@ public class Shell
 			 * ;// Run the code:
 			 * interpreter.interpret(currentProgram);
 			*/
-			
+			Parser.test();
 			
 			out("Pretend something was done with your input, please.");
 			
