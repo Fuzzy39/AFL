@@ -22,7 +22,13 @@ public class StatementData extends DataElement
 	 * @param parent
 	 * @throws Exception
 	 */
-	public StatementData(FunctionalGroup group, ElementContainer parent) throws Exception {super(group, parent);}
+	public StatementData(FunctionalGroup group, ElementContainer parent) throws Exception 
+	{
+		super(group, parent);
+		dataTypes=new ArrayList<Object>();
+		dataTypes.add( Integer.valueOf(0));
+		dataTypes.add( new String());
+	}
 
 
 	

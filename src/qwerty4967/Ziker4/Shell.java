@@ -18,7 +18,7 @@ public class Shell
 	// 5/1/21 Shell class probably finished, aside from errors
 	
 	
-	private static final int build = 23;
+	private static final int build = 26;
 	
 	private static int debugLevel = 1; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=3; // may as well make it public, it's final.
@@ -114,6 +114,13 @@ public class Shell
 		// learning is great!
 		// uh, did I get sidetracked?
 		// whatever, moving on.
+		if(string.length()==0)
+		{
+			//doesn't really matter.
+			out("No Input.","Ziker 4", 3);
+			return true;
+			
+		}
 		
 		out("Line Recieved: \""+string+"\"","Ziker 4",2);
 		

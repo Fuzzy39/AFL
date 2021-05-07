@@ -37,7 +37,7 @@ public class FunctionalGroup implements HasChildren
 	
 	@Override
 	public String toString() {
-		return "FunctionalGroup [allChildren=" + allChildren + ", children=" + children + ", name=" + name
+		return "FunctionalGroup [" + "children=" + children + ", name=" + name
 				+ ", returnType=" + returnType + ", perameters=" + perameters + "]";
 	}
 

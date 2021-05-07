@@ -12,6 +12,10 @@ public abstract class DataElement extends FunctionalElement
 	// of course a file structure doesn't have a sequence to you, so that means nothing.
 	// anyways...
 	
+	// This class define the elements that hold data.
+	// the format of the data is restricted by subclasses.
+	
+	
 	private ArrayList<Object> data = new ArrayList<Object>();
 	protected ArrayList<Object> dataTypes; // the expected types for the data.
 	// Data elements contain data, duh. they do not have children.
@@ -51,6 +55,13 @@ public abstract class DataElement extends FunctionalElement
 	{
 		return data.get(index);
 	}
+
+	@Override
+	public String toString() {
+		return "DataElement [data=" + data + "]";
+	}
+	
+	
 	
 	
 }

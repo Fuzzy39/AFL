@@ -8,7 +8,9 @@ public class Parser
 		FunctionalGroup test = new FunctionalGroup("test");
 		try
 		{
-		StatementData data = new StatementData(test);
+			StatementData data = new StatementData(test);
+			Node node = new Node(test);
+			StatementData data2 = new StatementData(test, node);
 		}
 		catch(Exception e)
 		{
