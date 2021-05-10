@@ -90,8 +90,15 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	}
 
 	@Override
-	public String toString() {
-		return "ElementContainer [children=" + children + "]";
+	public String toString() 
+	{
+		String tree="";
+		for(int i = 0; i<children.size(); i++)
+		{
+			tree+="\n    "+children.get(i);
+		}
+		
+		return "ElementContainer:    " + tree;
 	}
 	
 	

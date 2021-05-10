@@ -30,11 +30,12 @@ public abstract class DataElement extends FunctionalElement
 		super(group);
 	}
 	
-	public boolean setData(ArrayList<Object> data)
+	public boolean setData(ArrayList<Object> data) throws Exception
 	{
 		if(data.size()!=dataTypes.size())
 		{
-			return false;
+			
+			throw new Exception("Data type sizes incorrect");
 		}
 		
 		for(int i = 0; i<data.size(); i++)
@@ -42,7 +43,7 @@ public abstract class DataElement extends FunctionalElement
 			
 			if(data.get(i).getClass() != this.dataTypes.get(i).getClass())
 			{
-				return false;
+				throw new Exception("Data types incorrect, exprected "+this.dataTypes.get(i).getClass()+", got "+data.get(i).getClass());
 			}
 		}
 		

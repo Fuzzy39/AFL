@@ -16,11 +16,11 @@ public class Shell
 	// Project Information
 	// 4/30/21 Started
 	// 5/1/21 Shell class probably finished, aside from errors
+	// 5/7/21 Ready to begin work on pass 1
 	
+	private static final int build = 50;
 	
-	private static final int build = 26;
-	
-	private static int debugLevel = 1; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
+	private static int debugLevel = 3; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=3; // may as well make it public, it's final.
 	
 	private static Scanner sc= new Scanner( System.in ); // Setup the Scanner for gathering user input. 
@@ -57,6 +57,7 @@ public class Shell
 			out("Input Recieved: \""+inputBuffer+"\"","Ziker 4", 1);
 			
 			// Attempt to load the program:
+			Parser.Parse(inputBuffer);
 			//Program currentProgram = Loader.loadwhatever(inputBuffer);
 			
 			// clear the input buffer
@@ -68,7 +69,7 @@ public class Shell
 			 * ;// Run the code:
 			 * interpreter.interpret(currentProgram);
 			*/
-			Parser.test();
+			
 			
 			out("Pretend something was done with your input, please.");
 			
