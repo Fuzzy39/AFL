@@ -81,19 +81,19 @@ public class Parser
 			Shell.out("Begining Tree Construction...","Ziker 4",1);
 			
 			// preliminary pass is fairly simple.
-			Shell.out("Beggining Preliminary Pass (Pass 0)","Ziker 4",3);
+			Shell.out("Begining Preliminary Pass (Pass 0)","Ziker 4",3);
 			ArrayList<String> statements = preliminaryPass(code);
 			Shell.out("Results of pass 0:\n"+statements,"Ziker 4", 1);
 			
 			// control pass.
-			Shell.out("Beggining Control Pass (Pass 1)","Ziker 4",3);
+			Shell.out("Begining Control Pass (Pass 1)","Ziker 4",3);
 			FunctionalGroup program = controlPass(statements);
 			if(program== null)
 			{	
 				Shell.out("Control pass 1 errored out... returning","Ziker 4",2);
 				return;
 			}
-			Shell.out("Results of pass 1:\n"+program,"Ziker 4",1);
+			Shell.out("Results of pass 1:"+program,"Ziker 4",0);
 		}
 		catch(Exception e)
 		{
@@ -160,12 +160,15 @@ public class Parser
 		ElementContainer currentParent = null;
 		//first thing's first however. we loop through the ArrayList.
 		
-		for(int i = 0; i<statements.size(); i++)
+		loop:for(int i = 0; i<statements.size(); i++)
 		{
 			String statement=statements.get(i);
 			
 			// if we find a CONTROL_KEYWORD
 			boolean isControl = false;
+			// what is this for, past self?
+			// is this why it's all horribly broken?
+			// AWNSER MEEEEEE
 			
 			// then we loop through each CONTROL_KEYWORD and look for a match.
 			for(int j = 0; j<Lang.CONTROL_KEYWORDS.length; j++)
@@ -178,7 +181,7 @@ public class Parser
 				
 				// now do the actual checking.
 				
-				if(statement.equalsIgnoreCase(Lang.CONTROL_KEYWORDS[j]))
+				if(statement.substring(0,Lang.CONTROL_KEYWORDS[j].length()).equalsIgnoreCase(Lang.CONTROL_KEYWORDS[j]))
 				{
 					isControl=true;
 					
@@ -187,9 +190,13 @@ public class Parser
 						case "else":
 							// for an else to make any sense it has to go after an if.
 							// this if is completely nonsensical, but if I did it right it checks that the parent is not an if.
-							if(! ((String) ((StatementData)currentParent.getChild(0)).getData(1)).substring(0,2).equalsIgnoreCase("if"))
+							
+								
+							if(		currentParent==null||
+									! ((String) ((StatementData)currentParent.getChild(0)).getData(1)).substring(0,2).equalsIgnoreCase("if")
+							)
 							{
-								Shell.out("Error: No if procedes this else.","Ziker 4",0,i);
+								Shell.out("Error: No 'if' token procedes this else.","Ziker 4",0,i);
 								return null;
 							}
 							// we have determined the else makes sense.
@@ -211,12 +218,12 @@ public class Parser
 							//statement.substring(Lang.CONTROL_KEYWORDS[j].length());
 							
 							ArrayList<Object> data = new ArrayList<Object>();
-							data.add(i); // statement number.
+							data.add(i+1); // statement number.
 							data.add(statement);
 							
 							
 							controlConditional.setData(data);
-							continue;
+							continue loop;
 						
 							
 							
@@ -225,19 +232,20 @@ public class Parser
 							if(currentParent == null)
 							{
 								// this code is rather invalid...
-								Shell.out("Error: Keyword 'end' doesn't match any block declaration.","Ziker 4",0,i);
+								Shell.out("Error: Keyword 'end' doesn't match any block declaration.","Ziker 4",0,i+1);
+								Shell.out("Program's state at time of error:"+program,"Ziker 4", 3);
 								return null;
 							}
 							
 							if(currentParent.getParent()==null)
 							{
 								currentParent=null;
-								continue;
+								continue loop;
 							}
 							
 							currentParent = currentParent.getParent();
 							
-							continue;
+							continue loop;
 							
 						case "function":
 							// oh my
@@ -250,36 +258,46 @@ public class Parser
 					
 				}
 				
-				// code is not control code, just go ahead and add it to the pile.
-				StatementData statementData;
-				
-				if(currentParent!=null)
-				{
-					statementData= new StatementData(program,currentParent);
-				}
-				else
-				{
-					statementData= new StatementData(program);
-				}
-				
-				//statement.substring(Lang.CONTROL_KEYWORDS[j].length());
-				
-				ArrayList<Object> data = new ArrayList<Object>();
-				data.add(i); // statement number.
-				data.add(statement);
-				
-				
-				statementData.setData(data);
 			}
+			
+			// code is not control code, just go ahead and add it to the pile.
+			StatementData statementData;
+			
+			if(currentParent!=null)
+			{
+				statementData= new StatementData(program,currentParent);
+			}
+			else
+			{
+				statementData= new StatementData(program);
+			}
+			
+			//statement.substring(Lang.CONTROL_KEYWORDS[j].length());
+			
+			ArrayList<Object> data = new ArrayList<Object>();
+			data.add(i+1); // statement number.
+			data.add(statement);
+			
+			
+			statementData.setData(data);
+			
 		}
 		
+		if(currentParent!=null)
+		{
+			// somebody forgot ends!
+			Shell.out("Error: Unexpected end of input.","Ziker 4");
+			return null;
+		}
 		return program;
 	}
 	
 	private static Node createNode(FunctionalGroup program, ElementContainer parent)
 	{
+		
 		if( parent==null)
 		{
+			
 			return new Node(program);
 		}
 		

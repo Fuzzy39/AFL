@@ -18,9 +18,9 @@ public class Shell
 	// 5/1/21 Shell class probably finished, aside from errors
 	// 5/7/21 Ready to begin work on pass 1
 	
-	private static final int build = 50;
+	private static final int build = 64;
 	
-	private static int debugLevel = 3; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
+	private static int debugLevel = 0; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=3; // may as well make it public, it's final.
 	
 	private static Scanner sc= new Scanner( System.in ); // Setup the Scanner for gathering user input. 
@@ -58,6 +58,7 @@ public class Shell
 			
 			// Attempt to load the program:
 			Parser.Parse(inputBuffer);
+			//Parser.test();
 			//Program currentProgram = Loader.loadwhatever(inputBuffer);
 			
 			// clear the input buffer
@@ -71,7 +72,7 @@ public class Shell
 			*/
 			
 			
-			out("Pretend something was done with your input, please.");
+			//out("Pretend something was done with your input, please.");
 			
 			
 			// Basically, we need to discover if the input ends in a semicolon, if it does, continue, if not, output 

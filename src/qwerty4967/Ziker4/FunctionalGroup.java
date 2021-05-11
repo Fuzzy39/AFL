@@ -98,7 +98,7 @@ public class FunctionalGroup implements HasChildren
 			
 		}
 		
-		return "FunctionalGroup:\n" 
+		return "\n\nFunctionalGroup:\n" 
 				+ "name: " + name
 				+ "\nperameters:" + perameters 
 				+ "\n\nChildren:" +  tree ;
