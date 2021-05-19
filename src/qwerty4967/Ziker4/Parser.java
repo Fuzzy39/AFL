@@ -90,14 +90,26 @@ public class Parser
 			FunctionalGroup program = controlPass(statements);
 			if(program== null)
 			{	
-				Shell.out("Control pass 1 errored out... returning","Ziker 4",2);
+				Shell.out("Pass 1 errored out... returning","Ziker 4",2);
 				return;
 			}
-			Shell.out("Results of pass 1:"+program,"Ziker 4",0);
+			Shell.out("Results of pass 1:"+program,"Ziker 4",1);
+			
+			// token pass.
+			Shell.out("Begining Token Pass (Pass 2):","Ziker 4",3);
+			program=tokenPass(program);
+			if(program== null)
+			{	
+				Shell.out("Pass 2 errored out... returning","Ziker 4",2);
+				return;
+			}
+			Shell.out("Results of pass 2:"+program,"Ziker 4",1);
+			
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
+			System.exit(1);
 		}
 		
 		
@@ -165,28 +177,29 @@ public class Parser
 			String statement=statements.get(i);
 			
 			// if we find a CONTROL_KEYWORD
-			boolean isControl = false;
-			// what is this for, past self?
-			// is this why it's all horribly broken?
-			// AWNSER MEEEEEE
+		
+		
 			
 			// then we loop through each CONTROL_KEYWORD and look for a match.
 			for(int j = 0; j<Lang.CONTROL_KEYWORDS.length; j++)
 			{
+				String controlWord = Lang.CONTROL_KEYWORDS[j];
+				
 				// make sure the statement is long enough to do that though.
-				if(statement.length()<Lang.CONTROL_KEYWORDS[j].length())
+				if(statement.length()<controlWord.length())
 				{
 					continue;
 				}
 				
 				// now do the actual checking.
 				
-				if(statement.substring(0,Lang.CONTROL_KEYWORDS[j].length()).equalsIgnoreCase(Lang.CONTROL_KEYWORDS[j]))
+				if(statement.substring(0,controlWord.length()).equalsIgnoreCase(controlWord))
 				{
-					isControl=true;
 					
-					switch(Lang.CONTROL_KEYWORDS[j])
+					Shell.out("Detected a(n) "+controlWord,"Pass 1",3);
+					switch(controlWord)
 					{
+						
 						case "else":
 							// for an else to make any sense it has to go after an if.
 							// this if is completely nonsensical, but if I did it right it checks that the parent is not an if.
@@ -196,7 +209,14 @@ public class Parser
 									! ((String) ((StatementData)currentParent.getChild(0)).getData(1)).substring(0,2).equalsIgnoreCase("if")
 							)
 							{
-								Shell.out("Error: No 'if' token procedes this else.","Ziker 4",0,i);
+								Shell.out("Error: No 'if' statement procedes this else.","Ziker 4",0,i);
+								return null;
+							}
+							
+							// Else tokens cannot have anything else after them.
+							if(! statement.equalsIgnoreCase(controlWord))
+							{
+								Shell.out("Error: Unexpected Tokens after 'else'","Ziker 4",0,i);
 								return null;
 							}
 							// we have determined the else makes sense.
@@ -237,6 +257,13 @@ public class Parser
 								return null;
 							}
 							
+							// end can't have other tokens after it, much like else.
+							if(! statement.equalsIgnoreCase(controlWord))
+							{
+								Shell.out("Error: Unexpected Tokens after 'end'","Ziker 4",0,i);
+								return null;
+							}
+							
 							if(currentParent.getParent()==null)
 							{
 								currentParent=null;
@@ -250,7 +277,7 @@ public class Parser
 						case "function":
 							// oh my
 							// what to do here...
-							throw new Exception("NO FUNCTIONS RIGHT NOW YOU IMBECILE");
+							throw new Exception("Function's aren't currently implemented.");
 						default:
 							throw new Exception("Something's broken...");
 						
@@ -314,5 +341,225 @@ public class Parser
 		
 	}
 	
+	private static FunctionalGroup tokenPass(FunctionalGroup program)
+	{
+		// below is a passage not entirely relevant to understandng this method:
+		// --------------------------------------------
+		
+		// So....
+		// how hard could this part possibly be?
+		// (a note to past self: GAAAAAAAAAAAAAAAAAAAAAAAHHHHHH)
+		// Well I'm going to figure maybe twice as hard as pass 1, since this pass will have two parts.
+		
+		// in between the last sentence and this one, I decided to make a third pass, though I might not depending
+		// on how complicated things end up being.
+		
+		// uh... right then.
+		// what will token pass do?
+		// it will take each statementData in the program and turn it into a statement, though in this pass
+		//  the statementData in the satement won't be structured. That's for the final pass.
+		// I should look at Stream tokenizer, probably.
+		
+		// hmm... turns out it isn't very usefull
+		// or it could be but it would probably be easier to just do it myself
+		// I think
+		// the only usefull thing is it's ablity to recognize strings.
+		// in Ziker 2 and 3 that was quite the challenge.
+		// though I don't remember why...
+		// seems simple enough?
+		
+		// okay, okay.
+		// so I've done some thinking.
+		// this shouldn't be any more daunting than controlPass.
+		// which was still a bit daunting, but whatever.
+			
+		// okay, code time.
+		// first thing's first.
+		// building the classes I forgot I needed for this...	
+		// TokenData and Statement, for future reference.
+		
+		// ---------------------------------
+		
+		// this method is responsible for turning a big string into unstructured TokenData.
+		// the TokenData is structured in finalPass.
+		
+		// We need to start by 'looping' ( climbing maybe? it is a tree... ) the program, and
+		// turning each StatementData into a Statement, which will be a separate method.
+		// that sounds like it makes sense.
+		
+		// you know, since this is gonna be used in multiple places, I should make it it's own thing.
+		// needs to be an independent class...
+		
+		// done!
+		
+		// it *probably* works.
+		System.out.println("\nTesting TreeClimber:");
+		TreeClimber climber = new TreeClimber(program, true);
+		while(true)
+		{
+			System.out.println("\nCALLING:");
+			FunctionalElement temp = climber.nextData();
+			System.out.println("* "+temp);
+			if(temp==null)
+			{
+				break;
+			}
+			
+		}
+		return null;
+		
+		// okay, let's talk specifics now.
+		// once we've gotten the line we need to look at, we will go character by character.
+		
+		
+	}
 	
+	private static Statement parseLine( String data, int lineNumber, FunctionalGroup program, ElementContainer parent)
+	{
+		// first of all, create the statement.
+		Statement statement;
+		if(parent==null)
+		{
+			statement = new Statement(lineNumber,program);
+		}
+		else // what a surprise...
+		{
+			try 
+			{
+				statement = new Statement(lineNumber,program,parent);
+			} 
+			catch (Exception e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null; // meh. lazy
+			}
+			
+		}
+		
+		// now do the hard part....
+		// so... how?
+		StatementData[] tokens = findTokens(data);
+		for(int i=0; i<tokens.length; i++)
+		{
+			statement.addChild(tokens[i]);
+		}
+		
+		return statement;
+	}
+	
+	private static  StatementData[] findTokens(String data) throws Exception
+	{
+		// what does this need to do?
+		// actually do the hard part, find the tokens.
+		// how will it do that, you ask?
+		// Character by character.
+		// that kinda sounds like a joke, but no
+		// okay as I write this my eyelid is twitching and it's very hard to think
+		//I have a plan though
+		// it's been brewing all of today
+		//we have an string that contains the current token
+		// and a thing which includes it's type.
+		// or, more specifically, 'prototype'
+		// because keywords, functions, variables and booleans look pretty similar - they're just words, after all.
+		// numbers and operators are different though.
+		// so at first it will be one of three types.
+		
+		// though operators and the 'word tokens' will be properly classified in another method.
+		// so, without (much) further ado
+		// let's begin.
+		
+		String currentToken = "";
+		int type = -1;
+		for( int i = 0; i<data.length(); i++)
+		{
+			
+			
+			
+			
+			// take this character to take a good look at it.
+			char identifier = data.charAt(0);
+			data=data.substring(0);
+			
+			// we need to find identifiers for everthing, then see if they match.
+			
+			if(Character.isWhitespace(identifier))
+			{
+				//
+				
+			}
+			
+			if(identifier=='"')
+			{
+				// we have found a string
+				type=Lang.tokenTypes.string.ordinal();
+				continue;
+			}
+			
+			if(identifier=='\'')
+			{
+				// ah, a character
+				type=Lang.tokenTypes.character.ordinal();
+				continue;
+			}
+			
+			if(isNumber(identifier) )
+			{
+				// a number
+				type=Lang.tokenTypes.number.ordinal();
+				continue;
+			}
+			
+			if(isLetter(identifier) )
+			{
+				// could be anything
+				type=Lang.tokenTypes.prototext.ordinal();
+				continue;
+			}
+			
+			// if it's not a number or a letter, it's probably a symbol
+			// we don't check if things are valid at this point.
+			type=Lang.tokenTypes.operator.ordinal();
+			continue;
+			
+			// not really like this.
+			switch(type)
+			{
+				// the type that the data is changes how we respond to things.
+				case -1:
+					// we are unsure of the type.
+					if(currentToken.length()>=1)
+					{
+						throw new Exception("Something went wrong trying to classify a token.");
+					}
+					
+					alcohol abuse – the excessive use of alcohol		if(currentToken.equals(currentToken.strip()))
+					{
+						// empty token.
+						currentToken="";
+						continue;
+					}
+					
+					// now we are sure that whatever remains is an identifiable type.
+					
+					
+					
+				
+					
+			}
+		}
+		
+		
+	}
+	
+	private static boolean isLetter(char c)
+	{
+		 return (c >= 'a' && c <= 'z') ||
+		           (c >= 'A' && c <= 'Z');
+	}
+	
+	private static boolean isNumber(char c)
+	{
+		 return (c >= '0' && c <= '9') || c=='.';
+	}
 }

@@ -50,7 +50,7 @@ public class FunctionalGroup implements HasChildren
 		// the higher the index the deeper in the tree you are.
 		ArrayList<Integer> lengths =new ArrayList<Integer>();
 		// fill the list with dummy values.
-		for(int i = 0; i<1000; i++)
+		for(int i = 0; i<Lang.MAXIMUM_DEPTH; i++)
 		{
 			lengths.add(0);
 		}

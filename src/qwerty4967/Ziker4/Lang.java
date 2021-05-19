@@ -9,15 +9,21 @@ public class Lang
 	
 	public static final String[] CONTROL_KEYWORDS= {"if","while","else","function","end"};
 	
-	// I don't know how to feel about this one...
-	// TODO figure this out
-	public enum Type 
+	public static final int MAXIMUM_DEPTH =10000; //  wanted the int limit, but that gave me errors...
+	
+	public enum tokenTypes
 	{
-		none,
+		variable,
+		function,
+		keyword,
 		number,
-		bool,
+		string,
 		character,
-		type,
-		array
+		bool,
+		operator,
+		prototext // this is a dangerous one - only used while parsing, it should never be encountered in runtime.
 	}
+	
+	public static final String[] OPERATORS = 
+		{"==","!=",">=","<=",">","<","=","+","-","*","/","%","[","]","(",")","," };
 }

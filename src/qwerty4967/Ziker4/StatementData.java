@@ -6,7 +6,7 @@ public class StatementData extends DataElement
 {
 	// yeah, pretty boring.
 	// A statementData contains a string and an int.
-	// Explained in the statementDataData enum
+	
 	
 	
 	public StatementData(FunctionalGroup group) throws Exception 

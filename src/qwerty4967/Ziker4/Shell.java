@@ -17,10 +17,12 @@ public class Shell
 	// 4/30/21 Started
 	// 5/1/21 Shell class probably finished, aside from errors
 	// 5/7/21 Ready to begin work on pass 1
+	// 5/11/21 Pass 1 done, with the exception of functions
+	// 
 	
-	private static final int build = 64;
+	private static final int build = 100;
 	
-	private static int debugLevel = 0; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
+	private static int debugLevel = 3; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=3; // may as well make it public, it's final.
 	
 	private static Scanner sc= new Scanner( System.in ); // Setup the Scanner for gathering user input. 
@@ -31,7 +33,7 @@ public class Shell
 	{
 		
 		  
-		// TODO Auto-generated method stub
+		// TODO Auto-g	enerated method stub
 		// What to put here?
 		// let's worry about that later...
 		out("Ziker Interpreter Test 4 'ZIT' | build "+build);
