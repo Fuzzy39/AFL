@@ -31,6 +31,7 @@ public abstract class FunctionalElement
 	
 	public FunctionalElement( FunctionalGroup group, ElementContainer parent) throws Exception
 	{
+		
 		if( !group.add(this))
 		{
 			throw new Exception("Could not add FunctionalElement to Group "+group.getName());

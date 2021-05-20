@@ -11,7 +11,7 @@ public class Lang
 	
 	public static final int MAXIMUM_DEPTH =10000; //  wanted the int limit, but that gave me errors...
 	
-	public enum tokenTypes
+	public static enum tokenTypes
 	{
 		variable,
 		function,

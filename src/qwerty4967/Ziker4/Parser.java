@@ -448,7 +448,7 @@ public class Parser
 		return statement;
 	}
 	
-	private static  StatementData[] findTokens(String data) throws Exception
+	private static  StatementData[] findTokens(String data ,FunctionalGroup program, ElementContainer parent) throws Exception
 	{
 		// what does this need to do?
 		// actually do the hard part, find the tokens.
@@ -468,6 +468,7 @@ public class Parser
 		// though operators and the 'word tokens' will be properly classified in another method.
 		// so, without (much) further ado
 		// let's begin.
+		ArrayList<StatementData> tokens = new ArrayList<StatementData>();
 		
 		String currentToken = "";
 		int type = -1;
@@ -480,73 +481,101 @@ public class Parser
 			// take this character to take a good look at it.
 			char identifier = data.charAt(0);
 			data=data.substring(0);
+			int characterType=-1;		
 			
 			// we need to find identifiers for everthing, then see if they match.
-			
 			if(Character.isWhitespace(identifier))
 			{
-				//
+				if(type!=Lang.tokenTypes.string.ordinal()&type!=Lang.tokenTypes.character.ordinal()&type!=-1)
+				{
+					// it's time for a new token.
+					StatementData token;
+					if(parent==null)
+					{
+						token = new StatementData(program);
+					}
+					else
+					{
+						token = new StatementData(program, parent);
+					}
+					
+					ArrayList<Object> dataData = new ArrayList<Object>();
+					dataData.add(type);
+					dataData.add(currentToken);
+					token.setData(dataData);
+					type=-1;
+					currentToken="";
+					tokens.add(token);
+					continue;
+				}
+				
+				if(type==-1)
+				{
+					// we don't want to do anything with a random piece of whitespace.
+					continue;
+				}
 				
 			}
-			
-			if(identifier=='"')
+			else if(identifier=='"')
 			{
 				// we have found a string
-				type=Lang.tokenTypes.string.ordinal();
-				continue;
+				characterType=Lang.tokenTypes.string.ordinal();
+				
 			}
 			
-			if(identifier=='\'')
+			else if(identifier=='\'')
 			{
 				// ah, a character
-				type=Lang.tokenTypes.character.ordinal();
-				continue;
+				characterType=Lang.tokenTypes.character.ordinal();
+				
 			}
 			
-			if(isNumber(identifier) )
+			else if(isNumber(identifier) )
 			{
 				// a number
-				type=Lang.tokenTypes.number.ordinal();
-				continue;
+				characterType=Lang.tokenTypes.number.ordinal();
+				
 			}
 			
-			if(isLetter(identifier) )
+			else if(isLetter(identifier) )
 			{
 				// could be anything
-				type=Lang.tokenTypes.prototext.ordinal();
-				continue;
+				characterType=Lang.tokenTypes.prototext.ordinal();
+				
+			}
+			else
+			{
+				// if it's not a number or a letter, it's probably a symbol
+				// we don't check if things are valid at this point.
+				characterType=Lang.tokenTypes.operator.ordinal();
 			}
 			
-			// if it's not a number or a letter, it's probably a symbol
-			// we don't check if things are valid at this point.
-			type=Lang.tokenTypes.operator.ordinal();
-			continue;
 			
-			// not really like this.
+			// now that we've figured out the type of the character, we must do a bespoke response.
 			switch(type)
 			{
-				// the type that the data is changes how we respond to things.
 				case -1:
-					// we are unsure of the type.
-					if(currentToken.length()>=1)
+					type = characterType;
+					continue;
+				case 4: // character ( I would use the enum directly, but apparently I have to jump through hoops for that, so I'm picking the lazy route, this thing is due soon)
+				case 5: // string
+					// we ignore everything except itself.
+					if(characterType == type)
 					{
-						throw new Exception("Something went wrong trying to classify a token.");
+						//createToken();
 					}
-					
-					alcohol abuse – the excessive use of alcohol		if(currentToken.equals(currentToken.strip()))
+					continue;
+				// otherwise, anything will disturb things.
+				default case:
+					if(characterType != type)
 					{
-						// empty token.
-						currentToken="";
-						continue;
+						//createToken();
 					}
-					
-					// now we are sure that whatever remains is an identifiable type.
-					
-					
-					
+					continue;
 				
-					
 			}
+			
+		
 		}
 		
 		
