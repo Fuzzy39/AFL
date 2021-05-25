@@ -28,7 +28,15 @@ public abstract class FunctionalElement
 	
 	// now that I think about it I wonder if java already has a tree thing like I'm making?
 	// meh, probably not, mine is kind of weird.
-	
+	/**
+	 * this throws an exception.
+	 * it is the cauase of many problems
+	 * it is impossible for this to actually cause an exception
+	 * but yet it throws it.
+	 * @param group
+	 * @param parent
+	 * @throws Exception
+	 */
 	public FunctionalElement( FunctionalGroup group, ElementContainer parent) throws Exception
 	{
 		
@@ -52,6 +60,10 @@ public abstract class FunctionalElement
 		
 	}
 	
+	/**
+	 * 
+	 * @param group
+	 */
 	public FunctionalElement( FunctionalGroup group)
 	{
 		// in this case the element has no container as a parent, and is directly part of the group.
@@ -65,21 +77,51 @@ public abstract class FunctionalElement
 		
 	}
 	
+	/**
+	 * clones
+	 * @param from
+	 */
+	public FunctionalElement(FunctionalElement from)
+	{
+
+		this.group=from.group;
+		this.ID=from.ID;
+		this.parent=from.parent;
+		
+	}
+	
+	/** 
+	 * get the id
+	 * @return
+	 */
 	public int getID()
 	{
 		return ID;
 	}
 	
+	/**
+	 * do the thing
+	 * @return
+	 */
 	public ElementContainer getParent()
 	{
 		return parent;
 	}
 	
+	/**
+	 * this is really standard
+	 * @return
+	 */
 	public FunctionalGroup getGroup()
 	{
 		return group;
 	}
 	
+	/**
+	 * add to a new parent.
+	 * @param newParent
+	 * @return
+	 */
 	public boolean addTo( ElementContainer newParent)
 	{
 		int id=newParent.addChild(this);
@@ -103,6 +145,9 @@ public abstract class FunctionalElement
 		return true;
 	}
 	
+	/**
+	 * remove from parent, delete the object more or less
+	 */
 	public void remove()
 	{
 		// delete the object, basically.
@@ -117,8 +162,52 @@ public abstract class FunctionalElement
 		this.group=null;
 		
 	}
+
+	@Override
+	/**
+	 * standard
+	 */
+	public String toString() {
+		return "FunctionalElement [group=" + group + ", parent=" + parent + ", ID=" + ID + "]";
+	}
+
+
+
+	@Override
+	/**
+	 * standard.
+	 */
+	// according to eclipse, this may not work properly. I don't need the method anyways, so I can't be bothered to figure out why.
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FunctionalElement other = (FunctionalElement) obj;
+		if (ID != other.ID)
+			return false;
+		if (group == null) {
+			if (other.group != null)
+				return false;
+		} else if (!group.equals(other.group))
+			return false;
+		if (parent == null) {
+			if (other.parent != null)
+				return false;
+		} else if (!parent.equals(other.parent))
+			return false;
+		return true;
+	}
 	
-	
+	/**
+	 * @return
+	 */
+	public FunctionalElement copy()
+	{
+		return this; // it's abstract. this is the best I can do, I think. No plans to use it anyway.
+	}
 	
 	
 }

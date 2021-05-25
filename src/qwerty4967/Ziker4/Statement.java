@@ -26,20 +26,38 @@ public class Statement extends ElementContainer
 	
 	private int statementNumber;
 	
+	/**
+	 * 
+	 * @param num
+	 * @param group
+	 */
 	public Statement( int num, FunctionalGroup group)
 	{
 		super(group);
 		statementNumber=num;
 	}
 	
+	/**
+	 * 
+	 * @param num
+	 * @param group
+	 * @param parent
+	 * @throws Exception
+	 */
 	public Statement(int num, FunctionalGroup group, ElementContainer parent) throws Exception
 	{
 		super(group, parent);
 		statementNumber=num;
 	}
 	
+	/**
+	 * 
+	 * @return statementNumber
+	 */
 	public int getStatementNumber()
 	{
 		return statementNumber;
 	}
+	
+	
 }

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 public class Parser 
 {
+	/**
+	 * For one reason or another, I haven't deleted this method
+	 * I may as well right now...
+	 * I don't know, it's kinda fun to keep it semi-hidden.
+	 * of course it's the first one in the code, right at the top.
+	 */
 	public static void test() 
 	{
 		// I would be surprised if you are reading this comment, because it means that this method wasn't
@@ -50,6 +56,12 @@ public class Parser
 	}
 	
 	
+	/**
+	 * this thing does a lot. It turns a string containing a program into something that ziker can interpret.
+	 * that's the goal, at least.
+	 * 
+	 * @param code the code to be parsed
+	 */
 	public static void Parse( String code)
 	{
 		// okay.
@@ -63,7 +75,7 @@ public class Parser
 		
 		// all kidding aside, I do have a loose plan here.
 		
-		// there will be 3 'passes' on the code
+		// there will be 3 'passes' on the code ( later: this is dated, expect 5)
 		
 		// in the preliminary pass, the one string will be broken into segments (statements).
 		// in the control pass, the statements will be organized into a tree based on basic control structures (ifs, loops, etc.)
@@ -93,17 +105,17 @@ public class Parser
 				Shell.out("Pass 1 errored out... returning","Ziker 4",2);
 				return;
 			}
-			Shell.out("Results of pass 1:"+program,"Ziker 4",1);
+			Shell.out("Results of pass 1:"+program+"\n","Ziker 4",1);
 			
 			// token pass.
-			Shell.out("Begining Token Pass (Pass 2):","Ziker 4",3);
+			Shell.out("Begining Token Pass (Pass 2):\n","Ziker 4",3);
 			program=tokenPass(program);
 			if(program== null)
 			{	
 				Shell.out("Pass 2 errored out... returning","Ziker 4",2);
 				return;
 			}
-			Shell.out("Results of pass 2:"+program,"Ziker 4",1);
+			Shell.out("Results of pass 2:"+program+"\n","Ziker 4");
 			
 		}
 		catch(Exception e)
@@ -118,6 +130,11 @@ public class Parser
 		
 	}
 	
+	/**
+	 * does some basic work on the code, just splits by ;
+	 * @param code the code to be parsed
+	 * @return an array of statements
+	 */
 	private static ArrayList<String> preliminaryPass(String code)
 	{
 		// okay, how hard can this be?
@@ -157,6 +174,14 @@ public class Parser
 		
 	}
 	
+	/**
+	 * The second pass.
+	 * Detects if, else, while and end, and begins the construction of the program.
+	 * Also can give errors on occasion, if these are improperly formatted
+	 * @param statements a sequence of programs
+	 * @return the begining of a program.
+	 * @throws Exception if something goes wrong. shouldn't happen.
+	 */
 	private static FunctionalGroup controlPass(ArrayList<String> statements) throws Exception
 	{
 		// pfft... okay, I've been thinking about this for a while.
@@ -341,7 +366,17 @@ public class Parser
 		
 	}
 	
-	private static FunctionalGroup tokenPass(FunctionalGroup program)
+
+	/**
+	 * third pass.
+	 * attempts to identify tokens in the baby program
+	 * tokens that cannot be identified are identified in the fourth pass, the validation pass
+	 * no validation is done for this one though.
+	 * @param program
+	 * @return
+	 * @throws Exception
+	 */
+	private static FunctionalGroup tokenPass(FunctionalGroup program) throws Exception
 	{
 		// below is a passage not entirely relevant to understandng this method:
 		// --------------------------------------------
@@ -393,20 +428,26 @@ public class Parser
 		// done!
 		
 		// it *probably* works.
-		System.out.println("\nTesting TreeClimber:");
-		TreeClimber climber = new TreeClimber(program, true);
+	
+		TreeClimber climber = new TreeClimber(program, false);
 		while(true)
 		{
-			System.out.println("\nCALLING:");
-			FunctionalElement temp = climber.nextData();
-			System.out.println("* "+temp);
-			if(temp==null)
+			
+			DataElement data = climber.nextData();
+			if(data==null)
 			{
 				break;
 			}
+			 
+			
+			Shell.out("Processing statement "+data.getData(0)+":\n", "Pass 2", 2);
+			Shell.out("data: \""+ data.getData(1)+"\" parent: "+data.getParent(),"Pass 2", 3);
+			parseLine((String)data.getData(1), (int)data.getData(0), program, data.getParent());
+			data.remove();
+			
 			
 		}
-		return null;
+		return program;
 		
 		// okay, let's talk specifics now.
 		// once we've gotten the line we need to look at, we will go character by character.
@@ -414,7 +455,20 @@ public class Parser
 		
 	}
 	
-	private static Statement parseLine( String data, int lineNumber, FunctionalGroup program, ElementContainer parent)
+	/**
+	 * uh, what does this do?
+	 * I wrote this a week ago, I have no clue.
+	 * It takes a statementdata and turns it into a statement.
+	 * It helps with tokenPass
+	 * 
+	 * @param data
+	 * @param lineNumber
+	 * @param program the program
+	 * @param parent the parent of the statement. if the statement is in root, this is null.
+	 * @return a statement, naturally.
+	 * @throws Exception if something goes wrong. shouldn't happen.
+	 */
+	private static Statement parseLine( String data, int lineNumber, FunctionalGroup program, ElementContainer parent) throws Exception
 	{
 		// first of all, create the statement.
 		Statement statement;
@@ -430,7 +484,7 @@ public class Parser
 			} 
 			catch (Exception e) 
 			{
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 				return null; // meh. lazy
 			}
@@ -439,16 +493,24 @@ public class Parser
 		
 		// now do the hard part....
 		// so... how?
-		StatementData[] tokens = findTokens(data);
-		for(int i=0; i<tokens.length; i++)
-		{
-			statement.addChild(tokens[i]);
-		}
+		// with one line, of course.
+		findTokens(data, program, statement);
+		
 		
 		return statement;
 	}
 	
-	private static  StatementData[] findTokens(String data ,FunctionalGroup program, ElementContainer parent) throws Exception
+	/**
+	 * This takes the statement's data and turns it into tokens, without validation or anything nice
+	 * it gives a very rough picture, basically speaking.
+	 * 
+	 * @param data
+	 * @param program
+	 * @param parent
+	 * @return
+	 * @throws Exception
+	 */
+	private static  ArrayList<TokenData> findTokens(String data ,FunctionalGroup program, ElementContainer parent) throws Exception
 	{
 		// what does this need to do?
 		// actually do the hard part, find the tokens.
@@ -468,11 +530,12 @@ public class Parser
 		// though operators and the 'word tokens' will be properly classified in another method.
 		// so, without (much) further ado
 		// let's begin.
-		ArrayList<StatementData> tokens = new ArrayList<StatementData>();
+		
+		ArrayList<TokenData> tokens = new ArrayList<TokenData>();
 		
 		String currentToken = "";
 		int type = -1;
-		for( int i = 0; i<data.length(); i++)
+		while(data.length()>0)
 		{
 			
 			
@@ -480,32 +543,18 @@ public class Parser
 			
 			// take this character to take a good look at it.
 			char identifier = data.charAt(0);
-			data=data.substring(0);
+			data=data.substring(1);
 			int characterType=-1;		
-			
+		
 			// we need to find identifiers for everthing, then see if they match.
 			if(Character.isWhitespace(identifier))
 			{
 				if(type!=Lang.tokenTypes.string.ordinal()&type!=Lang.tokenTypes.character.ordinal()&type!=-1)
 				{
 					// it's time for a new token.
-					StatementData token;
-					if(parent==null)
-					{
-						token = new StatementData(program);
-					}
-					else
-					{
-						token = new StatementData(program, parent);
-					}
-					
-					ArrayList<Object> dataData = new ArrayList<Object>();
-					dataData.add(type);
-					dataData.add(currentToken);
-					token.setData(dataData);
-					type=-1;
+					tokens.add(createToken(currentToken, type, program, parent));
 					currentToken="";
-					tokens.add(token);
+					type = -1;
 					continue;
 				}
 				
@@ -554,39 +603,105 @@ public class Parser
 			// now that we've figured out the type of the character, we must do a bespoke response.
 			switch(type)
 			{
+			
 				case -1:
 					type = characterType;
+					currentToken="";
+					if(characterType!=Lang.tokenTypes.string.ordinal()
+					& characterType!=Lang.tokenTypes.character.ordinal())
+					{
+						currentToken+=identifier; // seems hacky.
+					}
 					continue;
 				case 4: // character ( I would use the enum directly, but apparently I have to jump through hoops for that, so I'm picking the lazy route, this thing is due soon)
 				case 5: // string
 					// we ignore everything except itself.
 					if(characterType == type)
 					{
-						//createToken();
+						tokens.add(createToken(currentToken,type,program, parent));
+						currentToken=""; 
+						type = -1;
+						continue;
 					}
+					currentToken+=identifier; // add the token to the thing.
 					continue;
-				// otherwise, anything will disturb things.
-				default case:
+				// otherwise, anything will disturb things. (Later: what did this comment mean?)
+				default:	
 					if(characterType != type)
 					{
-						//createToken();
+						tokens.add(createToken(currentToken,type,program, parent));
+						currentToken="";
+						if(characterType!=Lang.tokenTypes.string.ordinal()
+						& characterType!=Lang.tokenTypes.character.ordinal())
+						{
+							currentToken+=identifier; // seems hacky.
+						}
+						type = characterType;
+						continue;
 					}
+					currentToken+=identifier; // add the token to the thing.
 					continue;
 				
 			}
 			
 		
 		}
+		// add the dregs
+		//System.out.println(currentToken);
+		if(currentToken!="")
+		{
+			tokens.add(createToken(currentToken, type, program, parent));
+		}
+		return tokens;
 		
+	}
+	/**
+	 * this just does the busywork involved in making a token.
+	 * just a whole lot easier.
+	 * @param tokenText
+	 * @param type
+	 * @param program
+	 * @param parent
+	 * @return
+	 * @throws Exception
+	 */
+	private static TokenData createToken(String tokenText, int type, FunctionalGroup program, ElementContainer parent) throws Exception
+	{
+		Shell.out("Creating token with data: \""+tokenText+"\"", "Pass 2", 3);
+		TokenData token;
+		assert parent!=null;
+		
+			
+		
+		
+		token = new TokenData(program, parent);
+		
+		
+		ArrayList<Object> dataData = new ArrayList<Object>();
+		dataData.add(tokenText);
+		dataData.add(type);
+		token.setData(dataData);
+		return token;
 		
 	}
 	
+	/**
+	 * checks whether a character is a letter from a-z to A-Z
+	 * 
+	 * @param c
+	 * @return
+	 */
 	private static boolean isLetter(char c)
 	{
 		 return (c >= 'a' && c <= 'z') ||
 		           (c >= 'A' && c <= 'Z');
 	}
 	
+	/**
+	 * checks whether a character is part of a number, 0-9 and .
+	 * @param c
+	 * @return
+	 */
 	private static boolean isNumber(char c)
 	{
 		 return (c >= '0' && c <= '9') || c=='.';

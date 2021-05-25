@@ -8,14 +8,18 @@ public class StatementData extends DataElement
 	// A statementData contains a string and an int.
 	
 	
-	
+	/**
+	 * 
+	 * @param group
+	 * @throws Exception
+	 */
 	public StatementData(FunctionalGroup group) throws Exception 
 	{
 		
 		super(group);
 		dataTypes=new ArrayList<Object>();
-		dataTypes.add( Integer.valueOf(0));
-		dataTypes.add( new String());
+		dataTypes.add( Integer.valueOf(0)); // statement number
+		dataTypes.add( new String()); // statement
 	}
 	/**
 	 * @param group
@@ -29,6 +33,15 @@ public class StatementData extends DataElement
 		dataTypes.add( Integer.valueOf(0));
 		dataTypes.add( new String());
 	}
+	
+	/**
+	 * standard toString
+	 */
+	@Override
+	public String toString() {
+		return "StatementData [data=" + data + "]";
+	}
+	
 
 
 	

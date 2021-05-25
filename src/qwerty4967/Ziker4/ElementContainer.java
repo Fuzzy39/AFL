@@ -12,11 +12,21 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	// wow.
 	private ArrayList<FunctionalElement> children=new ArrayList<FunctionalElement>();
 	
+	/**
+	 * 
+	 * @param group
+	 */
 	public ElementContainer( FunctionalGroup group)
 	{
 		super(group);
 	}
 	
+	/**
+	 * 
+	 * @param group
+	 * @param parent
+	 * @throws Exception
+	 */
 	public ElementContainer (FunctionalGroup group, ElementContainer parent) throws Exception
 	{
 		
@@ -25,7 +35,10 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 
 	}
 	
-
+	/**
+	 * adds a child to the element.
+	 * returns the id of the child.
+	 */
 	public int addChild( FunctionalElement child)
 	{
 		// this never fails, I proclaimed proudly without any testing.
@@ -36,7 +49,9 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	}
 	
 	
-
+	/**
+	 * removes a child 
+	 */
 	public void removeChild(FunctionalElement child)
 	{
 		if(child instanceof ElementContainer)
@@ -50,7 +65,9 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 		
 	}
 	
-	
+	/**
+	 * why isn't the javadoc working?
+	 */
 	public void removeChild(int ID)
 	{
 		
@@ -63,6 +80,10 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	}
 	
 	// returns -1 on failure.
+	/**
+	 * gets id of child
+	 * returns -1 on failure.
+	 */
 	public int getChildID(FunctionalElement child)
 	{
 		
@@ -77,12 +98,17 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 		return -1;
 	}
 	
-	
+	/** 
+	 * gets size
+	 */
 	public int getSize()
 	{
 		return children.size();
 	}
 	
+	/**
+	 * removes all children
+	 */
 	public void removeAllChildren()
 	{
 		
@@ -90,6 +116,9 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	}
 
 	@Override
+	/**
+	 * toString, pretty standard, ish.
+	 */
 	public String toString() 
 	{
 		String tree="";

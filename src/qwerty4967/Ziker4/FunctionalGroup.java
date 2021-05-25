@@ -11,6 +11,10 @@ public class FunctionalGroup implements HasChildren
 	private final String name;
 	private final int perameters; // how many perameters the functionalGroup has.
 	// TODO figure out how perameters work better.
+	/**
+	 * 
+	 * @param name
+	 */
 	public FunctionalGroup(String name)
 	{
 		this(name, 0);
@@ -22,7 +26,21 @@ public class FunctionalGroup implements HasChildren
 		this.perameters=perameters;
 	}
 	
-
+	/**
+	 * clone
+	 * @param group
+	 */
+	public FunctionalGroup( FunctionalGroup group)
+	{
+		this.perameters = group.perameters;
+		this.name=group.name;
+		this.allChildren=group.allChildren;
+		this.children=group.children;
+		
+	}
+	/**
+	 * adds a child to the group. returns ID.
+	 */
 	public int addChild( FunctionalElement child)
 	{
 		// this never fails, I proclaimed proudly without any testing.
@@ -34,6 +52,9 @@ public class FunctionalGroup implements HasChildren
 	}
 	
 	@Override
+	/**
+	 * A chonky method.
+	 */
 	public String toString() 
 	{
 		// this is slightly long and convoluted, so bare with me.
@@ -76,7 +97,7 @@ public class FunctionalGroup implements HasChildren
 			{
 				depth++; 
 				lengths.set(depth,((ElementContainer)allChildren.get(i)).getSize());
-				tree+="    ElementContainer:";
+				tree+="    "+((allChildren.get(i) instanceof Node)?"Node:":"Statement:");
 				continue;
 			}
 			
@@ -108,6 +129,9 @@ public class FunctionalGroup implements HasChildren
 	
 
 	@Override
+	/**
+	 * again, fairly standard.
+	 */
 	public boolean equals(Object obj) 
 	{
 		// I didn't write this, thanks eclipse!
@@ -137,7 +161,10 @@ public class FunctionalGroup implements HasChildren
 			return false;
 		return true;
 	}
-
+	
+	/**
+	 * removes a specific child.
+	 */
 	public void removeChild(FunctionalElement child)
 	{
 		if(child instanceof ElementContainer)
@@ -152,6 +179,10 @@ public class FunctionalGroup implements HasChildren
 		
 	}
 	
+	/**
+	 * helps with removing children, I think?
+	 * @param container
+	 */
 	// because they aren't going to remove themselves, though they do add themselves.
 	private void removeChildrenOfChild(ElementContainer container)
 	{
@@ -165,19 +196,29 @@ public class FunctionalGroup implements HasChildren
 			allChildren.remove(container.getChild(i));	
 		}
 	}
-	
+	/**
+	 * yeah, same stuff
+	 */
 	public void removeChild(int ID)
 	{
 		
 		removeChild(children.get(ID));
 	}
 	
+	/**
+	 * I have a hunch that this javadoc isn't working quite right, but
+	 * meh.
+	 * gets a child from its id.
+	 */
 	public FunctionalElement getChild(int ID)
 	{
 		return children.get(ID);
 	}
 	
 	// returns -1 on failure.
+	/**
+	 * same thing, but with an object.
+	 */
 	public int getChildID(FunctionalElement child)
 	{
 		
@@ -192,18 +233,28 @@ public class FunctionalGroup implements HasChildren
 		return -1;
 	}
 	
-	
+	/**
+	 * gets the size of the group
+	 */
 	public int getSize()
 	{
 		return children.size();
 	}
 	
+	/**
+	 * removes all children from the group
+	 */
 	public void removeAllChildren()
 	{
 		
 		children= new ArrayList<FunctionalElement>();
 	}
 	
+	/**
+	 * Adds a child
+	 * @param toAdd
+	 * @return
+	 */
 	public boolean add( FunctionalElement toAdd)
 	{
 		// adds to all children.
@@ -226,6 +277,13 @@ public class FunctionalGroup implements HasChildren
 		return perameters;
 	}
 	
-	
+	/**
+	 * 
+	 * @return a copy of this.
+	 */
+	public FunctionalGroup copy()
+	{
+		return new FunctionalGroup(this);
+	}
 	
 }

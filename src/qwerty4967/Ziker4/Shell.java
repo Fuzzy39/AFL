@@ -1,7 +1,13 @@
 package qwerty4967.Ziker4;
 
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
+/**
+ * @author 2023HillMS
+ *
+ */
 public class Shell 
 {
 
@@ -20,15 +26,21 @@ public class Shell
 	// 5/11/21 Pass 1 done, with the exception of functions
 	// 
 	
-	private static final int build = 100;
+	private static final int build = 143;
 	
-	private static int debugLevel = 3; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
+	private static int debugLevel = 2; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=3; // may as well make it public, it's final.
 	
 	private static Scanner sc= new Scanner( System.in ); // Setup the Scanner for gathering user input. 
 	
 	
-	
+	/**
+	 * I don't think I've done this to the main method before...
+	 * Oh well, it's about what you expect
+	 * If you want more detailed explanations of what things do and how they work, they might be in the code's comments
+	 * only sometimes, of course.
+	 * @param args does nothing, as of yet.
+	 */
 	public static void main(String[] args) 
 	{
 		
@@ -40,7 +52,26 @@ public class Shell
 		out("Very not finished.");
 		out("");
 		
-		// perform initialization of the scanner
+		// Temporary junk to  appease a deadline, or something like that.
+		DecimalFormat df = new DecimalFormat("#.00"); 
+		out("Here's a formatted number for your troubles: "+df.format(90.9389790475827));
+		Scanner fileSC=null;
+		  
+		try
+		{
+			fileSC= new Scanner( new File("readme.txt"));
+		}
+		catch(Exception e)
+		{
+			System.out.println("uh-oh.");
+		}
+		
+		while(fileSC.hasNextLine())
+		{
+			System.out.println(fileSC.nextLine());
+		}
+		fileSC.close();
+		// and now the actual stuff.
 		
 		String inputBuffer="";
 		while(true)
@@ -82,7 +113,11 @@ public class Shell
 		
 		
 	}
-	
+	/**
+	 * Sets debug level to a valid value.
+	 * @param debugLevel 
+	 * @return returns true if input was valid.
+	 */
 	public static boolean setDebugLevel( int debugLevel)
 	{
 		// I've just noticed that I've almost strategically been avoiding using an else.
@@ -98,13 +133,19 @@ public class Shell
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @return debug level
+	 */
 	public static int getDebugLevel ()
 	{
 		return debugLevel;
 	}
 	
 	
+	/*
+	 * checks if a string ends with a semicolon, among other things.
+	 */
 	private static boolean checkString(String string)
 	{
 		// Checks the string to see if it's last non-whitespace character is a semicolon.
@@ -148,7 +189,11 @@ public class Shell
 	
 	
 	
-	// The shell handles all user interaction, so the out method has a variety of ways of printing to console.
+	/**
+	 *  The shell handles all user interaction, so the out method has a variety of ways of printing to console.
+	 * @param toOut string to output
+	 * @return returns true.
+	 */
 	public static boolean out( String toOut )
 	{
 		out(toOut, "<");
@@ -160,7 +205,12 @@ public class Shell
 	// the origin is the location the message came from. 
 	//If you're using this particular method the origin is probably going to be "Ziker 4",
 	//but maybe not, who knows! certainly not me.
-	
+	/**
+	 *  The shell handles all user interaction, so the out method has a variety of ways of printing to console.
+	 * @param toOut string to output
+	 * @param origin the sender of the message. typically 'Ziker 4'
+	 * @return returns true.
+	 */
 	public static boolean out( String toOut, String origin )
 	{
 		out( toOut, origin, 0 );
@@ -168,10 +218,16 @@ public class Shell
 	}
 	
 	
+	/**
+	 * The debug level controls whether the message is shown. Typically, it won't be if the debug level is greater than 1.
+	 * debug is set by a special command, where 0 is off and the higher it is the more messages are shown
+ 	 * I'm not sure what the max is at the time of writing... maybe 3?
+	 * @param toOut information to output to user
+	 * @param origin the sender of the message. typically 'Ziker 4'
+	 * @param debugLevel the required debug level for the message to be displayed to the user
+	 * @return returns true if the message was displayed
+	 */
 	
-	// The debug level controls whether the message is shown. Typically, it won't be if the debug level is greater than 1.
-	// debug is set by a special command, where 0 is off and the higher it is the more messages are shown
-	// I'm not sure what the max is at the time of writing... maybe 3?
 	
 	public static boolean out( String toOut, String origin, int debugLevel ) 
 	{
@@ -203,6 +259,16 @@ public class Shell
 	
 	
 	// I don't know if this will be used, but may as well include it now.
+	/**
+	 * The debug level controls whether the message is shown. Typically, it won't be if the debug level is greater than 1.
+	 * debug is set by a special command, where 0 is off and the higher it is the more messages are shown
+ 	 * I'm not sure what the max is at the time of writing... maybe 3?
+	 * @param toOut information to output to user
+	 * @param origin the sender of the message. typically 'Ziker 4'
+	 * @param debugLevel the required debug level for the message to be displayed to the user
+	 * @param line the line number the message came from/
+	 * @return returns true if the message was displayed
+	 */
 	public static boolean out( String toOut, String origin, int debugLevel, int line )
 	{
 		
