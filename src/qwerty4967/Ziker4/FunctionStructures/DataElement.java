@@ -1,4 +1,4 @@
-package qwerty4967.Ziker4;
+package qwerty4967.Ziker4.FunctionStructures;
 
 import java.util.ArrayList;
 
@@ -77,12 +77,32 @@ public abstract class DataElement extends FunctionalElement
 		return data.get(index);
 	}
 
+	public ArrayList<Object> getData( )
+	{
+		return data;
+	}
 	@Override
 	/**
 	 * 
 	 */
 	public String toString() {
 		return "DataElement [data=" + data + "]";
+	}
+	
+	public int getStatementNumber()
+	{
+		FunctionalElement e = this;
+		while(! (e.getParent() instanceof Statement))
+		{
+			e=e.getParent();
+			if(e==null)
+			{
+				return -1;
+			}
+		}
+		
+		Statement s = (Statement)(e.getParent());
+		return s.getStatementNumber();
 	}
 	
 	

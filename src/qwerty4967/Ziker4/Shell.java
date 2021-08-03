@@ -1,7 +1,7 @@
 package qwerty4967.Ziker4;
 
-import java.io.File;
-import java.text.DecimalFormat;
+//import java.io.File;
+//import java.text.DecimalFormat;
 import java.util.Scanner;
 
 /**
@@ -19,17 +19,22 @@ public class Shell
 	// I can shoe-horn some stuff in if need-be.
 	
 	
+	
 	// Project Information
 	// 4/30/21 Started
 	// 5/1/21 Shell class probably finished, aside from errors
 	// 5/7/21 Ready to begin work on pass 1
 	// 5/11/21 Pass 1 done, with the exception of functions
-	// 
+	// 5/X/21 Began major refactor pass 1 would be pass 3.
+	// 5/X/21 Stopped working on the project
+	// 7/13/21 Started work on the project again, capable of identifing all token types. 
+	// 7/1X/21 tokenPass, pass 1, complete.
 	
-	private static final int build = 143;
 	
-	private static int debugLevel = 2; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
-	public static final int MAX_DEBUG_LEVEL=3; // may as well make it public, it's final.
+	private static final int build = 317;
+	
+	private static int debugLevel = 0; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
+	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
 	
 	private static Scanner sc= new Scanner( System.in ); // Setup the Scanner for gathering user input. 
 	
@@ -45,32 +50,14 @@ public class Shell
 	{
 		
 		  
-		// TODO Auto-g	enerated method stub
+		// TODO Auto-generated method stub
 		// What to put here?
 		// let's worry about that later...
 		out("Ziker Interpreter Test 4 'ZIT' | build "+build);
 		out("Very not finished.");
 		out("");
 		
-		// Temporary junk to  appease a deadline, or something like that.
-		DecimalFormat df = new DecimalFormat("#.00"); 
-		out("Here's a formatted number for your troubles: "+df.format(90.9389790475827));
-		Scanner fileSC=null;
-		  
-		try
-		{
-			fileSC= new Scanner( new File("readme.txt"));
-		}
-		catch(Exception e)
-		{
-			System.out.println("uh-oh.");
-		}
 		
-		while(fileSC.hasNextLine())
-		{
-			System.out.println(fileSC.nextLine());
-		}
-		fileSC.close();
 		// and now the actual stuff.
 		
 		String inputBuffer="";
@@ -105,7 +92,7 @@ public class Shell
 			*/
 			
 			
-			//out("Pretend something was done with your input, please.");
+			//out("I don't know what to do with this...");
 			
 			
 			// Basically, we need to discover if the input ends in a semicolon, if it does, continue, if not, output 

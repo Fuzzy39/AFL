@@ -1,6 +1,9 @@
-package qwerty4967.Ziker4;
+package qwerty4967.Ziker4.FunctionStructures;
 
 import java.util.ArrayList;
+
+import qwerty4967.Ziker4.Lang;
+
 
 public class TokenData extends DataElement 
 {
@@ -39,10 +42,36 @@ public class TokenData extends DataElement
 	 */
 	@Override
 	public String toString() {
-		return "TokenData [data=" + data.get(0)+", "+Lang.tokenTypes.values()[(int)(data.get(1))]+ "]";
+		try 
+		{
+		return "TokenData [\"" + data.get(0)+"\", "+Lang.tokenTypes.values()[(int)(data.get(1))]+ "]";
+		}
+		catch(Exception e)
+		{
+			return "Invalid TokenData";
+		}
 	}
 
-
+	public FunctionalElement copy()
+	{
+		TokenData d;
+		try 
+		{
+			d= new TokenData(this.getGroup(),this.getParent());
+			d.setData(this.getData());
+			return d;
+		} 
+		catch (Exception e) 
+		{
+			
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+		
+		
+	}
 		
 
 	

@@ -2,6 +2,8 @@ package qwerty4967.Ziker4;
 
 import java.util.ArrayList;
 
+import qwerty4967.Ziker4.FunctionStructures.*;
+
 public class Parser 
 {
 	/**
@@ -36,15 +38,16 @@ public class Parser
 		try
 		{
 			// make a big 'ol tree
-			new StatementData(test);
+			//new StatementData(test);
 			Node node1 = new Node(test);
-			new StatementData(test, node1);
-			Node node2 = new Node(test, node1);
-			new StatementData(test, node2);
-			new StatementData(test, node2);
-			//new StatementData(test, node1);
-			new StatementData(test);
-			
+			TokenData t =new TokenData(test, node1);
+			ArrayList<Object> data = new ArrayList<Object>();
+			data.add("data");
+			data.add(7);
+			t.setData(data);
+			moveToken(t,node1);
+			//t.remove();
+			System.out.println("Node:"+node1);
 		}
 		catch(Exception e)
 		{
@@ -53,6 +56,7 @@ public class Parser
 		}
 		
 		Shell.out("REPORT: "+ test.toString(),"Ziker 4" );
+		
 	}
 	
 	
@@ -75,7 +79,7 @@ public class Parser
 		
 		// all kidding aside, I do have a loose plan here.
 		
-		// there will be 3 'passes' on the code ( later: this is dated, expect 5)
+		// there will be 3 'passes' on the code ( later: this is dated, expect 5) (even later: very dated, expect 4?)
 		
 		// in the preliminary pass, the one string will be broken into segments (statements).
 		// in the control pass, the statements will be organized into a tree based on basic control structures (ifs, loops, etc.)
@@ -97,9 +101,9 @@ public class Parser
 			ArrayList<String> statements = preliminaryPass(code);
 			Shell.out("Results of pass 0:\n"+statements,"Ziker 4", 1);
 			
-			// control pass.
-			Shell.out("Begining Control Pass (Pass 1)","Ziker 4",3);
-			FunctionalGroup program = controlPass(statements);
+			// token pass.
+			Shell.out("Begining Token Pass (Pass 1)","Ziker 4",3);
+			FunctionalGroup program = tokenPass(statements);
 			if(program== null)
 			{	
 				Shell.out("Pass 1 errored out... returning","Ziker 4",2);
@@ -107,7 +111,17 @@ public class Parser
 			}
 			Shell.out("Results of pass 1:"+program+"\n","Ziker 4",1);
 			
-			// token pass.
+			// operations pass
+			Shell.out("Begining Operation Pass (Pass 2)","Ziker 4",3);
+			program = operationPass(program);
+			if(program== null)
+			{	
+				Shell.out("Pass 2 errored out... returning","Ziker 4",2);
+				return;
+			}
+			Shell.out("Results of pass 2:"+program+"\n","Ziker 4",0);
+			
+			/*
 			Shell.out("Begining Token Pass (Pass 2):\n","Ziker 4",3);
 			program=tokenPass(program);
 			if(program== null)
@@ -116,6 +130,7 @@ public class Parser
 				return;
 			}
 			Shell.out("Results of pass 2:"+program+"\n","Ziker 4");
+			*/
 			
 		}
 		catch(Exception e)
@@ -175,14 +190,13 @@ public class Parser
 	}
 	
 	/**
-	 * The second pass.
-	 * Detects if, else, while and end, and begins the construction of the program.
-	 * Also can give errors on occasion, if these are improperly formatted
-	 * @param statements a sequence of programs
+	 * This code is currently unused and might be deleted in the future.
+	 * It has many many errors in it due to how the structure of the program has changed since it
+	 * stopped being used.
 	 * @return the begining of a program.
 	 * @throws Exception if something goes wrong. shouldn't happen.
 	 */
-	private static FunctionalGroup controlPass(ArrayList<String> statements) throws Exception
+	/*private static FunctionalGroup controlPass(ArrayList<String> statements) throws Exception
 	{
 		// pfft... okay, I've been thinking about this for a while.
 		// this doesn't seem too hard, with the major exception of functions.
@@ -342,7 +356,7 @@ public class Parser
 			return null;
 		}
 		return program;
-	}
+	}*/
 	
 	private static Node createNode(FunctionalGroup program, ElementContainer parent)
 	{
@@ -368,7 +382,7 @@ public class Parser
 	
 
 	/**
-	 * third pass.
+	 * second pass.
 	 * attempts to identify tokens in the baby program
 	 * tokens that cannot be identified are identified in the fourth pass, the validation pass
 	 * no validation is done for this one though.
@@ -376,7 +390,7 @@ public class Parser
 	 * @return
 	 * @throws Exception
 	 */
-	private static FunctionalGroup tokenPass(FunctionalGroup program) throws Exception
+	private static FunctionalGroup tokenPass(ArrayList<String> statements) throws Exception
 	{
 		// below is a passage not entirely relevant to understandng this method:
 		// --------------------------------------------
@@ -429,29 +443,33 @@ public class Parser
 		
 		// it *probably* works.
 	
-		TreeClimber climber = new TreeClimber(program, false);
-		while(true)
-		{
-			
-			DataElement data = climber.nextData();
-			if(data==null)
-			{
-				break;
-			}
-			 
-			
-			Shell.out("Processing statement "+data.getData(0)+":\n", "Pass 2", 2);
-			Shell.out("data: \""+ data.getData(1)+"\" parent: "+data.getParent(),"Pass 2", 3);
-			parseLine((String)data.getData(1), (int)data.getData(0), program, data.getParent());
-			data.remove();
-			
-			
-		}
-		return program;
+		
 		
 		// okay, let's talk specifics now.
 		// once we've gotten the line we need to look at, we will go character by character.
 		
+		// blah blah blah - yeah okay, flipping this on it's head now
+		// it makes a ton more sense if this is the first pass, doesn't it
+		// do we don't need to do any monkeying around in a tree.
+		// yeah?
+		// lets go, then.
+		
+		// yep, same stuff.
+		FunctionalGroup program = new FunctionalGroup("_MAIN");
+		
+		//then it should be simple?
+		
+		for( int i=0; i<statements.size(); i++)
+		{
+			if(parseLine(statements.get(i), i+1, program, null)==null)
+			{
+				return null;
+			}
+			
+		}
+		
+		return program;
+		// a lot of comments for very little substance.
 		
 	}
 	
@@ -494,7 +512,11 @@ public class Parser
 		// now do the hard part....
 		// so... how?
 		// with one line, of course.
-		findTokens(data, program, statement);
+		if(!verifyTokens(findTokens(data, program, statement)))
+		{
+			// oof, an error
+			return null;
+		}
 		
 		
 		return statement;
@@ -568,6 +590,7 @@ public class Parser
 			else if(identifier=='"')
 			{
 				// we have found a string
+				Shell.out("Found a string","Pass 1",3);	
 				characterType=Lang.tokenTypes.string.ordinal();
 				
 			}
@@ -575,6 +598,7 @@ public class Parser
 			else if(identifier=='\'')
 			{
 				// ah, a character
+				Shell.out("Found a character","Pass 1",3);	
 				characterType=Lang.tokenTypes.character.ordinal();
 				
 			}
@@ -582,6 +606,7 @@ public class Parser
 			else if(isNumber(identifier) )
 			{
 				// a number
+				//Shell.out("Found a number","Pass 1",3);	
 				characterType=Lang.tokenTypes.number.ordinal();
 				
 			}
@@ -589,13 +614,18 @@ public class Parser
 			else if(isLetter(identifier) )
 			{
 				// could be anything
+				//Shell.out("Found a prototext","Pass 1",3);	
 				characterType=Lang.tokenTypes.prototext.ordinal();
 				
 			}
 			else
 			{
+				//Shell.out("Found an operator","Pass 1",3);	
 				// if it's not a number or a letter, it's probably a symbol
 				// we don't check if things are valid at this point.
+				// ooh, a dirty edge case I have to fix.
+				// great.
+				
 				characterType=Lang.tokenTypes.operator.ordinal();
 			}
 			
@@ -625,6 +655,34 @@ public class Parser
 					}
 					currentToken+=identifier; // add the token to the thing.
 					continue;
+				case 7: // operator
+					//uh, okay
+					// so if we have "()" we need to split it up.
+					// or "[]"
+					
+					if(identifier == ')' || identifier=='(' )
+					{
+						tokens.add(createToken(currentToken,type,program, parent));
+						currentToken=identifier+"";
+						tokens.add(createToken(currentToken,type,program, parent));
+						currentToken="";
+						type=-1;
+						continue;
+					}
+					
+					if(currentToken.equals(")")||currentToken.equals("("))
+					{
+						
+						if(characterType==type)
+						{
+							tokens.add(createToken(currentToken,type,program, parent));
+							currentToken=identifier+"";
+							continue;
+						}
+					}
+					
+				
+					
 				// otherwise, anything will disturb things. (Later: what did this comment mean?)
 				default:	
 					if(characterType != type)
@@ -646,12 +704,29 @@ public class Parser
 			
 		
 		}
+		
 		// add the dregs
 		//System.out.println(currentToken);
+		
+		if(type==Lang.tokenTypes.string.ordinal()|| type==Lang.tokenTypes.character.ordinal())
+		{
+			// this is absolutely horrific.
+			// so is my spelling, according to eclipse.
+			if(currentToken.length()==0||
+			(!((currentToken.charAt(currentToken.length()-1)=='"'&type==Lang.tokenTypes.string.ordinal())||
+			(currentToken.charAt(currentToken.length()-1)=='\''& type==Lang.tokenTypes.character.ordinal()))))	
+			{
+				Shell.out("Error: No ending \" or '","Ziker 4",0);
+				return null;
+			}
+		}
+		
 		if(currentToken!="")
 		{
 			tokens.add(createToken(currentToken, type, program, parent));
 		}
+		
+		
 		return tokens;
 		
 	}
@@ -667,7 +742,7 @@ public class Parser
 	 */
 	private static TokenData createToken(String tokenText, int type, FunctionalGroup program, ElementContainer parent) throws Exception
 	{
-		Shell.out("Creating token with data: \""+tokenText+"\"", "Pass 2", 3);
+		Shell.out("Creating token with data: \""+tokenText+"\"", "Pass 1", 3);
 		TokenData token;
 		assert parent!=null;
 		
@@ -705,5 +780,1011 @@ public class Parser
 	private static boolean isNumber(char c)
 	{
 		 return (c >= '0' && c <= '9') || c=='.';
+	}
+	
+	private static boolean isValidNumber(String s)
+	{
+		/*
+		 * valid:
+		 * 01928
+		 * 90.30
+		 * .30
+		 * 
+		 * invalid:
+		 * ....
+		 * 20.
+		 * 36.39.00
+		 * 
+		 */
+		 if(s.charAt(s.length()-1)=='.')
+		 {
+			 
+			 return false;
+			 
+		 }
+		 
+		 int dots=0;
+		 for(int i=0; i<s.length(); i++)
+		 {
+			 char c = s.charAt(i);
+			
+			 
+			 if(c=='.')
+			 {
+				 dots++;
+			 }
+			
+			 if(dots>1)
+			 {
+				 return false;
+			 }
+			 
+		 }
+		 // you've probably got a problem there...
+		 // shouldn't ever get here.
+		 return true;
+	}
+	
+	
+	
+	private static boolean verifyTokens(ArrayList<TokenData> tokens) throws Exception
+	{
+		/*
+		 * so, we have a bunch of tokens with, uh, types
+		 * lets make sure those types make sense.
+		 * 
+		 */
+		
+		if(tokens==null || tokens.size()==0)
+		{
+			// clearly not valid.
+			return false;
+		}
+		
+		// that's a bit of a complicated way to get this marginally useful number, but there you go.
+		int statementNumber=((Statement)(tokens.get(0).getParent())).getStatementNumber();
+		
+		// okay if  things are gonna do things we need to loop through every token and do certain things depending on what type they are.
+		
+		loop: for(int i = 0; i<tokens.size(); i++)
+		{
+			String data = (String)(tokens.get(i).getData(0));
+			switch( (int)(tokens.get(i).getData(1)) ) // switch on the token type
+			{
+				case 3: // number. there ought to be a better way to type this, but noo, it wants constant things. grumble grumble.
+					if(isValidNumber(data))
+					{
+						continue;
+					}
+					
+					Shell.out("Error: \""+data+"\" isn't a valid number.","Ziker 4",0,statementNumber);
+					return false;
+				case 5: // character
+					if(data.length()==1)
+					{
+						continue;
+					}
+					
+					Shell.out("Error: \""+data+"\" isn't a valid character.","Ziker 4",0,statementNumber);
+					return false;
+				case 7: // operators
+					for(int j=0; j<Lang.OPERATORS.length; j++)
+					{
+						
+						for(int k=0; k<Lang.OPERATORS[j].length; k++)
+						{
+							if(Lang.OPERATORS[j][k].equalsIgnoreCase(data))
+							{
+								continue loop;
+							}
+						}
+						
+					}
+					Shell.out("Error: \""+data+"\" isn't a valid operator.","Ziker 4",0,statementNumber);
+					return false;
+					
+					
+				case 8: // the big one, prototext.
+					for(int j=0; j<Lang.KEYWORDS.length; j++)
+					{
+						if(Lang.KEYWORDS[j].equalsIgnoreCase(data))
+						{
+							ArrayList<Object> newData = new ArrayList<Object>();
+							newData.add(data);
+							newData.add(Integer.valueOf(2)); // keyword
+							tokens.get(i).setData(newData);
+							continue;
+						}
+					}
+					
+					for(int j=0; j<Lang.BOOLS.length; j++)
+					{
+						if(Lang.BOOLS[j].equalsIgnoreCase(data))
+						{
+							ArrayList<Object> newData = new ArrayList<Object>();
+							newData.add(data);
+							newData.add(Integer.valueOf(6));// boolean
+							tokens.get(i).setData(newData);
+							continue;
+						}
+					}
+					
+			}
+		}
+		
+		// note to self
+		// this function isn't done, here loop through things again and sort out variables and functions
+		
+		// thanks, past self, I did it, are you proud?
+		// ...
+		// I guess you don't exist, do you?
+		// hmm.
+
+		
+		for(int i = 0; i<tokens.size(); i++)
+		{
+			String data = (String)(tokens.get(i).getData(0));
+			if((int)(tokens.get(i).getData(1))==8) //find prototext
+			{
+				// exempt the last entry from being checked as a function
+				if(i==tokens.size()-1)
+				{
+					ArrayList<Object> newData = new ArrayList<Object>();
+					newData.add(data);
+					newData.add(Integer.valueOf(0));//variable
+					tokens.get(i).setData(newData);
+					continue;
+				}
+				
+				if((int)(tokens.get(i+1).getData(1))==7) // check for an operator after
+				{
+					if(((String)(tokens.get(i+1).getData(0))).equals("("))
+					{
+						// it's a function
+						// PANIC
+						/*Shell.out("Functions are not currently implemented.", "Ziker 4");
+						return false;*/
+						
+						ArrayList<Object> newData = new ArrayList<Object>();
+						newData.add(data);
+						newData.add(Integer.valueOf(1));//function
+						tokens.get(i).setData(newData);
+						continue;
+						
+					}
+				}
+				
+				ArrayList<Object> newData = new ArrayList<Object>();
+				newData.add(data);
+				newData.add(Integer.valueOf(0));//variable
+				tokens.get(i).setData(newData);
+				continue;
+			}
+			
+			
+			
+			
+		}
+		
+		
+		return true;
+		
+		
+	}
+	
+	
+	private static FunctionalGroup operationPass(FunctionalGroup program) throws Exception
+	{
+		//Alright...
+		// How hard could this possibly be?
+		// for every priority group we...
+		// do a bunch of loops?
+		//
+		
+		
+		// here's the situation
+		// we are going to loop through every statement and magic it away
+		// and another (recursive) function will be responsible for processing that statement.
+		// so this function will be relatively simple.
+		
+		// also we create a dummy to store groups ( think '(1+1)')
+		Statement groupDummy;
+					
+		
+		for(int i = 0; i<program.getSize(); i++)
+		{
+			// this will throw an exception if the cast fails, but if it fails
+			// we have some big problems.
+			
+			
+			groupDummy = new Statement(i+1, program);
+			ElementContainer c = (ElementContainer)program.getChild(i);
+			
+			if(c instanceof Statement)
+			{
+				
+				if(extractTopLevelGroups(c)==null)
+				{
+					return null;
+				}
+				
+				
+				if(processOperations(c)==null)
+				{
+					return null;
+				}
+				
+				// now we process the operations of each of the groups.
+				for(int j = 0; j<groupDummy.getSize(); j++)
+				{
+					if(extractTopLevelGroups((Node)groupDummy.getChild(j))==null)
+					{
+						return null;
+					}
+					
+					if(processOperations((Node)groupDummy.getChild(j))==null)
+					{
+						return null;
+					}
+				}
+				
+				// then stitch the groups back into one big statement.
+				// TODO fix the line number -1 problem ( after the stiching though)
+				
+				if(!stitchGroups((Statement)c))
+				{
+					return null;
+				}
+				
+				// and rip it to shreds when the statement is done.
+				groupDummy.remove();
+				
+				// check that the statement isn't empty.
+				if(c.getSize()==0)
+				{
+					c.remove();
+					i--;
+					continue;
+				}
+			}
+			
+			
+		}
+		
+		
+					
+		return program;
+		
+	}
+	
+	private static ElementContainer processOperations(ElementContainer container)
+	{
+		// okay
+		// we just need to find any operators
+		// seems simple enough.
+		Shell.out("Processing Container: "+container,"Ziker 4",2);
+		
+		
+		//assert container.getSize()>0;
+		if(container.getSize()==0)
+		{
+			return container;
+		}
+		
+		if(container.getSize()==1)
+		{
+			if(!(container.getChild(0) instanceof ElementContainer))
+			{
+				if((int)(((TokenData)(container.getChild(0))).getData(1))==Lang.tokenTypes.operator.ordinal())
+				{
+					Shell.out("Error: Missplaced Operator '"+((TokenData)(container.getChild(0))).getData(0)+"'. Delete this token.",
+							  container.getGroup().getName(),0, ((TokenData)(container.getChild(0))).getStatementNumber() );
+					return null;
+				}
+				
+				return container;
+			}
+			
+		}
+		
+		
+		
+		// okay, now look for the stuff.
+		// just copy all the code over more or less?
+		TokenData data = null;
+		for(int priorityGroup = 0; priorityGroup<Lang.OPERATORS.length; priorityGroup++)
+		{
+			//now we have to climb.
+			// I don't like climbing.
+			// I wonder if tree climber works?
+			
+		
+			for(int j = container.getSize()-1; j>=0;j--)
+			{
+				
+				FunctionalElement d = container.getChild(j);
+				assert d instanceof TokenData; // I suppose this isn't really necessary 
+				data = (TokenData)d;
+				
+				
+				if((int)data.getData(1) == Lang.tokenTypes.operator.ordinal())// if the data is an operator...
+				{
+					// now we get to do the 'fun' parts.
+					// yaaaay...
+					
+					
+					int operator=-1;
+					for(int i = 0; i<Lang.OPERATORS[priorityGroup].length; i++)
+					{
+						if(Lang.OPERATORS[priorityGroup][i].equals(data.getData(0)))
+						{
+							// we found something, alright.
+							// what to do, what to do...
+							operator = i;
+							Shell.out(data+" is a(n) "+Lang.OPERATION_PRIORITY_GROUPS.values()[priorityGroup]+" Operator.","Ziker 4",3);
+							break;
+						}
+					}
+					
+					if(operator!=-1)
+					{
+						
+						// Now we splice, having found the operator.
+						// returned to us will be a new container with 3 containers, and we need to look through each, and if there is more
+						// than one token in them, process them.
+						
+						 
+						if(null==processOperator(data, priorityGroup, operator))
+						{
+							// there was some kind of error.
+							return null;
+						}
+						
+						
+						
+						for(int i=0; i<container.getSize(); i++)
+						{
+							if(container.getChild(i) instanceof ElementContainer)
+							{
+								//System.out.println("Going to process:"+container.getGroup());
+								// then we process it
+								if(processOperations((ElementContainer)(container.getChild(i)))==null)
+								{
+									return null;
+								}
+								
+							}
+							
+						}
+						
+						// hopefully nothing terrible happens?
+						/*if(container.getParent()!= null)
+						{
+							container.getParent().removeChild(container);
+						}*/
+						return container; // doesn't matter. should just be returning a boolean but meh.
+						
+					}
+			
+
+				}
+				
+				
+				
+			}
+			
+		}
+		// in this case you probably have gotten something like '1 2 3' or just a bunch of normal words
+		// whatever it is, it's not going to be valid code.
+		// well, that would be the case.
+		// if not for functions existing.
+		// if there's something along the lines of 'function, groupPointer'
+		// then that's totally valid.
+		// so we need to look for that.
+		
+		// uh
+		// how?
+		// let's try a naive approach and see if anything explodes
+		
+		for(int i = 0; i<container.getSize()-1; i++)
+		{
+			// look for a function proceeded by a groupPointer
+			FunctionalElement d = container.getChild(i);
+			assert d instanceof TokenData; // I suppose this isn't really necessary 
+			data = (TokenData)d;
+			
+			if((int)data.getData(1) == Lang.tokenTypes.function.ordinal())
+			{
+				// okay, I woud check that it isn't the last token,
+				// but that's implied.
+				
+				// assert that the next token is a parenthetical group
+				
+				d = container.getChild(i+1);
+				assert d instanceof TokenData; // I suppose this isn't really necessary 
+				data = (TokenData)d;
+				
+				assert(int)data.getData(1) == Lang.tokenTypes.groupPointer.ordinal();
+				return container;
+				
+			}
+		}
+		
+		if(isGroupPointerAFunctionCall(getGroupPointer(container)))
+		{
+			return container;
+		}
+		
+		Shell.out("Invalid token sequence.",container.getGroup().getName(),0, data.getStatementNumber() );
+		return null;
+	}
+	
+	private static ElementContainer processOperator( TokenData operator, int priorityGroup, int operatorID)
+	{
+		// first check for the dreaded 'organize' operators.
+		ElementContainer parent = operator.getParent();
+		
+		if(Lang.OPERATION_PRIORITY_GROUPS.values()[priorityGroup]==Lang.OPERATION_PRIORITY_GROUPS.organize)
+		{
+			// this is going to get funky
+			// are ya ready kids?
+			// probably not.
+			/*if(operatorID==0||operatorID==1)
+			{	
+				Shell.out("Arrays are not currently implemented.",parent.getGroup().getName(),0,operator.getStatementNumber());
+				return null;
+			}*/
+			
+			// we are dealing with the dreaded ().
+			// oh my
+			// what are we in for
+			// we do this in a seperate method, probably.
+			assert false;
+		}
+		
+		//Let the chopping commence?
+		// no, not so quick, bucko
+		// we need to make sure there are things to chop.
+		// make sure there's no "1 +" situations.
+		// or + + + situations either
+		
+		Shell.out("Processing operator '"+Lang.OPERATORS[priorityGroup][operatorID]+"' normally. ","Ziker 4",3);
+		
+		// first, check that an operator is neither the first or last token.
+		if(parent.getChildID(operator)==0||parent.getChildID(operator)==parent.getSize()-1)
+		{
+			Shell.out("Error on Operator '"+operator.getData(0)+"'. Missing operand.",parent.getGroup().getName(),0,operator.getStatementNumber());
+			return null;
+		}
+		
+		// now check that both of it's neighbors are operators.
+		// this is really kind of a disgusting if, but I'm kinda lazy.
+		if( ((int)(((TokenData)(parent.getChild(parent.getChildID(operator)-1))).getData(1)))==Lang.tokenTypes.operator.ordinal() ||
+		    ((int)(((TokenData)(parent.getChild(parent.getChildID(operator)+1))).getData(1)))==Lang.tokenTypes.operator.ordinal())
+		{
+			Shell.out("Error on Operator '"+operator.getData(0)+"'. One or both operands are operators.",parent.getGroup().getName(),0,operator.getStatementNumber());
+			return null;
+		}
+		
+		// now we can probably chop safely.
+		// ah, not quite.
+		
+		int leftSize = parent.getChildID(operator);
+		int rightSize = (parent.getSize()-1)-parent.getChildID(operator);
+		Shell.out("Tokens before operator: "+leftSize,"Ziker 4",3);
+		Shell.out("Tokens after operator: "+rightSize,"Ziker 4",3);
+		
+		
+		// now we have all the information we need to chop.
+		// start by re-making the operator.
+		
+		String operation = (String)operator.getData(0);
+		operator.remove();
+		TokenData t = null;
+		
+		try 
+		{
+			t = new TokenData(parent.getGroup(),parent);
+			ArrayList<Object> data = new ArrayList<Object>();
+			data.add(operation);
+			data.add(Lang.tokenTypes.operation.ordinal());
+			t.setData(data);
+		} 
+		
+		catch (Exception e)
+		{
+			
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+		
+		
+		// choppy chop
+
+
+		
+		// first, the left half.	
+		
+		if(leftSize==1)
+		{
+			// I'm not certain this will work, but whatever.
+			TokenData d = (TokenData)parent.getChild(0);
+			moveToken(d,parent);
+		
+			
+		}
+		else
+		{
+			// first create a container,
+			// then loop through and move elements.
+			Node leftNode;
+			try
+			{
+				leftNode = new Node(parent.getGroup(),parent);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+			
+			for(;leftSize>0;leftSize--)
+			{
+				TokenData d = (TokenData)parent.getChild(0);
+				moveToken(d,leftNode);
+			}
+			
+		}
+		
+		// then the right half.
+		if(rightSize==1)
+		{
+			// I'm not certain this will work, but whatever.
+			TokenData d = (TokenData)parent.getChild(0);
+			moveToken(d,parent);
+		}
+		else
+		{
+			// first create a container,
+			// then loop through and move elements.
+			Node rightNode;
+			try
+			{
+				rightNode = new Node(parent.getGroup(),parent);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+			
+			
+			for(;rightSize>0;rightSize--)
+			{
+				TokenData d = (TokenData)parent.getChild(0);
+				moveToken(d,rightNode);
+			}
+			
+		}
+		
+		Shell.out("Operator Processed.","Ziker 4", 3);
+		
+		return parent;
+	}
+	
+	
+	private static void moveToken (TokenData token, ElementContainer newLocation)
+	{
+		
+		ArrayList<Object>data = token.getData();
+		token.remove();
+		
+		try
+		{
+			TokenData d2 = new TokenData(newLocation.getGroup(), newLocation);
+			d2.setData(data);
+			//newLocation.addChild(d2);
+		}
+		catch(Exception e)
+		{
+			// I doubt this will happen...
+			e.printStackTrace();
+		}	
+	}
+	
+	private static Boolean extractTopLevelGroups(ElementContainer container)
+	{
+		// this method locates all top level parentheses groups and takes them out of the relevant container.
+		// okay, how to do that?
+		// not sure...
+		// well, seems simple enough...
+		// returns true if it found any tokens, returns false if not, and returns null if something wasn't formatted properly.
+		
+		
+		
+		for(int i = 0; i<container.getSize(); i++)
+		{
+			// is the container guaranteed not to have containers as children?
+			// yes, I think.
+			
+			assert container.getChild(i)instanceof TokenData;
+			// better safe than sorry.
+			
+			TokenData currentToken =  (TokenData)container.getChild(i);
+			//Boolean currentResult=false;
+			
+			// now just find any "(" operators.
+			
+			if(((int)currentToken.getData(1)) == Lang.tokenTypes.operator.ordinal())
+			{
+				// also worth noting that if we find a ) we throw an error.
+				
+				if(((String)currentToken.getData(0)).equals(")"))
+				{
+					
+					Shell.out("Error: Unexpected token ')'. Remove this token.",container.getGroup().getName(),0,currentToken.getStatementNumber());
+					return null;
+					
+				}
+				
+				if(((String)currentToken.getData(0)).equals("("))
+				{
+					
+					Shell.out("found a group.","Ziker 4",2);
+					// my oh my.
+					// lookee what we found here...
+					// so at this point we probably make another method.
+					// I should probably be better at breaking up methods.
+					
+					int startingIndex = i;
+					int endingIndex = findTopLevelGroup(container, i);
+					
+					if(endingIndex==-1)
+					{
+						return null;
+					}
+					
+					// We now know where the group is.
+					if(!extractGroup(startingIndex, endingIndex,container))
+					{
+						return null;
+					}
+					
+					// so this is also recursive.
+					Boolean result = extractTopLevelGroups(container);
+					if(result==null)
+					{
+						return null;
+					}
+					
+					
+					return true;	
+					
+				}
+			}
+			
+		}
+		return false;
+	}
+	
+	
+	private static int findTopLevelGroup(ElementContainer container, int startingIndex)
+	{
+		
+		// find the ending Index of a ')' corresponding to the given top level group starting with a '(' operator at startingIndex within container.
+		
+		//first we need to find the end of the group.
+		int endingIndex=-1;
+		int depth=1;
+	
+		for(int i = startingIndex+1; i<container.getSize(); i++)
+		{
+			// look for any '(' or ')'
+			
+			assert container.getChild(i)instanceof TokenData;
+			TokenData currentToken =  (TokenData)container.getChild(i);
+			String tokenData = (String)(currentToken.getData(0));
+			
+			// is directly checking for the thing bad?
+			// yes.
+			// I'm not quite sure how to avoid it though.
+			// could access the operator array, but that's less readable and only slightly better.
+			if(tokenData.equals("("))
+			{
+				depth++;
+				continue;
+			}
+			
+			if(tokenData.equals(")"))
+			{
+				depth--;
+				if(depth==0)
+				{
+					endingIndex=i;
+					break;
+				}
+				continue;
+			}
+			
+		}
+		
+		if(endingIndex==-1)
+		{
+			// we did not complete the group.
+			// uh-oh.
+			// wow you can't really tell what this is even doing.
+			// it's just an error message though.
+			Shell.out("Error: An '(' was missing a coresponding ')'.",container.getGroup().getName(),0,
+			((TokenData)(container.getChild(startingIndex))).getStatementNumber());
+		
+		}
+		
+		return endingIndex;
+	
+	}
+	
+	private static boolean extractGroup(int startingIndex, int endingIndex, ElementContainer container)
+	{
+		// first we need to find a the dummy container to store the group in.
+		// should be the last element in the functionalGroup.
+	/*if(endingIndex-startingIndex==1)
+		{
+			// () is not valid.
+			Shell.out("Error: Parrenthese groups cannot be empty.",container.getGroup().getName(),0,
+			((TokenData)(container.getChild(0))).getStatementNumber());
+			return false;
+		}*/
+		
+		Statement groupDummy = (Statement)container.getGroup().getChild(container.getGroup().getSize()-1);
+		
+		Node newLocation;
+		try 
+		{
+			// I really wish I hadn't made making elements throw things.
+			// very annoying.
+			newLocation = new Node(container.getGroup(), groupDummy);
+		} 
+		catch (Exception e) 
+		{
+			
+			e.printStackTrace();
+			return false;
+		}
+		
+		// move everything.
+		for(int i = endingIndex-startingIndex-1;i>0;i-- )
+		{
+			TokenData t = (TokenData)container.getChild(startingIndex+1);
+			moveToken(t,newLocation);
+		}
+		
+		// then remove the original ')'
+		// we keep the '(' to transform it.
+		container.getChild(startingIndex+1).remove();
+		
+		// okay, now we do the... things.
+		// we transform the '(' operation to the location of a group.
+		ArrayList<Object> data = new ArrayList<Object>();
+		data.add(groupDummy.getChildID(newLocation)+"");
+		data.add(Lang.tokenTypes.groupPointer.ordinal());
+		
+		try 
+		{
+			
+			((TokenData)(container.getChild(startingIndex))).setData(data);
+		} 
+		catch (Exception e) 
+		{
+			
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		Shell.out("Group successfully extracted:","Ziker 4",2);
+		Shell.out("Container without Group:\n"+container,"Ziker 4",3);
+		Shell.out("Lone Group:\n"+newLocation,"Ziker 4",4);
+		return true;
+		
+	}
+	
+	private static boolean stitchGroups(Statement statement)
+	{
+		// try to stitch groups until there are no more groups to stitch.
+		Shell.out("Attempting to stitching any existing groups.","Ziker 4",3);
+		while(findStitchableGroup(statement)) {}
+		return true;
+	}
+	
+	private static boolean findStitchableGroup(ElementContainer container)
+	{
+		// finds and then stitches stitchable groups.
+		
+		// loop through children, if there's a group, stitch it, if there's a child, call this on it.
+		for(int i =0; i<container.getSize(); i++)
+		{
+			
+			FunctionalElement e = container.getChild(i);
+			
+			if(e instanceof Node)
+			{
+				if(findStitchableGroup((ElementContainer)e))
+				{
+					return true;
+				}
+				continue;
+			}
+			
+			if(e instanceof TokenData)
+			{
+				// easier reading
+				int tokenType = (int)((TokenData)e).getData(1);
+				
+				if(tokenType==Lang.tokenTypes.groupPointer.ordinal())
+				{
+					// we found a stitchable group.
+					// now stitch it.
+					
+					stitchGroup((TokenData)e);
+					return true;
+				}
+				continue;
+			}
+			
+			// code should never reach here, because then the container we've been given is definitely not part of a (valid)statement.
+			assert false;
+			
+		}
+		return false;
+	}
+	
+	private static void stitchGroup(TokenData groupPointer)
+	{
+		// just the tokenData that is the group pointer should be able to tell us everything we need to know.
+		
+		// just a note that if this method is used outside of the expected context that it will throw a ton of exceptions
+		
+		// okay first find the groupDummy.
+		
+		// it will always be the last element of the group.
+		ElementContainer groupDummy = (ElementContainer)groupPointer.getGroup().getChild(groupPointer.getGroup().getSize()-1);
+		
+		// next, get the group that we need to stitch
+		// we do this by first getting the data from the group pointer.
+		String groupPointerData = (String)groupPointer.getData(0);
+		int groupIndex = Integer.parseInt(groupPointerData);
+		
+		// now, among the dozen things we are assuming for this function to work, one of them
+		// is that the index points to a valid group.
+		
+		Node group = (Node)(groupDummy.getChild(groupIndex)).copy();
+		
+		int groupPointerIndex=groupPointer.getID();
+		ElementContainer parent = groupPointer.getParent();
+		
+
+		
+		// avoid (a) being interpreted with a spurious node
+		FunctionalElement toAdd = group;
+		while(group.getSize()==1)
+		{
+			if(group.getChild(0) instanceof Node)
+			{
+				
+				
+				group=(Node)group.getChild(0);
+				continue;
+				
+			}
+			
+			// check that this isn't a function call
+			if(!isGroupPointerAFunctionCall(groupPointer))
+			{
+				toAdd=group.getChild(0);
+			}
+			break;
+		}
+		
+		
+		if(parent.getSize()==0)
+		{
+			for(int i = 0; i<group.getSize();i++)
+			{
+				if(group.getChild(i) instanceof ElementContainer)
+				{
+					toAdd=((ElementContainer)group.getChild(i)).copy();
+				}
+				else
+				{
+					toAdd=((TokenData)group.getChild(i)).copy();
+				}
+				
+				parent.addChild(groupPointerIndex+i, toAdd);
+			}
+			return;
+		}
+		
+		// that should be it...
+		groupPointer.remove(); 
+		parent.addChild(groupPointerIndex, toAdd);
+		
+		
+	}
+	
+	private static boolean isGroupPointerAFunctionCall(TokenData GroupPointer)
+	{
+		if(GroupPointer== null)
+		{
+			return false;
+		}
+		
+		if(GroupPointer.getID()==0)
+		{
+			return false;
+		}
+		
+		TokenData d = (TokenData)GroupPointer.getParent().getChild(GroupPointer.getID()-1);
+		int dType = (int)d.getData(1);
+		if(dType==Lang.tokenTypes.function.ordinal())
+		{
+			return true;
+		}
+		
+		return false;
+
+	}
+	
+	private static TokenData getGroupPointer(ElementContainer group)
+	{
+		if(group instanceof Statement)
+		{
+			// not a group.
+			return null;
+		}
+		
+		if(group.getParent().getID()!=group.getGroup().getSize()-1)
+		{
+			// not a group.
+			return null;
+		}
+		
+		int groupID=group.getID();
+		FunctionalGroup program = group.getGroup();
+		
+		for(int i = 0; i< program.getSize(); i++)
+		{
+			Statement s =(Statement)program.getChild(i);
+			for(int j=0; j<s.getSize(); j++)
+			{
+				//I'm assuming that if there are nodes or whatever then it's not gonna be there;
+				// it's already processed.
+				FunctionalElement e = s.getChild(j);
+				
+				if(e instanceof ElementContainer)
+				{
+					continue;
+				}
+				
+				// tokendata
+				TokenData d = (TokenData)e;
+				int dType = (int)d.getData(1);
+				
+				if(dType==Lang.tokenTypes.groupPointer.ordinal())
+				{
+					// we found A group pointer.
+					// but is it THE group pointer?
+					
+					if(Integer.parseInt((String)d.getData(0))==groupID)
+					{
+						return d;
+					}
+				}	
+			}
+		}
+		
+		assert false;
+		return null;
 	}
 }

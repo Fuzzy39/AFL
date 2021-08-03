@@ -1,12 +1,22 @@
 package qwerty4967.Ziker4;
 
-
-
+import qwerty4967.Ziker4.FunctionStructures.DataElement;
+import qwerty4967.Ziker4.FunctionStructures.ElementContainer;
+import qwerty4967.Ziker4.FunctionStructures.FunctionalElement;
+import qwerty4967.Ziker4.FunctionStructures.FunctionalGroup;
+import qwerty4967.Ziker4.FunctionStructures.Node;
+import qwerty4967.Ziker4.FunctionStructures.Statement;
 
 public class TreeClimber 
 {
 
 	// climbs programs.
+	// poorly, If I am remembering correctly.
+	
+	// This code, as written, has a pretty marignal use case, 
+	// and I don't really know how it works anymore...
+	// changing it would be difficult
+	// it's possible that this code isn't actually ever going to be used...
 	
 	private boolean climbsStatements; // does this treeclimber climb Statements, or ignore them?
 	private FunctionalGroup program; // the tree to climb.
@@ -81,7 +91,7 @@ public class TreeClimber
 			
 			
 			// otherwise we just take the first element.
-			Shell.out("taking first element","Group Monkey",3);
+			Shell.out("taking first element","Group Monkey",4);
 			return program.getChild(0);
 			
 		}
@@ -89,12 +99,12 @@ public class TreeClimber
 		if(prev.getGroup()==null)
 		{
 			// the element has been deleted.
-			Shell.out("Reseting...","Group Monkey",3);
+			Shell.out("Reseting...","Group Monkey",4);
 			lastElement=null;
 			return getNext(null,ignoreContainers);
 		}
 		// first check if the previous element was a container.
-		Shell.out("Last Element: "+prev,"Group Monkey",3);
+		Shell.out("Last Element: "+prev,"Group Monkey",4);
 		
 		if(prev instanceof Node || (prev instanceof Statement & climbsStatements))
 		{
@@ -102,7 +112,7 @@ public class TreeClimber
 			{
 				if(! ignoreContainers)
 				{
-					Shell.out("It is a container.","Group Monkey",3);
+					Shell.out("It is a container.","Group Monkey",4);
 					return ((ElementContainer)prev).getChild(0);
 				}
 			}
@@ -128,12 +138,12 @@ public class TreeClimber
 			
 			if(id+1<program.getSize())
 			{
-				Shell.out("Got element in root...","Group Monkey",3);
+				Shell.out("Got element in root...","Group Monkey",4);
 				return program.getChild(id+1);
 			}
 			
 			// we have reached the end of the program.
-			Shell.out("End of FunctionalGroup reached.","Group Monkey",3);
+			Shell.out("End of FunctionalGroup reached.","Group Monkey",4);
 			return null;
 		}
 		
@@ -146,13 +156,13 @@ public class TreeClimber
 		
 		if(id+1<prev.getParent().getSize())
 		{
-			Shell.out("Got element in a container.","Group Monkey",3);
+			Shell.out("Got element in a container.","Group Monkey",4);
 			return prev.getParent().getChild(id+1);
 		}
 		
 		// we have reached the end of the container.
 		// what now?
-		Shell.out("End of Container reached.","Group Monkey",3);
+		Shell.out("End of Container reached.","Group Monkey",4);
 		return getNext(prev.getParent(),true);
 	}
 	

@@ -1,4 +1,4 @@
-package qwerty4967.Ziker4;
+package qwerty4967.Ziker4.FunctionStructures;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,8 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	// introduce this object, which is a copy of functional group with most of it stripped out.
 	// wow.
 	private ArrayList<FunctionalElement> children=new ArrayList<FunctionalElement>();
+	protected String name; // since everything I'm writing is in the same package, isn't this functionally the same as making it public?
+	// I just want subclasses to see it, nothing else.
 	
 	/**
 	 * 
@@ -19,6 +21,7 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	public ElementContainer( FunctionalGroup group)
 	{
 		super(group);
+		this.name="ElementContainer";
 	}
 	
 	/**
@@ -32,6 +35,7 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 		
 		
 		super(group, parent);
+		this.name="ElementContainer";
 
 	}
 	
@@ -43,22 +47,38 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	{
 		// this never fails, I proclaimed proudly without any testing.
 		// whatever.
-		
+		// add a check to make sure the same thing isn't in there twice
+		child.addTo(this,children.size()-1);
 		children.add(child);
+		updateChildrenIDs();
 		return children.size()-1;
 	}
 	
+	
+	public void addChild(int index, FunctionalElement child)
+	{
+		// really very simple
+		// having this method earlier would definitely reduce some awkwardness.
+		child.addTo(this,index);
+		children.add(index,child);
+		updateChildrenIDs();
+	}
 	
 	/**
 	 * removes a child 
 	 */
 	public void removeChild(FunctionalElement child)
 	{
+		// this code looks like it was half written?
+		// what was the intention here?
+		// does it matter if I delete this? Probably not.
+		// I'll comment it out and see if anything explodes I guess
+		/*
 		if(child instanceof ElementContainer)
 		{
 			ElementContainer container = (ElementContainer)child;
 			
-		}
+		}*/
 		
 		children.remove(child);
 		
@@ -72,6 +92,7 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	{
 		
 		removeChild(children.get(ID));
+		updateChildrenIDs();
 	}
 	
 	public FunctionalElement getChild(int ID)
@@ -86,7 +107,7 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 	 */
 	public int getChildID(FunctionalElement child)
 	{
-		
+		updateChildrenIDs();
 		for (int i = 0; i < children.size(); i++) 
 		{
 			if( children.get(i) == child)
@@ -124,12 +145,29 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 		String tree="";
 		for(int i = 0; i<children.size(); i++)
 		{
-			tree+="\n    "+children.get(i);
+			String child = children.get(i).toString();
+			String[] childsChilds = child.split("\n");
+			for(int j = 0; j<childsChilds.length;j++)
+			{
+				tree+="\n    "+childsChilds[j];
+			}
+			
 		}
 		
-		return "ElementContainer:    " + tree;
+		return name+":    " + tree;
 	}
 	
 	
+	public abstract ElementContainer copy();
 	
+	
+	protected void updateChildrenIDs()
+	{
+		int j = 0;
+		for(FunctionalElement i : children)
+		{
+			i.ID=j;
+			j++;
+		}
+	}
 }

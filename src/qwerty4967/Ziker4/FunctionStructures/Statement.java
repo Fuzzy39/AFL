@@ -1,4 +1,4 @@
-package qwerty4967.Ziker4;
+package qwerty4967.Ziker4.FunctionStructures;
 
 public class Statement extends ElementContainer
 {
@@ -35,6 +35,7 @@ public class Statement extends ElementContainer
 	{
 		super(group);
 		statementNumber=num;
+		name="Statement";
 	}
 	
 	/**
@@ -48,6 +49,7 @@ public class Statement extends ElementContainer
 	{
 		super(group, parent);
 		statementNumber=num;
+		name="Statement";
 	}
 	
 	/**
@@ -57,6 +59,30 @@ public class Statement extends ElementContainer
 	public int getStatementNumber()
 	{
 		return statementNumber;
+	}
+	
+	
+	public ElementContainer copy()
+	{
+		Statement s;
+		try 
+		{
+			s = new Statement(this.getStatementNumber(),this.getGroup(),this.getParent());
+		} 
+		catch (Exception e) 
+		{
+			
+			e.printStackTrace();
+			return null;
+		}
+		int size = this.getSize();
+		for(int i = 0; i<size; i++)
+		{
+			s.addChild(this.getChild(i).copy());
+		}
+		
+		return s;
+	
 	}
 	
 	

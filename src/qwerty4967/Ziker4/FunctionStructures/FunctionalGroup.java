@@ -1,4 +1,4 @@
-package qwerty4967.Ziker4;
+package qwerty4967.Ziker4.FunctionStructures;
 
 import java.util.ArrayList;
 
@@ -46,9 +46,22 @@ public class FunctionalGroup implements HasChildren
 		// this never fails, I proclaimed proudly without any testing.
 		// whatever.
 		
+		// some serious work needs to be done for this to make sense
+		//TODO fix this	
+
+		
 		children.add(child);
 		allChildren.add(child);
 		return children.size()-1;
+	}
+	
+	public void addChild(int index, FunctionalElement child)
+	{
+		// really very simple
+		// having this method earlier would definitely reduce some awkwardness.
+		children.add(index,child);
+		allChildren.add(index, child);
+		updateChildrenIDs();
 	}
 	
 	@Override
@@ -57,67 +70,23 @@ public class FunctionalGroup implements HasChildren
 	 */
 	public String toString() 
 	{
-		// this is slightly long and convoluted, so bare with me.
-		// the thing that makes this complicated is that we have to print all of the function's
-		// children, which are organized into a tree.
-		// we want that tree to be as easy to understand as possible, so
-		// we need to figure out the proper indentation.
+		// Why have a giant convoluted to string when you can have a much simpler and more elegant one
+		// it's Recursive, if you count calling other container's to strings, which in turn call even more.
+		// it's nice and simple, is what it is.
 		
 		String tree="";
-		int depth=0;
-		
-		// if you have more than a thousand nested ifs you are doing something silly anyways.
-		// lengths represents the amount of elements left in a certain element of the tree,
-		// the higher the index the deeper in the tree you are.
-		ArrayList<Integer> lengths =new ArrayList<Integer>();
-		// fill the list with dummy values.
-		for(int i = 0; i<Lang.MAXIMUM_DEPTH; i++)
+		for(int i = 0; i<children.size(); i++)
 		{
-			lengths.add(0);
+			String child = children.get(i).toString();
+			String[] childsChilds = child.split("\n");
+			for(int j = 0; j<childsChilds.length;j++)
+			{
+				tree+="\n    "+childsChilds[j];
+			}
+			
 		}
 		
 		
-		lengths.set(0, allChildren.size());
-	
-		for(int i = 0; i<allChildren.size(); i++)
-		{
-			
-			
-			tree+="\n";
-			
-			// indent once for each level down we are.
-			for(int j=0; j<depth; j++)
-			{
-				tree+="    ";
-			}
-			
-			lengths.set(depth, lengths.get(depth)-1);
-			
-			if( allChildren.get(i) instanceof ElementContainer)
-			{
-				depth++; 
-				lengths.set(depth,((ElementContainer)allChildren.get(i)).getSize());
-				tree+="    "+((allChildren.get(i) instanceof Node)?"Node:":"Statement:");
-				continue;
-			}
-			
-			tree+="    "+allChildren.get(i);
-			
-			// when we reach the end of the element container, make sure we haven't reached the end of multiple.
-			if(lengths.get(depth)==0)
-			{
-				while(lengths.get(depth)==0)
-				{
-					if(depth==0)
-					{
-						break;
-					}
-					depth--;
-				}
-				
-			}
-			
-		}
 		
 		return "\n\nFunctionalGroup:\n" 
 				+ "name: " + name
@@ -175,7 +144,7 @@ public class FunctionalGroup implements HasChildren
 		
 		allChildren.remove(child);
 		children.remove(child);
-		
+		updateChildrenIDs();
 		
 	}
 	
@@ -195,6 +164,7 @@ public class FunctionalGroup implements HasChildren
 			}
 			allChildren.remove(container.getChild(i));	
 		}
+		updateChildrenIDs();
 	}
 	/**
 	 * yeah, same stuff
@@ -221,7 +191,7 @@ public class FunctionalGroup implements HasChildren
 	 */
 	public int getChildID(FunctionalElement child)
 	{
-		
+		updateChildrenIDs();
 		for (int i = 0; i < children.size(); i++) 
 		{
 			if( children.get(i) == child)
@@ -259,6 +229,7 @@ public class FunctionalGroup implements HasChildren
 	{
 		// adds to all children.
 		allChildren.add(toAdd);
+		updateChildrenIDs();
 		return true;
 	}
 
@@ -279,11 +250,22 @@ public class FunctionalGroup implements HasChildren
 	
 	/**
 	 * 
-	 * @return a copy of this.
+	 * @return this doesn't work like you would expect it to. TODO fix this if you intend to use it.
 	 */
 	public FunctionalGroup copy()
 	{
+		// this doesn't actually work, obviously
 		return new FunctionalGroup(this);
 	}
 	
+	
+	protected void updateChildrenIDs()
+	{
+		int j = 0;
+		for(FunctionalElement i : children)
+		{
+			i.ID=j;
+			j++;
+		}
+	}
 }

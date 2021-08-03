@@ -1,5 +1,5 @@
 
-package qwerty4967.Ziker4;
+package qwerty4967.Ziker4.FunctionStructures;
 
 
 public abstract class FunctionalElement 
@@ -24,7 +24,7 @@ public abstract class FunctionalElement
 	private ElementContainer parent;
 	
 	// I'm not sure if this is necessary, but I'll put it in because it can only make things easier.
-	private int ID;
+	protected int ID;
 	
 	// now that I think about it I wonder if java already has a tree thing like I'm making?
 	// meh, probably not, mine is kind of weird.
@@ -96,6 +96,15 @@ public abstract class FunctionalElement
 	 */
 	public int getID()
 	{
+		if(parent!=null)
+		{	
+			assert this==parent.getChild(ID);
+		}
+		else
+		{
+			assert this==group.getChild(ID);
+		}
+		
 		return ID;
 	}
 	
@@ -122,13 +131,9 @@ public abstract class FunctionalElement
 	 * @param newParent
 	 * @return
 	 */
-	public boolean addTo( ElementContainer newParent)
+	public boolean addTo( ElementContainer newParent, int id)
 	{
-		int id=newParent.addChild(this);
-		if( id==-1)
-		{
-			return false;
-		}
+		
 		
 		// now, it's actually usefull to check for the EXACT same object here,
 		// it needs to be the same, not just a copy or something.
@@ -138,6 +143,14 @@ public abstract class FunctionalElement
 		if(!newParent.getGroup().equals(this.getGroup()))
 		{
 			return false;
+		}
+		
+		if(newParent != parent)
+		{
+			if(parent!= null)
+			{
+				parent.removeChild(ID);
+			}
 		}
 		
 		this.ID=id;
@@ -162,6 +175,15 @@ public abstract class FunctionalElement
 		this.group=null;
 		
 	}
+	
+	public void removeFromParent()
+	{
+		if(parent!=null)
+		{
+			parent.removeChild(this);
+			this.parent=null;
+		}
+	}
 
 	@Override
 	/**
@@ -173,12 +195,12 @@ public abstract class FunctionalElement
 
 
 
-	@Override
+	
 	/**
 	 * standard.
 	 */
 	// according to eclipse, this may not work properly. I don't need the method anyways, so I can't be bothered to figure out why.
-	public boolean equals(Object obj) {
+	/*public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -199,15 +221,13 @@ public abstract class FunctionalElement
 		} else if (!parent.equals(other.parent))
 			return false;
 		return true;
-	}
+	}*/
 	
 	/**
 	 * @return
 	 */
-	public FunctionalElement copy()
-	{
-		return this; // it's abstract. this is the best I can do, I think. No plans to use it anyway.
-	}
+	public abstract FunctionalElement copy();
+
 	
 	
 }
