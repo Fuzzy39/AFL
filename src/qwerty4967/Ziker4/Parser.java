@@ -1,4 +1,4 @@
-package qwerty4967.Ziker4;
+	package qwerty4967.Ziker4;
 
 import java.util.ArrayList;
 
@@ -1029,7 +1029,7 @@ public class Parser
 				}
 				
 				// then stitch the groups back into one big statement.
-				// TODO fix the line number -1 problem ( after the stiching though)
+				
 				
 				if(!stitchGroups((Statement)c))
 				{
@@ -1813,7 +1813,7 @@ public class Parser
 		
 		currentParameter.add((TokenData)parameters.getChild(0));
 		
-		for(int i = 1; i<parameters.getSize(); i++)
+		for(int i = 1; i<parameters.getSize()-1; i++)
 		{
 			if((!wasLastTokenOperator)&!isTokenDataOperator((TokenData)parameters.getChild(i)))
 			{
@@ -1854,9 +1854,23 @@ public class Parser
 			}
 			currentParameter.clear();
 		}
-	
+		
 		//TODO now process everything. should be pretty simple.
+		for(int i = 0; i<parameters.getSize(); i++)
+		{
+			if(parameters.getChild(i) instanceof ElementContainer)
+			{
+				ElementContainer e = (ElementContainer)parameters.getChild(i);
+				if(processOperations(e)==null)
+				{
+					return false;
+				}
+			}
+		}
+		
+			
 		return true;
+		
 	}
 	
 	private static boolean isTokenDataOperator(TokenData d)
