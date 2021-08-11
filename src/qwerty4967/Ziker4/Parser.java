@@ -1094,11 +1094,23 @@ public class Parser
 		TokenData data = null;
 		for(int priorityGroup = 0; priorityGroup<Lang.OPERATORS.length; priorityGroup++)
 		{
-			//now we have to climb.
-			// I don't like climbing.
-			// I wonder if tree climber works?
 			
-		
+			// okay so we get to do a funny thing here...
+			// after we looked for groups, we check if this container is a function call.
+			// if it is, we need to check for every parameter.
+			if(priorityGroup==Lang.OPERATION_PRIORITY_GROUPS.assign.ordinal())
+			{
+				if(isGroupPointerAFunctionCall(getGroupPointer(container)))
+				{
+					// looks like we need to check for multiple parameters.
+					if(!processFunctionParameters(container))
+					{
+						return null;
+					}
+					return container;
+				}
+			}
+			// look through every element.
 			for(int j = container.getSize()-1; j>=0;j--)
 			{
 				
@@ -1736,6 +1748,7 @@ public class Parser
 
 	}
 	
+	// returns the tokendata that is the groupPointer to this element contianer, if the container is in fact a group. otherwise returns null.
 	private static TokenData getGroupPointer(ElementContainer group)
 	{
 		if(group instanceof Statement)
@@ -1787,4 +1800,68 @@ public class Parser
 		assert false;
 		return null;
 	}
+
+
+
+	private static boolean processFunctionParameters(ElementContainer parameters)
+	{
+		//I'm reasonably confident that parameters will have at least one element.
+		
+		
+		ArrayList<TokenData> currentParameter = new ArrayList<TokenData>();
+		boolean wasLastTokenOperator = isTokenDataOperator((TokenData)parameters.getChild(0));
+		
+		currentParameter.add((TokenData)parameters.getChild(0));
+		
+		for(int i = 1; i<parameters.getSize(); i++)
+		{
+			if((!wasLastTokenOperator)&!isTokenDataOperator((TokenData)parameters.getChild(i)))
+			{
+				//there is a seperate parameter here...
+				if(currentParameter.size()>1)
+				{
+					// create a node at index i-1 and move all of currentParameter into it.
+					Node newParameter= new Node(parameters.getGroup());
+					// move the node to it's proper home.
+					parameters.addChild(i-1, newParameter);
+					
+					for(TokenData j:currentParameter)
+					{
+						newParameter.addChild(j);
+						
+					}
+					
+				}
+				currentParameter.clear();
+			}
+			
+			// we are good...
+			wasLastTokenOperator = isTokenDataOperator((TokenData)parameters.getChild(i));
+			currentParameter.add((TokenData)parameters.getChild(i));
+		}
+		
+		if(currentParameter.size()>1)
+		{
+			// create a node at index i-1 and move all of currentParameter into it.
+			Node newParameter= new Node(parameters.getGroup());
+			// move the node to it's proper home.
+			parameters.addChild(newParameter);
+			
+			for(TokenData j:currentParameter)
+			{
+				newParameter.addChild(j);
+				
+			}
+			currentParameter.clear();
+		}
+	
+		//TODO now process everything. should be pretty simple.
+		return true;
+	}
+	
+	private static boolean isTokenDataOperator(TokenData d)
+	{
+		return ((int)(d.getData(1)))==Lang.tokenTypes.operator.ordinal();
+	}
+
 }

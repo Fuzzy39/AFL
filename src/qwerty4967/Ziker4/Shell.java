@@ -31,7 +31,7 @@ public class Shell
 	// 7/1X/21 tokenPass, pass 1, complete.
 	
 	
-	private static final int build = 317;
+	private static final int build = 320;
 	
 	private static int debugLevel = 0; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
