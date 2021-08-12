@@ -40,18 +40,15 @@ public class Parser
 			// make a big 'ol tree
 			//new StatementData(test);
 			Node node1 = new Node(test);
-			TokenData t =new TokenData(test, node1);
-			ArrayList<Object> data = new ArrayList<Object>();
-			data.add("data");
-			data.add(7);
-			t.setData(data);
-			moveToken(t,node1);
-			//t.remove();
-			System.out.println("Node:"+node1);
+			TokenData t =new TokenData(test);
+			Shell.out("BEFORE: "+ test.toString(),"Ziker 4" );
+			
+			node1.addChild(t);
+			
 		}
 		catch(Exception e)
 		{
-			Shell.out("Uh-oh, it broke");
+			e.printStackTrace();
 			return;
 		}
 		
@@ -1813,9 +1810,11 @@ public class Parser
 		
 		currentParameter.add((TokenData)parameters.getChild(0));
 		
-		for(int i = 1; i<parameters.getSize()-1; i++)
+		for(int i = 1; i<parameters.getSize(); i++)
 		{
-			if((!wasLastTokenOperator)&!isTokenDataOperator((TokenData)parameters.getChild(i)))
+			TokenData currentToken = (TokenData)parameters.getChild(i);
+			boolean isThisTokenOperator = isTokenDataOperator(currentToken);
+			if((!wasLastTokenOperator)&!isThisTokenOperator)
 			{
 				//there is a seperate parameter here...
 				if(currentParameter.size()>1)
@@ -1836,8 +1835,8 @@ public class Parser
 			}
 			
 			// we are good...
-			wasLastTokenOperator = isTokenDataOperator((TokenData)parameters.getChild(i));
-			currentParameter.add((TokenData)parameters.getChild(i));
+			wasLastTokenOperator = isThisTokenOperator;
+			currentParameter.add(currentToken);
 		}
 		
 		if(currentParameter.size()>1)

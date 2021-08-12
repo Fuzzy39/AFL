@@ -46,7 +46,7 @@ public abstract class FunctionalElement
 		}
 		
 		this.group=group;
-		
+		this.ID = -1;
 		int id=parent.addChild(this);
 		
 		if( id == -1) // adding child failed
@@ -131,7 +131,7 @@ public abstract class FunctionalElement
 	 * @param newParent
 	 * @return
 	 */
-	public boolean addTo( ElementContainer newParent, int id)
+	protected boolean addTo( ElementContainer newParent, int id)
 	{
 		
 		
@@ -150,6 +150,14 @@ public abstract class FunctionalElement
 			if(parent!= null)
 			{
 				parent.removeChild(ID);
+			}
+			else
+			{
+				// okay, we are moving from root to, presumably, a new container.
+				if(this.ID!=-1)
+				{
+					group.removeChild(this);
+				}
 			}
 		}
 		

@@ -48,10 +48,10 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 		// this never fails, I proclaimed proudly without any testing.
 		// whatever.
 		// add a check to make sure the same thing isn't in there twice
-		child.addTo(this,children.size()-1);
+		child.addTo(this,children.size());
 		children.add(child);
 		updateChildrenIDs();
-		return children.size()-1;
+		return children.size();
 	}
 	
 	
