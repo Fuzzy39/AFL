@@ -1,4 +1,4 @@
-package qwerty4967.Ziker4;
+/*package qwerty4967.Ziker4;
 
 import qwerty4967.Ziker4.FunctionStructures.DataElement;
 import qwerty4967.Ziker4.FunctionStructures.ElementContainer;
@@ -26,7 +26,7 @@ public class TreeClimber
 	 * 
 	 * @param program
 	 * @param climbsStatements
-	 */
+	 *
 	public TreeClimber(FunctionalGroup program, boolean climbsStatements)
 	{
 		this.climbsStatements=climbsStatements;
