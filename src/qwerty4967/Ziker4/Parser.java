@@ -1716,8 +1716,9 @@ public class Parser
 		}
 		
 		// that should be it...
-		groupPointer.remove(); 
+		
 		parent.addChild(groupPointerIndex, toAdd);
+		groupPointer.remove(); 
 		
 		
 	}
@@ -1812,6 +1813,11 @@ public class Parser
 		
 		for(int i = 1; i<parameters.getSize(); i++)
 		{
+			if(parameters.getChild(i) instanceof Node)
+			{
+				continue;
+			}
+			
 			TokenData currentToken = (TokenData)parameters.getChild(i);
 			boolean isThisTokenOperator = isTokenDataOperator(currentToken);
 			if((!wasLastTokenOperator)&!isThisTokenOperator)
@@ -1829,7 +1835,7 @@ public class Parser
 						newParameter.addChild(j);
 						
 					}
-					
+					i=0;
 				}
 				currentParameter.clear();
 			}
@@ -1837,6 +1843,7 @@ public class Parser
 			// we are good...
 			wasLastTokenOperator = isThisTokenOperator;
 			currentParameter.add(currentToken);
+			
 		}
 		
 		if(currentParameter.size()>1)

@@ -149,7 +149,7 @@ public abstract class FunctionalElement
 		{
 			if(parent!= null)
 			{
-				parent.removeChild(ID);
+				parent.removeChild(this);
 			}
 			else
 			{
