@@ -10,7 +10,7 @@ import qwerty4967.Ziker4.Lang.tokenTypes;
 
 public class Parser 
 {
-	
+	 	 	
 	/**
 	 * this thing does a lot. It turns a string containing a program into something that ziker can interpret.
 	 * that's the goal, at least.
@@ -30,7 +30,8 @@ public class Parser
 		
 		// all kidding aside, I do have a loose plan here.
 		
-		// there will be 3 'passes' on the code ( later: this is dated, expect 5) (even later: very dated, expect 4?)
+		// there will be 3 'passes' on the code ( later: this is dated, expect 5) (even later: very dated, expect 4?)(even laterer: the concept of a pass doesn't make a ton of sense, but still 4?)
+		
 		
 		// in the preliminary pass, the one string will be broken into segments (statements).
 		// in the control pass, the statements will be organized into a tree based on basic control structures (ifs, loops, etc.)
@@ -72,16 +73,7 @@ public class Parser
 			}
 			Shell.out("Results of pass 2:"+program+"\n","Ziker 4",0);
 			
-			/*
-			Shell.out("Begining Token Pass (Pass 2):\n","Ziker 4",3);
-			program=tokenPass(program);
-			if(program== null)
-			{	
-				Shell.out("Pass 2 errored out... returning","Ziker 4",2);
-				return;
-			}
-			Shell.out("Results of pass 2:"+program+"\n","Ziker 4");
-			*/
+			
 			
 		}
 		catch(Exception e)
@@ -862,14 +854,35 @@ public class Parser
 			// if it is, we need to check for every parameter.
 			if(priorityGroup==Lang.OPERATION_PRIORITY_GROUPS.assign.ordinal())
 			{
-				if(isGroupPointerAFunctionCall(getGroupPointer(container)))
+				
+				/*if(isGroupPointerAFunctionCall(getGroupPointer(container)))
 				{
+					
 					// looks like we need to check for multiple parameters.
 					if(!processFunctionParameters(container))
 					{
 						return null;
 					}
 					return container;
+				}*/
+				
+				for(int i = 0; i<container.getSize()-1; i++)
+				{
+					// tokens should always be tokens, no nodes here.
+					TokenData d = (TokenData)container.getChild(i);
+					if((int)d.getData(1)==Lang.tokenTypes.function.ordinal())
+					{
+						// cool
+						TokenData groupPointerToken =  (TokenData)container.getChild(i+1);
+						int groupPointer = Integer.parseInt((String)groupPointerToken.getData(0));
+						// get the group to parse.
+						ElementContainer groupDummy = (ElementContainer)container.getGroup().getChild(container.getGroup().getSize()-1);
+						if(!processFunctionParameters((Node)groupDummy.getChild(groupPointer)))
+						{
+							return null;
+						}
+						
+					}
 				}
 			}
 			// look through every element.
@@ -1091,6 +1104,12 @@ public class Parser
 		}
 		else
 		{
+			// there are three scenarios here.
+			// 1: there is a lot more code.
+			// 2: there is an operation, a+b(this)c...
+			// 3L there is a function call. f GROUP + c...
+			// if there's an opearion or a bunch of code it's easy to dump
+			// everything in a bucket and carry on, but if it is a function...
 			// first create a container,
 			// then loop through and move elements.
 			Node leftNode;
@@ -1500,7 +1519,14 @@ public class Parser
 			return false;
 		}
 		
-		TokenData d = (TokenData)GroupPointer.getParent().getChild(GroupPointer.getID()-1);
+		FunctionalElement e = GroupPointer.getParent().getChild(GroupPointer.getID()-1);
+		
+		if(e instanceof Node)
+		{
+			return false;
+		}
+		
+		TokenData d = (TokenData)e;
 		int dType = (int)d.getData(1);
 		if(dType==Lang.tokenTypes.function.ordinal())
 		{
@@ -1571,6 +1597,7 @@ public class Parser
 		//I'm reasonably confident that parameters will have at least one element.
 		
 		
+		Shell.out("Parsing function parameters of a function : "+parameters,"Ziker 4",2 );
 		ArrayList<TokenData> currentParameter = new ArrayList<TokenData>();
 		boolean wasLastTokenOperator = isTokenDataOperator((TokenData)parameters.getChild(0));
 		
@@ -1594,7 +1621,7 @@ public class Parser
 					Node newParameter= new Node(parameters.getGroup());
 					// move the node to it's proper home.
 					parameters.addChild(i-1, newParameter);
-					
+					Shell.out("Creating Parameter of function: "+currentParameter,"Ziker 4",3);
 					for(TokenData j:currentParameter)
 					{
 						newParameter.addChild(j);

@@ -52,6 +52,7 @@ public abstract class ElementContainer extends FunctionalElement implements HasC
 		children.add(child);
 		updateChildrenIDs();
 		return children.size();
+		
 	}
 	
 	
