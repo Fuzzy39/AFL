@@ -1,18 +1,10 @@
-package qwerty4967.Ziker4;
-
-//import java.io.File;
-//import java.text.DecimalFormat;
+package qwerty4967.AFL;
 import java.util.Scanner;
 
-import qwerty4967.Ziker4.Parser.Parser;
 
-/**
- * @author 2023HillMS
- *
- */
+
 public class Shell 
 {
-
 	// Here is a comment, in the mildly vain hope that I might remember to put something more meaningful here.
 	// I've got to say, I'm excited to get started on something new.
 	// Hopefully it won't take months...
@@ -31,9 +23,10 @@ public class Shell
 	// 5/X/21 Stopped working on the project
 	// 7/13/21 Started work on the project again, capable of identifing all token types. 
 	// 7/1X/21 tokenPass, pass 1, complete.
+	// 8/13/21 b 328 Decided to massively refactor the code. Renamed from Ziker 4 to AFL (Arguably Functional Language)
 	
 	
-	private static final int build = 328;
+	private static final int build = 329;
 	
 	private static int debugLevel = 4; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
@@ -52,11 +45,12 @@ public class Shell
 	{
 		
 		  
-		// TODO Auto-generated method stub
+		
 		// What to put here?
 		// let's worry about that later...
-		out("Ziker Interpreter Test 4 'ZIT' | build "+build);
-		out("Very not finished.");
+		
+		// TODO replace this with an AFL function in the very long term.
+		out("AFL !WARNING: not functional in the slightest! | build: "+build+" | debug: "+debugLevel);
 		out("");
 		
 		
@@ -78,26 +72,19 @@ public class Shell
 			//input is done.
 			out("Input Recieved: \""+inputBuffer+"\"","Ziker 4", 1);
 			
-			// Attempt to load the program:
+			
+			
+			// Attempt to parse the program:
 			Parser.Parse(inputBuffer);
-			//Parser.test();
-			//Program currentProgram = Loader.loadwhatever(inputBuffer);
 			
 			// clear the input buffer
 			inputBuffer="";
-			 /* if(currentProgram==null) // there was an error
-			 * {
-			 * 	 continue;
-			 * }
-			 * ;// Run the code:
-			 * interpreter.interpret(currentProgram);
-			*/
+			
+			//TODO You know, try running the program
+			// something like Interpreter.run("_Main");
 			
 			
-			//out("I don't know what to do with this...");
 			
-			
-			// Basically, we need to discover if the input ends in a semicolon, if it does, continue, if not, output 
 		}
 		
 		
@@ -185,7 +172,7 @@ public class Shell
 	 */
 	public static boolean out( String toOut )
 	{
-		out(toOut, "<");
+		out(toOut, "AFL");
 		return true;
 	}
 	
@@ -204,6 +191,18 @@ public class Shell
 	{
 		out( toOut, origin, 0 );
 		return true;
+	}
+	
+	
+	/**
+	 *  The shell handles all user interaction, so the out method has a variety of ways of printing to console.
+	 * @param toOut string to output
+	 * @param origin the sender of the message. typically 'Ziker 4'
+	 * @return returns true.
+	 */
+	public static boolean out( String toOut, int DebugLevel )
+	{
+		return out( toOut, "AFL", DebugLevel );		
 	}
 	
 	
@@ -283,5 +282,4 @@ public class Shell
 		System.out.println( origin+", Line "+line+": "+toOut);
 		return true;
 	}
-
 }
