@@ -2,6 +2,8 @@ package qwerty4967.AFL.ParseTree;
 
 import java.util.ArrayList;
 
+import qwerty4967.AFL.Function.AFLFunction;
+
 
 public abstract class Container extends Element implements HasChildren
 {
@@ -13,8 +15,9 @@ public abstract class Container extends Element implements HasChildren
 	// wow.
 
 	private ArrayList<Element> children=new ArrayList<Element>();
-	protected String name; // since everything I'm writing is in the same package, isn't this functionally the same as making it public?
-	// I just want subclasses to see it, nothing else.
+	protected String name; // I had a comment here, but now it's not
+	// what is the name for anyways?
+	// toString, right.
 	
 	/**
 	 * 
@@ -63,7 +66,8 @@ public abstract class Container extends Element implements HasChildren
 		// having this method earlier would definitely reduce some awkwardness.
 		if(child instanceof Statement)
 		{
-			assert false;
+			System.out.println("ATTEMPTED TO ADD A STATEMENT TO A CONTAINER");
+			System.exit(-1);
 		}
 		child.addTo(this,index);
 		children.add(index,child);

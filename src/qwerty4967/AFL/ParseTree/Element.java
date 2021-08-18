@@ -1,6 +1,6 @@
 package qwerty4967.AFL.ParseTree;
 
-
+import qwerty4967.AFL.Function.AFLFunction;
 
 public abstract class Element 
 {

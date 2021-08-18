@@ -7,7 +7,7 @@ public class Shell
 {
 	// Here is a comment, in the mildly vain hope that I might remember to put something more meaningful here.
 	// I've got to say, I'm excited to get started on something new.
-	// Hopefully it won't take months...
+	// Hopefully it won't take months... (4 months later: HAH)
 	// Started 4/30/21, for Computer Science II final project.
 	// Hopefully there aren't any requirements in there that will be a challenge... 
 	// I can shoe-horn some stuff in if need-be.
@@ -135,6 +135,13 @@ public class Shell
 		// learning is great!
 		// uh, did I get sidetracked?
 		// whatever, moving on.
+		
+		// Note from slightly future self:
+		// the joke is still really bad
+		// and I am trying to do this better
+		// hopefully it works
+		// best of luck
+		
 		if(string.length()==0)
 		{
 			//doesn't really matter.
