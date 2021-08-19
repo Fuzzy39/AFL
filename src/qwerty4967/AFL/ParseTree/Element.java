@@ -37,7 +37,7 @@ public abstract class Element
 		
 		if( !function.add(this))
 		{
-			throw new Exception("Could not add Element to function "+function.getName());
+			assert false; 
 		}
 		
 		this.function=function;
@@ -183,7 +183,14 @@ public abstract class Element
 	public String toString() {
 		return "FunctionalElement [function=" + function + ", parent=" + parent + ", ID=" + ID + "]";
 	}
-
+	
+	public void setID(int newID, Object o )
+	{
+		if(o instanceof HasChildren)
+		{	
+			ID=newID;
+		}
+	}
 
 
 }

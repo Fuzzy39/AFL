@@ -39,7 +39,7 @@ public class Shell
 	 * Oh well, it's about what you expect
 	 * If you want more detailed explanations of what things do and how they work, they might be in the code's comments
 	 * only sometimes, of course.
-	 * @param args does nothing, as of yet.
+	 * @param args does nothing, yet. 
 	 */
 	public static void main(String[] args) 
 	{
