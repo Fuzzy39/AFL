@@ -45,6 +45,27 @@ public class Statement extends Container
 	}
 	
 	
+	@Override
+	public int addChild( Element toAdd)
+	{
+		// Statements can only have the one child.
+		// it's the rules, kid.
+		// I think that joke was so bad it can't even be classified as such.
+		// welp.
+		if(this.getSize()!=0)
+		{
+			// I should probably throw an exception, that would be the polite thing to do
+			// or maybe this should be an assertion?
+			System.out.println("ATTEMPTED TO GIVE A STATEMENT MORE THAN ONE CHILD");
+			System.exit(-1);
+			
+		}
+		
+		return super.addChild(toAdd);
+		
+		
+	}
+	
 	
 	
 	
