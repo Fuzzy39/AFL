@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import qwerty4967.AFL.Function.AFLFunction;
 
 
-public abstract class Container extends Element implements HasChildren
+public class Container extends Element implements HasChildren
 {
 	// Time to get down to buisness
 	// of the very abstract.
@@ -26,7 +26,7 @@ public abstract class Container extends Element implements HasChildren
 	public Container( AFLFunction function)
 	{
 		super(function);
-		this.name="ElementContainer";
+		this.name="Container";
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public abstract class Container extends Element implements HasChildren
 		
 		
 		super(function, parent);
-		this.name="ElementContainer";
+		this.name="Container";
 
 	}
 	
@@ -150,6 +150,10 @@ public abstract class Container extends Element implements HasChildren
 	 */
 	public String toString() 
 	{
+		// this is a mess
+		// what does it do?
+		// I know it's recursive...
+		
 		String tree="";
 		for(int i = 0; i<children.size(); i++)
 		{

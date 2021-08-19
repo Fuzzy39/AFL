@@ -37,6 +37,7 @@ public abstract class Element
 		
 		if( !function.add(this))
 		{
+			System.out.println("CREATING ELEMENT FAILED (somehow)");
 			assert false; 
 		}
 		
