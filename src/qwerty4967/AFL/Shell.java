@@ -1,6 +1,8 @@
 package qwerty4967.AFL;
 import java.util.Scanner;
 
+import qwerty4967.AFL.Parse.Parser;
+
 
 
 public class Shell 
@@ -26,10 +28,17 @@ public class Shell
 	// 8/13/21 b 328 Decided to massively refactor the code. Renamed from Ziker 4 to AFL (Arguably Functional Language)
 	
 	
-	private static final int build = 329;
+	private static final int build = 330;
 	
 	private static int debugLevel = 4; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
+	/*
+	 * As a general Guideline for which debug level to use:
+	 * 1 : Only the highest level information. Only extensively used in Parser.parse.
+	 * 2 : Basic information about a process.
+	 * 3 : Details about a process
+	 * 4 : information about a sub-process.
+	 */
 	
 	private static Scanner sc= new Scanner( System.in ); // Setup the Scanner for gathering user input. 
 	
@@ -50,7 +59,7 @@ public class Shell
 		// let's worry about that later...
 		
 		// TODO replace this with an AFL function in the very long term.
-		out("AFL !WARNING: not functional in the slightest! | build: "+build+" | debug: "+debugLevel);
+		out("WARNING: not functional in the slightest! | build: "+build+" | debug: "+debugLevel);
 		out("");
 		
 		
@@ -70,12 +79,12 @@ public class Shell
 			}
 			
 			//input is done.
-			out("Input Recieved: \""+inputBuffer+"\"","Ziker 4", 1);
+			out("Input Recieved: \""+inputBuffer+"\"", 1);
 			
 			
 			
 			// Attempt to parse the program:
-			Parser.Parse(inputBuffer);
+			Parser.parse(inputBuffer);
 			
 			// clear the input buffer
 			inputBuffer="";
@@ -142,23 +151,27 @@ public class Shell
 		// hopefully it works
 		// best of luck
 		
+		// a couple days later: 
+		// you doof, this thing still calls itself ziker...
+		// pah, I'll do it myself.
+		
 		if(string.length()==0)
 		{
 			//doesn't really matter.
-			out("No Input.","Ziker 4", 3);
+			out("No Input.", 3);
 			return true;
 			
 		}
 		
-		out("Line Recieved: \""+string+"\"","Ziker 4",2);
+		out("Line Recieved: \""+string+"\"",2);
 		
 		if( string.charAt(string.length()-1)==';')
 		{
-			out("Input Continuing...","Ziker 4", 3);
+			out("Input Continuing...", 3);
 			return true;
 		}
 		
-		out("End of Input.","Ziker 4", 3);
+		out("End of Input.", 3);
 		return false;
 		
 	}
@@ -188,6 +201,13 @@ public class Shell
 	// the origin is the location the message came from. 
 	//If you're using this particular method the origin is probably going to be "Ziker 4",
 	//but maybe not, who knows! certainly not me.
+	
+	// I'm keeping that comment for posterity, but yeah
+	// If you are reading this, Mr. Bower, you might remember the pile of gibberish I handed in as a final
+	// last year, which addressed itself as ziker 4
+	// This is still the same project.
+	// I mean it doesn't bear much resemblance at all, only this class and a couple methods are very similar...
+	// And most everything got at least slightly touched if not completely destroyed or rewritten.
 	/**
 	 *  The shell handles all user interaction, so the out method has a variety of ways of printing to console.
 	 * @param toOut string to output
