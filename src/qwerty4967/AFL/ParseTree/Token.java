@@ -10,16 +10,16 @@ public class Token extends Element
 	// the type of the token.
 	
 	private String data;
-	private Lang.tokenTypes type;
+	private Lang.tokenType type;
 	
-	public Token(String data, Lang.tokenTypes type, AFLFunction function, Container parent) 
+	public Token(String data, Lang.tokenType type, AFLFunction function, Container parent) 
 	{
 		super(function, parent);
 		this.data = data;
 		this.type = type;
 	}
 
-	public Token(String data, Lang.tokenTypes type, AFLFunction function) 
+	public Token(String data, Lang.tokenType type, AFLFunction function) 
 	{
 		super(function);
 		this.data = data;
@@ -36,12 +36,12 @@ public class Token extends Element
 		this.data = data;
 	}
 
-	public Lang.tokenTypes getType() 
+	public Lang.tokenType getType() 
 	{
 		return type;
 	}
 
-	public void setType(Lang.tokenTypes type) 
+	public void setType(Lang.tokenType type) 
 	{
 		this.type = type;
 	}

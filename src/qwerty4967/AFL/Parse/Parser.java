@@ -23,6 +23,9 @@ public class Parser
 		
 		Shell.out("Begining Parsing...", 1);
 		
+		// probably should make the AFLFunction everything will end up in
+		AFLFunction main = new AFLFunction("_main");
+		
 		// Here we're just splitting all of the code by ';' to determine statements.
 		// I know that this presents a problem with ; not being able to be part of strings,
 		// but I'm okay with that, I think. Is it a problem? I guess, but it's logically consistent to me
@@ -31,6 +34,16 @@ public class Parser
 		Shell.out("Creating Statement Array..", 2);
 		ArrayList<String> statements = seperateStatements(code);
 		Shell.out("Statement Array Created:\n"+statements, 1);
+		
+		// next we identify and separate important tokens ( strings, numbers, operators, etc.) i
+		Shell.out("Creating Tokens...",3);
+		main = Tokenizer.tokenize(main, statements);
+		if(main == null)
+		{	
+			Shell.out("Tokenizer errored out... returning",2);
+			return null;
+		}
+		Shell.out("Results of Tokenizer:"+main+"\n",1);
 		
 		// TODO everything.
 		return null;
@@ -41,7 +54,7 @@ public class Parser
 		if(main == null)
 		{	
 			Shell.out("example errored out... returning",2);
-			return;
+			return null;
 		}
 		Shell.out("Results of example:"+main+"\n",1);
 		*/

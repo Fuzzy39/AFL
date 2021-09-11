@@ -14,18 +14,17 @@ public class Lang
 		
 		public static final int MAXIMUM_DEPTH =10000; //  wanted the int limit, but that gave me errors...
 		
-		public static enum tokenTypes
+		public static enum tokenType
 		{
-			variable,
+			variable, // first 4 are 'raw text'
 			function,
-			keyword,
+			type,
+			bool,
 			number,
 			string,
 			character,
-			bool,
 			operator,
-			prototext, // this is a dangerous one - only used while parsing, it should never be encountered in runtime.
-			groupPointer // also only used while parsing, specifically '(' and ')'s.
+			groupPointer // also only used while parsing, specifically '(' and ')'s. TODO is required?
 		}
 		
 		// I wasn't sure whether it would make more sense to make a series of enums or just do a two dimensional array, so
