@@ -284,7 +284,7 @@ public class Shell
 	 * @param line the line number the message came from/
 	 * @return returns true if the message was displayed
 	 */
-	public static boolean out( String toOut, String origin, int debugLevel, int line )
+	public static boolean error( String toOut, int line )
 	{
 		
 		
@@ -294,7 +294,7 @@ public class Shell
 		{
 			throw new IllegalArgumentException
 			(
-					origin + " attempted to send a message \"" + toOut + "\" with invalid debug level " 
+					 " Attempted to send an error message \"" + toOut + "\" with invalid debug level " 
 					+ Shell.debugLevel + ". Expected range is 0-" + MAX_DEBUG_LEVEL + "."
 			);
 		}
@@ -306,7 +306,7 @@ public class Shell
 		}
 		
 		
-		System.out.println( origin+", Line "+line+": "+toOut);
+		System.out.println( "AFL: Error on line "+line+": "+toOut);
 		return true;
 	}
 }

@@ -1,7 +1,7 @@
 package qwerty4967.AFL.ParseTree;
 
-import qwerty4967.AFL.Lang;
 import qwerty4967.AFL.Function.AFLFunction;
+import qwerty4967.AFL.Lang.Lang;
 
 public class Token extends Element 
 {
