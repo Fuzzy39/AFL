@@ -1,7 +1,7 @@
 package qwerty4967.AFL.ParseTree;
 
 import qwerty4967.AFL.Function.AFLFunction;
-import qwerty4967.AFL.Lang.Lang;
+import qwerty4967.AFL.Lang.*;
 
 public class Token extends Element 
 {
@@ -10,16 +10,16 @@ public class Token extends Element
 	// the type of the token.
 	
 	private String data;
-	private Lang.tokenType type;
+	private TokenType type;
 	
-	public Token(String data, Lang.tokenType type, AFLFunction function, Container parent) 
+	public Token(String data, TokenType type, AFLFunction function, Container parent) 
 	{
 		super(function, parent);
 		this.data = data;
 		this.type = type;
 	}
 
-	public Token(String data, Lang.tokenType type, AFLFunction function) 
+	public Token(String data, TokenType type, AFLFunction function) 
 	{
 		super(function);
 		this.data = data;
@@ -36,12 +36,12 @@ public class Token extends Element
 		this.data = data;
 	}
 
-	public Lang.tokenType getType() 
+	public TokenType getType() 
 	{
 		return type;
 	}
 
-	public void setType(Lang.tokenType type) 
+	public void setType(TokenType type) 
 	{
 		this.type = type;
 	}

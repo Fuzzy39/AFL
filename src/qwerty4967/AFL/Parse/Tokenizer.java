@@ -44,62 +44,59 @@ public class Tokenizer
 		//next, look through each character meticulously.
 		TokenType currentTokenType = null;
 		TokenType currentCharType = null;
-		boolean isStringMode = false;
+		
 		String currentTokenData = "";
 		
 		for( int i = 0; i<=toTokenize.length(); i++)
 		{
-			if(!isStringMode)
-			{
-				 char currentChar=toTokenize.charAt(i);
-				 
-				 currentCharType=getCharType(currentChar);
-				 
-				 if(currentCharType!=currentTokenType)
-				 {
-					 // two things.
-					 // one, verify and create the current token.
-					 // two, get ready to look for the next token
-					 if(currentTokenType!=null)
-					 {
-						 // create token also verifies the token.
-						 if(!createToken(statement, currentTokenData, currentTokenType))
-						 {
-							 return false;
-						 }
-						 currentTokenData="";
-					 }
-					 
-					 currentTokenType=currentCharType;
-					 switch(currentTokenType)
-					 {
-					 	
-					 	case variable:
-					 	case number:
-					 	case operator:
-					 		// just set up for next time, nothing special.
-					 		currentTokenData+=currentChar;
-					 		continue;
-					 		break;
-					 	case character:
-					 		System.out.println("NOPE");
-					 		return false;
-					 	case string:
-					 		System.out.println("NOPE");
-					 		return false;
-					 	default:
-					 		Shell.error("internal error. Invalid token type "+currentCharType, statementNumber);
-					 		System.exit(-1);
-					 }
-				 }
-				 else
-				 {
-					 currentTokenData+=currentChar;
-					 continue;
-				 }
-			}
 			
+			 char currentChar=toTokenize.charAt(i);
+			 
+			 currentCharType=getCharType(currentChar);
+			 
+			 if(currentCharType!=currentTokenType)
+			 {
+				 // two things.
+				 // one, verify and create the current token.
+				 // two, get ready to look for the next token
+				 if(currentTokenType!=null)
+				 {
+					 // create token also verifies the token.
+					 if(!createToken(statement, currentTokenData, currentTokenType))
+					 {
+						 return false;
+					 }
+					 currentTokenData="";
+				 }
+				 
+				 currentTokenType=currentCharType;
+				 switch(currentTokenType)
+				 {
+				 	
+				 	case variable:
+				 	case number:
+				 	case operator:
+				 		// just set up for next time, nothing special.
+				 		currentTokenData+=currentChar;
+				 		continue;
+				 	case character:
+				 		System.out.println("NOPE");
+				 		return false;
+				 	case string:
+				 		System.out.println("NOPE");
+				 		return false;
+				 	default:
+				 		Shell.error("internal error. Invalid token type "+currentCharType, statementNumber);
+				 		System.exit(-1);
+				 }
+			 }
+			 else
+			 {
+				 currentTokenData+=currentChar;
+				 continue;
+			 }
 		}
+
 		return false;
 	}
 	
@@ -130,16 +127,29 @@ public class Tokenizer
 		return TokenType.operator;	
 	}
 	
-	private boolean createToken(Statement parent, String tokenData, TokenType type)
+	private static boolean createToken(Statement parent, String tokenData, TokenType type)
 	{
 		// keep in mind, characters never enter these cursed realms
 		//TODO make this a seperate token.
+		type=verifyToken(tokenData, type);
+		if(type==null)
+		{
+			return false;
+		}
+		
+		new Token(tokenData, type, parent.getFunction(), parent);
+		return true;
+		
+	}
+	
+	private static TokenType verifyToken(String tokenData, TokenType type)
+	{
 		switch(type)
 		{
 			case number:
 				if(!validateNumber(tokenData))
 				{
-					return false;
+					return null;
 				}
 			case variable:
 				// can't pull out fucntions
@@ -148,8 +158,47 @@ public class Tokenizer
 			case operator:
 				if(!validateOperator(tokenData))
 				{
-					return false;
+					return null;
 				}
+			default:
+				Shell.error("Internal error. Invalid token type '"+type+"' while verifying tokens.", -1);
+		 		System.exit(-1);
 		}
+		return type;
+		
 	}
+	
+	private static boolean validateNumber(String s)
+	{
+		// can't have more than 1 decimal point & decimal point cannot be at the end of the string.
+		
+		if(s.charAt(s.length()-1)=='.')
+		 {
+			 
+			 return false;
+			 
+		 }
+		 
+		 int dots=0;
+		 for(int i=0; i<s.length(); i++)
+		 {
+			 char c = s.charAt(i);
+			
+			 
+			 if(c=='.')
+			 {
+				 dots++;
+			 }
+			
+			 if(dots>1)
+			 {
+				 return false;
+			 }
+			 
+		 }
+		 // you've probably got a problem there...
+		 // shouldn't ever get here.
+		 return true;
+	}
+	
 }
