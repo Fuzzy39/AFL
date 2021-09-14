@@ -49,7 +49,7 @@ public class Token extends Element
 	@Override
 	public String toString() 
 	{
-		return "Token [ ID:"+this.ID+"| "+data  + ", " + type + "]";
+		return "Token [ ID:"+this.ID+" | \""+data  + "\", " + type + "]";
 	}
 
 }

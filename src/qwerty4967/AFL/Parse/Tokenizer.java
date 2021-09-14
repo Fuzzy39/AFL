@@ -2,6 +2,7 @@ package qwerty4967.AFL.Parse;
 
 import java.util.ArrayList;
 
+
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Function.*;
 import qwerty4967.AFL.ParseTree.*;
@@ -9,6 +10,7 @@ import qwerty4967.AFL.Lang.*;
 
 public class Tokenizer 
 {
+	private static int lineNumber;
 	// The first class that is actually particularly new to AFL!
 	// So, you might wonder, what does it do?
 	
@@ -25,7 +27,8 @@ public class Tokenizer
 		{
 			// if this method returns false, the user has made some kind of syntax error. 
 			// we need to pass this info up the chain.
-			if(!tokenizeStatement(main, statements.get(i), i+1))
+			lineNumber=i+1;
+			if(!tokenizeStatement(main, statements.get(i)))
 			{
 				return null;
 			}
@@ -36,10 +39,11 @@ public class Tokenizer
 		
 	}
 	
-	private static boolean tokenizeStatement(AFLFunction main, String toTokenize, int statementNumber)
+	private static boolean tokenizeStatement(AFLFunction main, String toTokenize)
 	{
 		// first, create the statement we are going to tokenize.
-		Statement statement = new Statement( statementNumber, main );
+		Statement statement = new Statement( lineNumber, main );
+		Container container = new Container(main, statement);
 		
 		//next, look through each character meticulously.
 		TokenType currentTokenType = null;
@@ -47,7 +51,7 @@ public class Tokenizer
 		
 		String currentTokenData = "";
 		
-		for( int i = 0; i<=toTokenize.length(); i++)
+		for( int i = 0; i<toTokenize.length(); i++)
 		{
 			
 			 char currentChar=toTokenize.charAt(i);
@@ -61,15 +65,27 @@ public class Tokenizer
 				 // two, get ready to look for the next token
 				 if(currentTokenType!=null)
 				 {
+					 
 					 // create token also verifies the token.
-					 if(!createToken(statement, currentTokenData, currentTokenType))
+					 if(!createToken(container, currentTokenData, currentTokenType))
 					 {
 						 return false;
 					 }
 					 currentTokenData="";
+					
+					 
 				 }
 				 
-				 currentTokenType=currentCharType;
+				 c	urrentTokenType=currentCharType;
+				 
+				 //whitespace handling.
+				 if(currentTokenType == null)
+				 {
+				 		// just set up for next time, nothing special.
+				 		//currentTokenData+=currentChar;
+				 		continue;
+				 }
+				 
 				 switch(currentTokenType)
 				 {
 				 	
@@ -86,24 +102,42 @@ public class Tokenizer
 				 		System.out.println("NOPE");
 				 		return false;
 				 	default:
-				 		Shell.error("internal error. Invalid token type "+currentCharType, statementNumber);
+				 		Shell.error("Internal error. Found invalid token type "+currentCharType, lineNumber);
 				 		System.exit(-1);
 				 }
 			 }
 			 else
 			 {
-				 currentTokenData+=currentChar;
-				 continue;
+				 if(currentCharType!=null)
+				 {
+					 currentTokenData+=currentChar;
+					 continue;
+				 }
+			 }
+		}
+		
+		// create a token with the last bit of data
+		if(currentTokenData.length()>0)
+		{
+			
+			 if(!createToken(container, currentTokenData, currentTokenType))
+			 {
+				 return false;
 			 }
 		}
 
-		return false;
+		return true;
 	}
 	
 	private static TokenType getCharType( char c)
 	{
+		if(Character.isWhitespace(c))
+		{
+			return null;
+		}
+		
 		// check for numbers, simply.
-		if( c>='0'||c<='9'||c=='.')
+		if( Character.isDigit(c)||c=='.')
 		{
 			return TokenType.number;
 		}
@@ -127,8 +161,10 @@ public class Tokenizer
 		return TokenType.operator;	
 	}
 	
-	private static boolean createToken(Statement parent, String tokenData, TokenType type)
+	private static boolean createToken(Container parent, String tokenData, TokenType type)
 	{
+		Shell.out("Creating Token with data '"+tokenData+"'", 3);
+		 
 		// keep in mind, characters never enter these cursed realms
 		//TODO make this a seperate token.
 		type=verifyToken(tokenData, type);
@@ -149,19 +185,23 @@ public class Tokenizer
 			case number:
 				if(!validateNumber(tokenData))
 				{
+					Shell.error("Invalid token '"+tokenData+"'. Is it a number? ", lineNumber);
 					return null;
 				}
+				break;
 			case variable:
 				// can't pull out fucntions
 				type=identifyKeywords(tokenData);
 				break;
 			case operator:
-				if(!validateOperator(tokenData))
+				//if(!validateOperator(tokenData))
 				{
+					Shell.error("Invalid Operator '"+tokenData+"'.", lineNumber);
 					return null;
 				}
+				//break;
 			default:
-				Shell.error("Internal error. Invalid token type '"+type+"' while verifying tokens.", -1);
+				Shell.error("Internal error. Found invalid token type '"+type+"' while verifying tokens.", -1);
 		 		System.exit(-1);
 		}
 		return type;
@@ -198,7 +238,31 @@ public class Tokenizer
 		 }
 		 // you've probably got a problem there...
 		 // shouldn't ever get here.
+		 // ^ The above comment was in Ziker 4 code
+		 // I haven't the faintest idea what it means.
+		 
 		 return true;
 	}
 	
+	private static TokenType identifyKeywords(String data)
+	{
+		for(String bool : Lang.BOOLS)
+		{
+			if(data.equals(bool))
+			{
+				return TokenType.bool;
+			}
+		}
+		
+		for(String type : Lang.TYPES)
+		{
+			if(data.equals(type))
+			{
+				return TokenType.type;
+			}
+		}
+		
+		// NOTE: this can also include functions. we aren't bothered with those just yet.
+		return TokenType.variable;
+	}
 }
