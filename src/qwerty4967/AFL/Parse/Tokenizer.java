@@ -96,11 +96,24 @@ public class Tokenizer
 				 		currentTokenData+=currentChar;
 				 		continue;
 				 	case character:
-				 		System.out.println("NOPE");
-				 		return false;
+				 		if(!createCharacter(i, toTokenize, container))
+				 		{
+				 			return false;
+				 		}
+				 		
+				 		currentTokenType=null; // not sure if this is required...
+				 		i+=2; // a character's length.
+				 		continue;
 				 	case string:
-				 		System.out.println("NOPE");
-				 		return false;
+				 		int newI =createString(i, toTokenize, container);
+				 		if(newI==-1)
+				 		{
+				 			return false;
+				 		}
+				 		
+				 		currentTokenType=null; // not sure if this is required...
+				 		i=newI; // a character's length.
+				 		continue;
 				 	default:
 				 		Shell.error("Internal error. Found invalid token type "+currentCharType, lineNumber);
 				 		System.exit(-1);
@@ -310,5 +323,84 @@ public class Tokenizer
 		}
 		toReturn = toReturn.substring(1);
 		return toReturn;
+	}
+	
+	private static boolean createCharacter(int startingIndex, String statement, Container parent)
+	{
+		if(!validateCharacter(startingIndex, statement))
+		{
+			Shell.error("Invalid Character.", lineNumber);
+			return false;
+		}
+		
+		// we are assuming that the character is perfectly fine.
+		String character = Character.toString(statement.charAt(startingIndex+1));
+		new Token(character,TokenType.character, parent.getFunction(), parent);
+		return true;
+	}
+	
+	private static boolean validateCharacter(int startingIndex, String statement)
+	{
+		// perform various checks
+		// first, bounds.
+		if(startingIndex+2>=statement.length())
+		{
+			return false;
+		}
+		
+		// next, quotes.
+		
+		if(statement.charAt(startingIndex)!='\'')
+		{
+			return false;
+		}
+		
+		if(statement.charAt(startingIndex+2)!='\'')
+		{
+			return false;
+		}
+		
+		// seems good
+		
+		return true;
+		
+	}
+	
+	// returns length of string.
+	private static int createString(int startingIndex, String statement, Container parent)
+	{
+		int toReturn = validateString(startingIndex, statement);
+		if(toReturn == -1)
+		{
+			return -1;
+		}
+		
+		String string = statement.substring(startingIndex+1, toReturn+1);
+		Shell.out("Found string \""+string+"\".", 3);
+		
+		new Token(string,TokenType.string, parent.getFunction(), parent);
+		
+		return toReturn+1;
+	}
+	
+	/**
+	 *  
+	 * @param startingIndex
+	 * @param statement
+	 * @return the character index of the end of the string
+	 */
+	private static int validateString(int startingIndex, String statement)
+	{
+		
+		for(int i = startingIndex+1; i<statement.length(); i++)
+		{
+			if(statement.charAt(i)=='"')
+			{
+				return i-1;
+			}
+		}
+		
+		Shell.error("Invalid String.", lineNumber);
+		return -1;
 	}
 }
