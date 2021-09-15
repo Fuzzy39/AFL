@@ -14,7 +14,7 @@ public class Operators
 		
 	};
 		
-	public static enum PRIORITY_GROUPS
+	public static enum PRIORITY_GROUP
 	{
 		organize,
 		assign,
@@ -36,5 +36,10 @@ public class Operators
 			}
 		}
 		return toReturn;
+	}
+	
+	public static String[] getGroup(PRIORITY_GROUP pg)
+	{
+		return SORTED[pg.ordinal()];
 	}
 }

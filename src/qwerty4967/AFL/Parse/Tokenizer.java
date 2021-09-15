@@ -1,7 +1,7 @@
 package qwerty4967.AFL.Parse;
 
 import java.util.ArrayList;
-
+import java.util.Arrays;
 
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Function.*;
@@ -76,14 +76,14 @@ public class Tokenizer
 					 
 				 }
 				 
-				 c	urrentTokenType=currentCharType;
+				 currentTokenType=currentCharType;
 				 
 				 //whitespace handling.
 				 if(currentTokenType == null)
 				 {
-				 		// just set up for next time, nothing special.
-				 		//currentTokenData+=currentChar;
-				 		continue;
+			 		// just set up for next time, nothing special.
+			 		//currentTokenData+=currentChar;
+			 		continue;
 				 }
 				 
 				 switch(currentTokenType)
@@ -167,18 +167,21 @@ public class Tokenizer
 		 
 		// keep in mind, characters never enter these cursed realms
 		//TODO make this a seperate token.
-		type=verifyToken(tokenData, type);
+		type=verifyToken(tokenData, type, parent);
 		if(type==null)
 		{
 			return false;
 		}
 		
-		new Token(tokenData, type, parent.getFunction(), parent);
+		if(type!=TokenType.operator)
+		{
+			new Token(tokenData, type, parent.getFunction(), parent);
+		}
 		return true;
 		
 	}
 	
-	private static TokenType verifyToken(String tokenData, TokenType type)
+	private static TokenType verifyToken(String tokenData, TokenType type, Container parent)
 	{
 		switch(type)
 		{
@@ -194,12 +197,12 @@ public class Tokenizer
 				type=identifyKeywords(tokenData);
 				break;
 			case operator:
-				//if(!validateOperator(tokenData))
+				if(!validateOperator(tokenData, parent))
 				{
 					Shell.error("Invalid Operator '"+tokenData+"'.", lineNumber);
 					return null;
 				}
-				//break;
+				break;
 			default:
 				Shell.error("Internal error. Found invalid token type '"+type+"' while verifying tokens.", -1);
 		 		System.exit(-1);
@@ -264,5 +267,48 @@ public class Tokenizer
 		
 		// NOTE: this can also include functions. we aren't bothered with those just yet.
 		return TokenType.variable;
+	}
+	
+	private static boolean validateOperator( String data, Container parent)
+	{
+		// split by organize Operators, then identify and create operators.
+		
+		// first step is to create the regex, which will be made dynamically, in case I ever need another
+		// organize operator.
+		// frankly from where I'm standing now this seems pretty unlikely.
+		// whatever.
+		String[] ops = data.split(createOperatorRegex());
+		outer: for(String op:ops)
+		{
+			for(String toCheck:Operators.list())
+			{
+				if(op.equals(toCheck))
+				{
+					// create the operator
+					new Token(op,TokenType.operator, parent.getFunction(), parent);
+					continue outer;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+	
+	private static String createOperatorRegex()
+	{
+		String escape = "\\.[]{}()<>*+-=!?^$|";
+		String lookBehind="?<=";
+		String lookAhead = "?=";
+		String toReturn = "";
+		// That looks like gibberish, it means organize operators.
+		for(String op : Operators.getGroup(Operators.PRIORITY_GROUP.organize))
+		{
+			// escape characters if they need it
+			op = escape.contains(op) ? ("\\"+op):op;
+			
+			toReturn+="|(("+lookBehind+op+")|("+lookAhead+op+"))";
+		}
+		toReturn = toReturn.substring(1);
+		return toReturn;
 	}
 }
