@@ -23,26 +23,13 @@ public class Container extends Element implements HasChildren
 	 * 
 	 * @param group
 	 */
-	public Container( AFLFunction function)
+	public Container( HasChildren parent)
 	{
-		super(function);
+		super(parent);
 		this.name="Container";
 	}
 	
-	/**
-	 * 
-	 * @param group
-	 * @param parent
-	 * @throws Exception
-	 */
-	public Container (AFLFunction function, Container parent) 
-	{
-		
-		
-		super(function, parent);
-		this.name="Container";
-
-	}
+	
 	
 	/**
 	 * adds a child to the element.
@@ -69,7 +56,7 @@ public class Container extends Element implements HasChildren
 			System.out.println("ATTEMPTED TO ADD A STATEMENT TO A CONTAINER");
 			System.exit(-1);
 		}
-		child.addTo(this,index);
+		child.moveTo(this,index);
 		children.add(index,child);
 		updateChildrenIDs();
 	}

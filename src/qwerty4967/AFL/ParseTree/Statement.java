@@ -13,27 +13,14 @@ public class Statement extends Container
 	 * @param num
 	 * @param group
 	 */
-	public Statement( int num, AFLFunction function)
+	public Statement( int num, AFLFunction parent)
 	{
-		super(function);
+		super(parent);
+		
 		statementNumber=num;
 		name="Statement";
 	}
 	
-	/**
-	 * 
-	 * @param num
-	 * @param group
-	 * @param parent
-	 * @throws Exception
-	 */
-	public Statement(int num, AFLFunction function, Container parent)
-	{
-		super(function, parent);
-		System.out.println("ATTEMPTED TO ADD A STATEMENT TO A CONTAINER");
-		System.exit(-1);
-		
-	}
 	
 	/**
 	 * 

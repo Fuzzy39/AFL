@@ -15,62 +15,18 @@ public abstract class Element
 	// If I've done my job right, at least.
 		
 
-	private AFLFunction function;
-	private Container parent;
+	
+	private HasChildren parent;
 	
 	// I'm not sure if this is necessary, but I'll put it in because it can only make things easier.
+	// As it turns out, very helpful.
 	protected int ID;
 	
-	// now that I think about it I wonder if java already has a tree thing like I'm making?
-	// meh, probably not, mine is kind of weird.
-	/**
-	 * this throws an exception.
-	 * it is the cauase of many problems
-	 * it is impossible for this to actually cause an exception
-	 * but yet it throws it.
-	 * @param function
-	 * @param parent
-	 * @throws Exception
-	 */
-	public Element( AFLFunction function, Container parent)
+	
+	public Element(HasChildren parent)
 	{
-		
-		if( !function.add(this))
-		{
-			System.out.println("CREATING ELEMENT FAILED (somehow)");
-			assert false; 
-		}
-		
-		this.function=function;
-		this.ID = -1;
-		int id=parent.addChild(this);
-		
-		if( id == -1) // adding child failed
-		{
-			// it might be possible for it to be impossible for adding this stuff to fail, I'm not sure.
-			assert false;
-		}
-		
-		this.ID=id;
 		this.parent=parent;
-		
-	}
-	
-	/**
-	 * 
-	 * @param function
-	 */
-	public Element( AFLFunction function)
-	{
-		// in this case the element has no container as a parent, and is directly part of the function.
-		int id = function.addChild(this);
-		
-	
-		
-		this.function=function;
-		this.ID=id;
-		this.parent=null;
-		
+		this.ID=parent.addChild(this);
 	}
 
 	
@@ -80,15 +36,7 @@ public abstract class Element
 	 */
 	public int getID()
 	{
-		if(parent!=null)
-		{	
-			assert this==parent.getChild(ID);
-		}
-		else
-		{
-			assert this==function.getChild(ID);
-		}
-		
+		assert this==parent.getChild(ID);
 		return ID;
 	}
 	
@@ -96,7 +44,7 @@ public abstract class Element
 	 * do the thing
 	 * @return
 	 */
-	public Container getParent()
+	public HasChildren getParent()
 	{
 		return parent;
 	}
@@ -107,48 +55,53 @@ public abstract class Element
 	 */
 	public AFLFunction getFunction()
 	{
-		return function;
+		HasChildren root = getRoot();
+		if(root instanceof AFLFunction)
+		{
+			return (AFLFunction)root;
+		}
+		return null;
 	}
+	
+	public Group getGroup()
+	{
+		HasChildren root = getRoot();
+		if(root instanceof Group)
+		{
+			return (Group)root;
+		}
+		return null;
+	}
+	
+	public HasChildren getRoot()
+	{
+		HasChildren p = parent;
+		while(p instanceof Container)
+		{
+			p=((Container)p).getParent();
+		}
+		return p;
+	}
+	
 	
 	/**
 	 * add to a new parent.
 	 * @param newParent
 	 * @return
 	 */
-	protected boolean addTo( Container newParent, int id)
+	protected boolean moveTo( HasChildren newParent, int id)
 	{
 		
-		
-		// now, it's actually usefull to check for the EXACT same object here,
-		// it needs to be the same, not just a copy or something.
-		// why? it doesn't have to be...
-		// no real reason, but I know that an element should never travel between functions.
-		
-		if(!newParent.getFunction().equals(this.getFunction()))
-		{
-			return false;
-		}
-		
-		if(newParent != parent)
-		{
-			if(parent!= null)
-			{
-				parent.removeChild(this);
-			}
-			else
-			{
-				// okay, we are moving from root to, presumably, a new container.
-				if(this.ID!=-1)
-				{
-					function.removeChild(this);
-				}
-			}
-		}
+
+		parent.removeChild(this);
+		newParent.addChild(id, this);
 		
 		this.ID=id;
 		this.parent=newParent;
 		return true;
 	}
+	
+	
 	
 	/**
 	 * remove from parent, delete the object more or less
@@ -156,42 +109,37 @@ public abstract class Element
 	public void remove()
 	{
 		// delete the object, basically.
-		if(parent!=null)
-		{
-			parent.removeChild(this);
-			this.parent=null;
-		}
 		
-		function.removeChild(this);
+		parent.removeChild(this);
+		this.parent=null;
 		this.ID=-1;
-		function=null;
+	
 		
 	}
 	
-	public void removeFromParent()
-	{
-		if(parent!=null)
-		{
-			parent.removeChild(this);
-			this.parent=null;
-		}
-	}
+	
 
 	@Override
 	/**
 	 * standard
+	 * 
 	 */
-	public String toString() {
-		return "FunctionalElement [function=" + function + ", parent=" + parent + ", ID=" + ID + "]";
+	public String toString() 
+	{
+		// if this were to list it's parents, then it would never end, so that's bad, and won't happen.
+		return "Element [ID=" + ID + "]";
 	}
 	
-	public void setID(int newID, Object o )
+	// this is to expand visibility to AFLFunctions, for when they need to re-sync their children's ID's.
+	// seems weird, but I can't think of a more reasonable solution...
+	public boolean setID(int newID, HasChildren parent)
 	{
-		if(o instanceof HasChildren)
-		{	
+		if(this.parent==parent)
+		{
 			ID=newID;
+			return true;
 		}
+		return false;
 	}
-
 
 }

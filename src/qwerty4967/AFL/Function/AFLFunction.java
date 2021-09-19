@@ -77,7 +77,7 @@ public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
 			
 			
 			
-			return "\n\nFunctionalGroup:\n" 
+			return "\n\nAFLFunction:\n" 
 					+ "name: " + name
 					+ "\nperameters:" + perameters 
 					+ "\n\nChildren:" +  tree ;
@@ -173,17 +173,7 @@ public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
 			children= new ArrayList<Element>();
 		}
 		
-		/**
-		 * Adds a child
-		 * @param toAdd
-		 * @return
-		 */
-		public boolean add( Element toAdd)
-		{
-			// adds to all children.
-			updateChildrenIDs();
-			return true;
-		}
+		
 
 		/**
 		 * @return the name

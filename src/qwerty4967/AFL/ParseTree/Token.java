@@ -12,16 +12,10 @@ public class Token extends Element
 	private String data;
 	private TokenType type;
 	
-	public Token(String data, TokenType type, AFLFunction function, Container parent) 
-	{
-		super(function, parent);
-		this.data = data;
-		this.type = type;
-	}
 
-	public Token(String data, TokenType type, AFLFunction function) 
+	public Token(String data, TokenType type, HasChildren parent) 
 	{
-		super(function);
+		super(parent);
 		this.data = data;
 		this.type = type;
 	}
