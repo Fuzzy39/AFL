@@ -1,7 +1,6 @@
 package qwerty4967.AFL.Parse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Function.*;
