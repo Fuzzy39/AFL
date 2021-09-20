@@ -425,5 +425,9 @@ public class Tokenizer
 				}
 			}
 		}
+		
+		// this comment is here to break the clean diagonal of the braces here.
+		// it felt unnatural, I had to break it up somehow.
+		
 	}
 }

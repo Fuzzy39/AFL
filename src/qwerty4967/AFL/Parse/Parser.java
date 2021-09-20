@@ -35,8 +35,9 @@ public class Parser
 		ArrayList<String> statements = seperateStatements(code);
 		Shell.out("Statement Array Created:\n"+statements, 1);
 		
+		
 		// next we identify and separate important tokens ( strings, numbers, operators, etc.) i
-		Shell.out("Creating Tokens...",3);
+		Shell.out("Calling Tokenizer...",3);
 		main = Tokenizer.tokenize(main, statements);
 		if(main == null)
 		{	
@@ -44,6 +45,17 @@ public class Parser
 			return null;
 		}
 		Shell.out("Results of Tokenizer:"+main+"\n",1);
+		
+		
+		// and then we turn those tokens into a tree made entirely of function calls. 
+		Shell.out("Calling Functionizer...",3);
+		main = Functionizer.functionize(main);
+		if(main == null)
+		{	
+			Shell.out("functionizer errored out... returning",2);
+			return null;
+		}
+		Shell.out("Results of functionizer:"+main+"\n",1);
 		
 		// TODO everything.
 		return null;

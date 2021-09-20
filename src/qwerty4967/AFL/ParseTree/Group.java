@@ -7,6 +7,7 @@ public class Group implements HasChildren
 	// Group represents a collection of Tokens and FunctionCalls that are within parentheses,
 	// whether they're function parameters or just normal groups.
 	// this is basically a straight copy of Container, except it's not an Element.
+	
 	private ArrayList<Element> children;
 	
 	public Group()
