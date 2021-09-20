@@ -91,10 +91,12 @@ public abstract class Element
 	 */
 	protected boolean moveTo( HasChildren newParent, int id)
 	{
-		
-
-		parent.removeChild(this);
-		newParent.addChild(id, this);
+		// this is only false during an element's initialization.
+		if(parent!=null)
+		{
+			parent.removeChild(this);
+		}
+		//newParent.addChild(id, this);
 		
 		this.ID=id;
 		this.parent=newParent;
@@ -106,11 +108,11 @@ public abstract class Element
 	/**
 	 * remove from parent, delete the object more or less
 	 */
-	public void remove()
+	protected void remove()
 	{
 		// delete the object, basically.
 		
-		parent.removeChild(this);
+	
 		this.parent=null;
 		this.ID=-1;
 	

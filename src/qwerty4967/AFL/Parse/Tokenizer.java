@@ -32,6 +32,7 @@ public class Tokenizer
 			{
 				return null;
 			}
+			locateFunctionCalls((Statement)main.getChild(i));
 			
 		}
 		
@@ -43,7 +44,7 @@ public class Tokenizer
 	{
 		// first, create the statement we are going to tokenize.
 		Statement statement = new Statement( lineNumber, main );
-		Container container = new Container(main, statement);
+		Container container = new Container(statement);
 		
 		//next, look through each character meticulously.
 		TokenType currentTokenType = null;
@@ -188,7 +189,7 @@ public class Tokenizer
 		
 		if(type!=TokenType.operator)
 		{
-			new Token(tokenData, type, parent.getFunction(), parent);
+			new Token(tokenData, type, parent);
 		}
 		return true;
 		
@@ -298,7 +299,7 @@ public class Tokenizer
 				if(op.equals(toCheck))
 				{
 					// create the operator
-					new Token(op,TokenType.operator, parent.getFunction(), parent);
+					new Token(op,TokenType.operator, parent);
 					continue outer;
 				}
 			}
@@ -335,7 +336,7 @@ public class Tokenizer
 		
 		// we are assuming that the character is perfectly fine.
 		String character = Character.toString(statement.charAt(startingIndex+1));
-		new Token(character,TokenType.character, parent.getFunction(), parent);
+		new Token(character,TokenType.character, parent);
 		return true;
 	}
 	
@@ -378,7 +379,7 @@ public class Tokenizer
 		String string = statement.substring(startingIndex+1, toReturn+1);
 		Shell.out("Found string \""+string+"\".", 3);
 		
-		new Token(string,TokenType.string, parent.getFunction(), parent);
+		new Token(string,TokenType.string, parent);
 		
 		return toReturn+1;
 	}
@@ -402,5 +403,28 @@ public class Tokenizer
 		
 		Shell.error("Invalid String.", lineNumber);
 		return -1;
+	}
+	
+	private static void locateFunctionCalls(Statement s)
+	{
+		Shell.out("Looking for functions...",3);
+		Container c = (Container)s.getChild(0);
+		
+		for(int i = 0; i<c.getSize()-1; i++)
+		{
+			Token t = (Token)c.getChild(i);
+			Token paren = (Token)c.getChild(i+1);
+			if(t.getType()==TokenType.variable)
+			{
+				if(paren.getType()==TokenType.operator)
+				{
+					// hardcoded, uh-oh.
+					if(paren.getData().equals("("))
+					{
+						t.setType(TokenType.function);
+					}
+				}
+			}
+		}
 	}
 }
