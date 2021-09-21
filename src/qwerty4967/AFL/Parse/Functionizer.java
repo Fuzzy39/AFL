@@ -37,7 +37,11 @@ public class Functionizer
 		// this, you see. is the function of functions.
 		// this is the second most important method of AFL.Parse.
 		// While it is true that Parser.parse() is the controller for parsing,
-		// this is the core of turning tokens into
+		// this is the core of turning tokens into function calls
+		// you could say it 'functionizes'
+		// huh. What a fitting name
+		
+		GroupManager.findGroups();
 		return false;
 	}
 	
