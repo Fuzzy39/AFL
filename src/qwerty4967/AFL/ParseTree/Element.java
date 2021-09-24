@@ -144,4 +144,22 @@ public abstract class Element
 		return false;
 	}
 
+	// gets the correct statement number, unless, of course, the element is part of a group.
+	public int getStatementNumber()
+	{
+	
+		HasChildren p = parent;
+		while (p instanceof Container)
+		{
+			if(p instanceof Statement)
+			{
+				return ((Statement)p).getStatementNumber();
+			}
+			p=((Container)p).getParent();
+			
+		}
+		
+		return -1;
+		
+	}
 }

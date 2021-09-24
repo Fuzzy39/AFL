@@ -41,8 +41,49 @@ public class Functionizer
 		// you could say it 'functionizes'
 		// huh. What a fitting name
 		
-		GroupManager.findGroups();
-		return false;
+		// find any parenthetical groups and violently rip them from the container
+		if( !GroupManager.findGroups(container))
+		{
+			return false;
+		}
+		
+		// While the container is bleeding out, figure out which groups are function parameters and respond accordingly.
+		
+		if(!functionizeFunctions(container))
+		{
+			return false;
+		}
+		
+		
+		// functionize the remaining groups while we wait for the container to take it's last breath.
+		if( !GroupManager.functionizeGroups(container))
+		{
+			return false;
+		}
+		
+		// unfortunately it just won't die,  so we may as well put its organs back in
+		if(!OperationManager.functionizeOperators(container))
+		{
+			return false;
+		}
+		
+		GroupManager.stitchGroups(container);
+		return true;
+	}
+	
+	private static boolean functionizeFunctions(Container c)
+	{
+		for(int i=0; i<c.getSize();i++)
+		{
+			Token t = (Token)c.getChild(i);
+			if(t.getType()==TokenType.function)
+			{
+				Shell.error("Functions are not currently supported.",t.getStatementNumber());
+				return false;
+			}
+			
+		}
+		return true; 
 	}
 	
 	
