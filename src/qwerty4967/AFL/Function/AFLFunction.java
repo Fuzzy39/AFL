@@ -53,6 +53,19 @@ public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
 			updateChildrenIDs();
 		}
 		
+		public void moveChild(int index, Element child)
+		{
+			if(!children.contains(child))
+			{
+				System.out.println("CANT MOVE A CHILD I DONT HAVE!");
+				System.exit(-1);
+			}
+			
+			children.remove(child);
+			children.add(index,child);
+			updateChildrenIDs();
+		}
+		
 		@Override
 		/**
 		 * A chonky method.

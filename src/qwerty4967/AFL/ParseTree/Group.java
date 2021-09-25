@@ -39,7 +39,20 @@ public class Group implements HasChildren
 		children.add(index,child);
 		updateChildrenIDs();
 	}
-
+	
+	public void moveChild(int index, Element child)
+	{
+		if(!children.contains(child))
+		{
+			System.out.println("CANT MOVE A CHILD I DONT HAVE!");
+			System.exit(-1);
+		}
+		
+		children.remove(child);
+		children.add(index,child);
+		updateChildrenIDs();
+	}
+	
 	@Override
 	public void removeChild(Element child) 
 	{

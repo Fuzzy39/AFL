@@ -4,6 +4,7 @@ public interface HasChildren
 {
 	public int addChild( Element child);
 	public void addChild( int index, Element child);
+	public void moveChild(int index, Element child);
 	public void removeChild(Element child);
 	public void removeChild(int ID);
 	public Element getChild(int ID);

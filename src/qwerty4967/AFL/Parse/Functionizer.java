@@ -15,6 +15,7 @@ public class Functionizer
 		{
 			
 			Statement s = (Statement)main.getChild(i);
+			Shell.out("Functionizing Statement:\n"+s, 3);
 			if(!functionizeStatement(s))
 			{
 				return null;

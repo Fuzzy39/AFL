@@ -57,10 +57,31 @@ public class Container extends Element implements HasChildren
 			System.exit(-1);
 		}
 		child.moveTo(this,index);
-		children.add(index,child);
+		if(!children.contains(child))
+		{
+			children.add(index,child);
+		}
+		else
+		{
+			// would it be better to throw an exception here? yes.
+			System.out.println("DONT MOVE A CHILD USING addChild! USE moveChild INSTEAD!");
+			System.exit(-1);
+		}
 		updateChildrenIDs();
 	}
 	
+	public void moveChild(int index, Element child)
+	{
+		if(!children.contains(child))
+		{
+			System.out.println("CANT MOVE A CHILD I DONT HAVE!");
+			System.exit(-1);
+		}
+		
+		children.remove(child);
+		children.add(index,child);
+		updateChildrenIDs();
+	}
 	/**
 	 * removes a child 
 	 */

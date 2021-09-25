@@ -6,21 +6,22 @@ public class Operators
 {
 	public static final String[][] SORTED = 
 	{
+		// Highest priority at the top.
 		{"(",")" }, // organize (these operators are special)
-		{"="}, // assign
-		{"==","!=",">=","<=",">","<"}, // compare
+		{"*","/","%"}, // multiply and divide	
 		{"+","-"}, // add and subtract.
-		{"*","/","%"} // multiply and divide
+		{"==","!=",">=","<=",">","<"}, // compare
+		{"="} // assign
 		
 	};
 		
 	public static enum PRIORITY_GROUP
 	{
 		organize,
-		assign,
+		multiply,
+		add, 
 		compare,
-		add,
-		multiply
+		assign
 		
 		
 	}
