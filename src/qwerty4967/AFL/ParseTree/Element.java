@@ -1,6 +1,7 @@
 package qwerty4967.AFL.ParseTree;
 
 import qwerty4967.AFL.Function.AFLFunction;
+import qwerty4967.AFL.Parse.GroupManager;
 
 public abstract class Element 
 {
@@ -157,6 +158,11 @@ public abstract class Element
 			}
 			p=((Container)p).getParent();
 			
+		}
+		
+		if(p instanceof Group)
+		{
+			return GroupManager.getStatementNumber();
 		}
 		
 		return -1;

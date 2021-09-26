@@ -30,7 +30,24 @@ public class Functionizer
 	{
 		
 		Container c = (Container)s.getChild(0);
-		return functionize(c);
+		GroupManager.reset();
+		boolean toReturn = functionize(c);
+		
+		// time to scrunch the container
+		if(toReturn)
+		{
+			// this is ugly...
+			AFLFunction main =(AFLFunction)s.getParent();
+			
+			Statement s2 = new Statement(s.getStatementNumber(), main);
+			s2.addChild(c.getChild(0));
+			main.removeChild(s);
+			main.moveChild(s2.getStatementNumber()-1, s2);
+		}
+		
+		return toReturn;
+		
+		
 	}
 	
 	protected static boolean functionize(Container container)
@@ -62,13 +79,15 @@ public class Functionizer
 			return false;
 		}
 		
+		GroupManager.stitchGroups(container);
+		
 		// unfortunately it just won't die,  so we may as well put its organs back in
-		if(!OperationManager.functionizeOperators(container))
+		if(!OperationManager.functionizeOperators(container, false))
 		{
 			return false;
 		}
 		
-		GroupManager.stitchGroups(container);
+		
 		return true;
 	}
 	

@@ -8,10 +8,12 @@ import qwerty4967.AFL.Lang.Operators.PRIORITY_GROUP;
 public class OperationManager 
 {
 	
-	protected static boolean functionizeOperators(Container c)
+	protected static boolean functionizeOperators(Container c, boolean parameterMode)
 	{
 		// so, what's the plan, Stan?
 		// this is actually fairly simple...
+		// after writing this all out, it's only a hundred lines of code, so it seems a bit silly to make it it's own class.
+		// oh well, can't really hurt.
 		
 		for(PRIORITY_GROUP g: PRIORITY_GROUP.values())
 		{
@@ -40,6 +42,16 @@ public class OperationManager
 						i-=2;
 					}
 				}
+			}
+		}
+		
+		if(!parameterMode)
+		{
+			// we need to ensure that the container only has one child.
+			if(c.getSize()!=1)
+			{
+				Shell.error("Invalid Syntax.", c.getStatementNumber());
+				return false;
 			}
 		}
 		return true;
@@ -77,13 +89,21 @@ public class OperationManager
 		int opID = operator.getID();
 		if(opID==0 || opID==c.getSize()-1)
 		{
-			Shell.error("Operator '"+operator.getData()+"' only has one operand. Expected two.", operator.getStatementNumber());
+			if(c.getSize()==1)
+			{
+				Shell.error("Operator '"+operator.getData()+"' only has no operands. Expected two.", operator.getStatementNumber());	
+			}
+			else
+			{
+				Shell.error("Operator '"+operator.getData()+"' only has one operand. Expected two.", operator.getStatementNumber());
+			}
 			return false;
 		}
 		
 		//check the previous token.
-	
-		if(c.getChild(opID-1) instanceof Token)
+		// I don't belive there is any situation in which two operators can be next to each other,
+		// unless they are parentheses, which are already handled elsewhere, so I guess this doesn't need to exist?
+		/*if(c.getChild(opID-1) instanceof Token)
 		{
 			Token prev = (Token)c.getChild(opID-1);
 			if(prev.getType()==TokenType.operator)
@@ -102,7 +122,7 @@ public class OperationManager
 				Shell.error("Operator '"+operator.getData()+"' can't act on another operator.", operator.getStatementNumber());
 				return false;
 			}
-		}
+		}*/
 		
 		// all seems clear, as far as I can tell.
 		return true;
