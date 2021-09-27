@@ -165,7 +165,7 @@ public class GroupManager
 			
 			// now, actually functionize the group
 			Container toFunctionize = (Container)g.getChild(0);
-			if(!Functionizer.functionize(toFunctionize))
+			if(!Functionizer.functionize(toFunctionize, false))
 			{
 				return false;
 			}
@@ -215,6 +215,14 @@ public class GroupManager
 		Element toReplace = toScrunch.getChild(0);
 		c.addChild(pointerID, toReplace);
 		// I think that's it...
+	}
+	
+	protected static Group getGroup(int ID)
+	{
+		// this method assumes you will modify the group you get, so it disposes of it.
+		Group toReturn = Groups.get(ID);
+		Groups.set(ID, null);
+		return toReturn;
 	}
 	
 	

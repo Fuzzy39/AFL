@@ -31,7 +31,7 @@ public class Functionizer
 		
 		Container c = (Container)s.getChild(0);
 		GroupManager.reset();
-		boolean toReturn = functionize(c);
+		boolean toReturn = functionize(c, false);
 		
 		// time to scrunch the container
 		if(toReturn)
@@ -50,7 +50,7 @@ public class Functionizer
 		
 	}
 	
-	protected static boolean functionize(Container container)
+	protected static boolean functionize(Container container, boolean mode)
 	{
 		// this, you see. is the function of functions.
 		// this is the second most important method of AFL.Parse.
@@ -82,7 +82,7 @@ public class Functionizer
 		GroupManager.stitchGroups(container);
 		
 		// unfortunately it just won't die,  so we may as well put its organs back in
-		if(!OperationManager.functionizeOperators(container, false))
+		if(!OperationManager.functionizeOperators(container, mode))
 		{
 			return false;
 		}
@@ -93,18 +93,61 @@ public class Functionizer
 	
 	private static boolean functionizeFunctions(Container c)
 	{
+		// look for any functions...
 		for(int i=0; i<c.getSize();i++)
 		{
 			Token t = (Token)c.getChild(i);
 			if(t.getType()==TokenType.function)
 			{
-				Shell.error("Functions are not currently supported.",t.getStatementNumber());
-				return false;
+				Token pointer = (Token)c.getChild(i+1);
+				if(!(pointer.getType() == TokenType.groupPointer))
+				{
+					// if this ever happens we've got a big problem
+					return false;
+				}
+				int pointerValue = Integer.parseInt(pointer.getData());
+				Group group = GroupManager.getGroup(pointerValue);
+				if(!createFunction(t,group))
+				{
+					return false;
+				}
+				continue;
 			}
 			
 		}
 		return true; 
 	}
 	
-	
+	private static boolean createFunction(Token function, Group parameters)
+	{
+		Container parent = (Container)function.getParent();
+		Container param = (Container)parameters.getChild(0);
+		
+		int functionLocation  = function.getID();
+		
+		//start by deleting the group pointer.
+		// that line of code is a bit of a mess.
+		// oh well.
+		parent.removeChild(parent.getChild(functionLocation+1));
+		// grab the function we are to be functionizing.
+		String functionName=function.getData();
+		parent.removeChild(function); // poof!
+		
+		FunctionCall newFunction = new FunctionCall(functionName, parent);
+		parent.addChild(functionLocation, newFunction);
+		
+		//now it's time to add the parameters.
+		if(!functionize(param, true))
+		{
+			return false;
+		}
+		
+		for(int i = 0; i<param.getSize(); )
+		{
+			Element e = param.getChild(i);
+			newFunction.addChild(e);
+		}
+		return true;
+		
+	}
 }

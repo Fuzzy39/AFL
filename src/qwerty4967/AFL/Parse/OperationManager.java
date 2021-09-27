@@ -102,8 +102,10 @@ public class OperationManager
 		
 		//check the previous token.
 		// I don't belive there is any situation in which two operators can be next to each other,
-		// unless they are parentheses, which are already handled elsewhere, so I guess this doesn't need to exist?
-		/*if(c.getChild(opID-1) instanceof Token)
+		// unless they are parentheses, which are already handled elsewhere, 
+		//so I guess this doesn't need to exist?
+		// Actually, incorrect!
+		if(c.getChild(opID-1) instanceof Token)
 		{
 			Token prev = (Token)c.getChild(opID-1);
 			if(prev.getType()==TokenType.operator)
@@ -122,7 +124,7 @@ public class OperationManager
 				Shell.error("Operator '"+operator.getData()+"' can't act on another operator.", operator.getStatementNumber());
 				return false;
 			}
-		}*/
+		}
 		
 		// all seems clear, as far as I can tell.
 		return true;
