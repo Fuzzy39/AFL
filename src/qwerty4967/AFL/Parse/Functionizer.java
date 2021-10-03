@@ -129,6 +129,7 @@ public class Functionizer
 		// that line of code is a bit of a mess.
 		// oh well.
 		parent.removeChild(parent.getChild(functionLocation+1));
+		
 		// grab the function we are to be functionizing.
 		String functionName=function.getData();
 		parent.removeChild(function); // poof!

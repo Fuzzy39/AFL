@@ -52,10 +52,20 @@ public class Parser
 		main = Functionizer.functionize(main);
 		if(main == null)
 		{	
-			Shell.out("functionizer errored out... returning",2);
+			Shell.out("Functionizer errored out... returning",2);
 			return null;
 		}
-		Shell.out("Results of functionizer:"+main+"\n",1);
+		Shell.out("Results of Functionizer:"+main+"\n",1);
+		
+		// We take statements that contain control statements and interpret their meaning. 
+		Shell.out("Calling Contextuallizer...",3);
+		main = Contextualizer.contextualize(main);
+		if(main == null)
+		{	
+			Shell.out("Contextualizer errored out... returning",2);
+			return null;
+		}
+		Shell.out("Results of Contextuallizer:"+main+"\n",1);
 		
 		// TODO everything.
 		return null;

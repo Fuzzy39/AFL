@@ -51,11 +51,6 @@ public class Container extends Element implements HasChildren
 	{
 		// really very simple
 		// having this method earlier would definitely reduce some awkwardness.
-		if(child instanceof Statement)
-		{
-			System.out.println("ATTEMPTED TO ADD A STATEMENT TO A CONTAINER");
-			System.exit(-1);
-		}
 		child.moveTo(this,index);
 		if(!children.contains(child))
 		{

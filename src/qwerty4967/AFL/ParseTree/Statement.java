@@ -13,12 +13,22 @@ public class Statement extends Container
 	 * @param num
 	 * @param group
 	 */
-	public Statement( int num, AFLFunction parent)
+	public Statement( int num, HasChildren parent)
 	{
 		super(parent);
 		
 		statementNumber=num;
 		name="Statement";
+		
+		//statements can only have ControlStatements and AFL Functions as parents
+		// check that the parent is a legal entity, and not some ne'er-do-well.
+		if( (!(parent instanceof ControlStatement)) & (! (parent instanceof AFLFunction)))
+		{
+			System.out.println("CONTROL STATEMENT HAS INVALID PARENT!");
+			System.exit(-1);
+		}
+		
+
 	}
 	
 	
