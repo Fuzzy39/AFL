@@ -28,7 +28,7 @@ public class Shell
 	// 8/13/21 b 328 Decided to massively refactor the code. Renamed from Ziker 4 to AFL (Arguably Functional Language)
 	// 9/27/21 b 385 All Ziker functionality restored.
 	
-	private static final int build = 386;
+	private static final int build = 390;
 	
 	private static int debugLevel = 4; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
