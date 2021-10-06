@@ -1,5 +1,7 @@
 package qwerty4967.AFL.Parse;
 
+import java.util.ArrayList;
+
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Function.AFLFunction;
 import qwerty4967.AFL.Lang.Lang;
@@ -276,9 +278,158 @@ public class Contextualizer
 		
 	}
 	
-	
+	// a bizzare and arcane process...
 	private static boolean contextualizeFunction( AFLFunction function)
 	{
+		// excellent design, if we're being honest
+		// we need to measure depth.
+		
+		int depth = 0;
+		Container currentContainer = null;
+		ArrayList<Element> toProcess=getFunctionStatements(function);
+		
+		for(Element e:toProcess)
+		{
+			// search each element.
+			// look for statements which have functions.
+			Statement s = (Statement)e;
+			if(s.getChild(0) instanceof Token )
+			{
+				addToContainer(s, currentContainer);
+			}
+			
+			FunctionCall f = (FunctionCall)s.getChild(0);
+			String name = f.getFunctionName();
+			
+			// check that the funcition might be a control function, and act accordingly.
+			if(isInvalidControlStatement(f))
+			{
+				Shell.error("Invalid Control Statement \'"+name+"\'. Wrong parameter amount.", e.getStatementNumber());
+				return false;
+			}
+			
+			switch(name)
+			{
+				case "if":
+				case "while":
+					ControlStatement cs= transformToControlStatement(s);
+					depth++;
+					currentContainer=cs;
+					break;
+				case "end":
+					function.removeChild(e);
+					depth--;
+					if(depth<0)
+					{
+						Shell.error("Misplaced 'end()'. Remove this token.", e.getStatementNumber());
+						return false;
+					}
+					currentContainer= getHigherLevelContainer(currentContainer);
+					break;
+				case "return":
+				case "=":
+					transformToControlStatement(s);
+					break;
+				case "else":
+					currentContainer = transformElseToControlStatement(s);
+					if(currentContainer ==null)
+					{
+						return false;
+					}
+					depth++;
+				default:
+					addToContainer(s, currentContainer);
+			}
+			
+		}
+			
+		return true;
+	}
+	
+	private static ArrayList<Element> getFunctionStatements(AFLFunction function)
+	{
+		ArrayList<Element> toReturn= new ArrayList<Element>();
+		for(int i =0; i<function.getSize(); i++)
+		{
+			toReturn.add(function.getChild(i));
+		}
+		
+		return toReturn;
+	}
+	
+	// returns true only if the statement is a control statement and invalid.
+	private static boolean isInvalidControlStatement(FunctionCall f)
+	{
+		// this element is actually a full blown statement and we all know it
+		// well, except the compiler, so better tell it.
+		String name = f.getFunctionName();
+		int size=f.getSize();
+		switch(name)
+		{
+			case "if":
+			case "while":
+				if(size!=1)
+				{
+					return true;
+				}
+				break;
+			case "else":
+			case "end":
+				if(size!=0)
+				{
+					return true;
+				}
+				break;
+			case "return":
+				if(size>=2)
+				{
+					return true;
+				}
+				break;
+			case "=":
+				if(size!=2)
+				{
+					return true;
+				}
+				break;
+			
+		}
+		
 		return false;
+	}
+	
+	private static void addToContainer(Element toAdd, Container container)
+	{
+		if(container==null)
+		{
+			// nothing ought to be done
+			return;
+		}
+		
+		container.addChild(toAdd);
+		// do we need to remove it from the old container?
+	}
+	
+	private static ControlStatement transformToControlStatement(Statement s)
+	{
+		// is it really this simple?
+		return new ControlStatement(s);
+	}
+	
+	private static ControlStatement transformElseToControlStatement(Statement s)
+	{
+		// is it really this simple?
+		return new ControlStatement(s);
+	}
+	
+	private static Container getHigherLevelContainer(Container c)
+	{
+		HasChildren toReturn = c.getParent();
+		if(toReturn instanceof Container)
+		{
+			return (Container)toReturn;
+		}
+		
+		return null;
 	}
 }
