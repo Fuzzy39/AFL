@@ -222,6 +222,9 @@ public class GroupManager
 		// this method assumes you will modify the group you get, so it disposes of it.
 		Group toReturn = Groups.get(ID);
 		Groups.set(ID, null);
+		// I'm a bit wary that using add instead of set might break something,
+		// but set crashes things...
+		FunctionizedGroups.add(ID, null);
 		return toReturn;
 	}
 	

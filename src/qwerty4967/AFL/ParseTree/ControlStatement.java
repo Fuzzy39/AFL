@@ -41,7 +41,7 @@ public class ControlStatement extends Container
 		FunctionCall function = (FunctionCall)from.getChild(0);
 		this.function = function.getFunctionName();
 		
-		for(int i = 0; i<function.getSize(); i++)
+		for(int i = 0; i<function.getSize();)
 		{
 			parameters.addChild(function.getChild(i));
 		}
@@ -55,7 +55,25 @@ public class ControlStatement extends Container
 		
 		// that probably works
 		// this makes sense, yes.
-		this.name +=" "+this.function+"\n    Parameters: "+parameters;
+		String p = getParameterString();
+		this.name +=" "+this.function+":\n"+p;
+	}
+	
+	private String getParameterString()
+	{
+		// this is some kind of tumor.
+		
+		String toReturn = "    Parameters:";
+		for(int i=0; i<parameters.getSize(); i++)
+		{
+			String child =parameters.getChild(i).toString();
+			String[] childsChilds = child.split("\n");
+			for(int j = 0; j<childsChilds.length;j++)
+			{
+				toReturn+="\n        "+childsChilds[j];
+			}
+		}
+		return toReturn;
 	}
 	
 	public String getFunctionName() 

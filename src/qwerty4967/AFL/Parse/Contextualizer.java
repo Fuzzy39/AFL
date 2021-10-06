@@ -42,7 +42,7 @@ public class Contextualizer
 			Statement s = (Statement)main.getChild(i);
 			if(isFunctionDefinition(s))
 			{
-				System.out.println("FOUND ONE, BOIS");
+				
 				i=getFunctionEnd(s);
 				if(i== -1)
 				{
@@ -154,10 +154,13 @@ public class Contextualizer
 		// transfer tokens to function.
 		AFLFunction main = s.getFunction();
 		transferTokens(main, function, startIndex, endIndex);
-		contextualizeFunction(function);
+		if(!contextualizeFunction(function))
+		{
+			return false;
+		}
 		
-		Shell.out("Produced Function:\n"+function,4);
-		System.out.println("MAIN"+main);
+		
+		
 		return true;
 				
 	}
@@ -296,6 +299,7 @@ public class Contextualizer
 			if(s.getChild(0) instanceof Token )
 			{
 				addToContainer(s, currentContainer);
+				continue;
 			}
 			
 			FunctionCall f = (FunctionCall)s.getChild(0);
@@ -313,6 +317,7 @@ public class Contextualizer
 				case "if":
 				case "while":
 					ControlStatement cs= transformToControlStatement(s);
+					addToContainer(cs, currentContainer);
 					depth++;
 					currentContainer=cs;
 					break;
@@ -328,10 +333,13 @@ public class Contextualizer
 					break;
 				case "return":
 				case "=":
-					transformToControlStatement(s);
+					cs =transformToControlStatement(s);
+					addToContainer(cs, currentContainer);
 					break;
 				case "else":
-					currentContainer = transformElseToControlStatement(s);
+					cs = transformElseToControlStatement(s);
+					addToContainer(cs, currentContainer);
+					currentContainer=cs;
 					if(currentContainer ==null)
 					{
 						return false;
@@ -342,7 +350,13 @@ public class Contextualizer
 			}
 			
 		}
-			
+		
+		if( depth != 0)
+		{
+			Shell.error("Missing expected function 'end'.", function.getSize());
+			return false;
+		}
+		Shell.out("Produced Function:\n"+function,4);
 		return true;
 	}
 	
@@ -413,12 +427,38 @@ public class Contextualizer
 	private static ControlStatement transformToControlStatement(Statement s)
 	{
 		// is it really this simple?
+		// TODO fix the constructor, it borked
 		return new ControlStatement(s);
 	}
 	
 	private static ControlStatement transformElseToControlStatement(Statement s)
 	{
-		// is it really this simple?
+		// Start by getting the if statement
+		
+		FunctionCall elseFunc =(FunctionCall)s.getChild(0);
+		s.removeChild(elseFunc);
+		Element ifElement = s.getParent().getChild(s.getID()-1);
+		if(!(ifElement instanceof ControlStatement))
+		{
+			Shell.error("An If must precede an else.", s.getStatementNumber());
+			return null;
+		}
+		ControlStatement ifStatement = (ControlStatement)ifElement;
+		if(!ifStatement.getFunctionName().equals("if"))
+		{
+			Shell.error("An If must precede an else.", s.getStatementNumber());
+			return null;
+		}
+		
+		Element ifParameter = ifStatement.getParameters().getChild(0);
+		
+		// first, change the if to an else, then add an == false
+		FunctionCall ifFunc = new FunctionCall("if", s);
+		FunctionCall elseCompare = new FunctionCall("==", ifFunc);
+		new Token("false",TokenType.bool,elseCompare);
+		elseCompare.addChild(ifParameter);
+		
+		
 		return new ControlStatement(s);
 	}
 	
