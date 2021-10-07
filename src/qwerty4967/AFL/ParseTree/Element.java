@@ -26,8 +26,9 @@ public abstract class Element
 	
 	public Element(HasChildren parent)
 	{
-		this.parent=parent;
+		
 		this.ID=parent.addChild(this);
+		this.parent=parent;
 	}
 
 	
@@ -87,10 +88,11 @@ public abstract class Element
 	
 	/**
 	 * add to a new parent.
+	 * ONLY USE IF THE CLASS IMPLEMENTS HASCHILDREN
 	 * @param newParent
 	 * @return
 	 */
-	protected boolean moveTo( HasChildren newParent, int id)
+	public boolean moveTo( HasChildren newParent, int id)
 	{
 		// this is only false during an element's initialization.
 		if(parent!=null)

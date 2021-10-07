@@ -40,7 +40,7 @@ public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
 			//TODO fix this	
 
 			
-			children.add(child);
+			addChild(children.size(),child);
 			return children.size()-1;
 		}
 		
@@ -48,7 +48,17 @@ public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
 		{
 			// really very simple
 			// having this method earlier would definitely reduce some awkwardness.
-			children.add(index,child);
+			child.moveTo(this,index);
+			if(!children.contains(child))
+			{
+				children.add(index,child);
+			}
+			else
+			{
+				// would it be better to throw an exception here? yes.
+				System.out.println("DONT MOVE A CHILD USING addChild! USE moveChild INSTEAD!");
+				System.exit(-1);
+			}
 			
 			updateChildrenIDs();
 		}

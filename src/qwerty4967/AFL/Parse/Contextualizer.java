@@ -345,6 +345,7 @@ public class Contextualizer
 						return false;
 					}
 					depth++;
+					break;
 				default:
 					addToContainer(s, currentContainer);
 			}
@@ -427,16 +428,18 @@ public class Contextualizer
 	private static ControlStatement transformToControlStatement(Statement s)
 	{
 		// is it really this simple?
-		// TODO fix the constructor, it borked
 		return new ControlStatement(s);
 	}
 	
 	private static ControlStatement transformElseToControlStatement(Statement s)
 	{
-		// Start by getting the if statement
+		// Start by getting the if's conditional.
 		
+		//delete the else.
 		FunctionCall elseFunc =(FunctionCall)s.getChild(0);
 		s.removeChild(elseFunc);
+		
+		
 		Element ifElement = s.getParent().getChild(s.getID()-1);
 		if(!(ifElement instanceof ControlStatement))
 		{
@@ -449,7 +452,7 @@ public class Contextualizer
 			Shell.error("An If must precede an else.", s.getStatementNumber());
 			return null;
 		}
-		
+		// if conditional.
 		Element ifParameter = ifStatement.getParameters().getChild(0);
 		
 		// first, change the if to an else, then add an == false
