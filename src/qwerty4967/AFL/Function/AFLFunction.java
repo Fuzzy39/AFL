@@ -3,30 +3,24 @@ package qwerty4967.AFL.Function;
 import java.util.ArrayList;
 import qwerty4967.AFL.ParseTree.*;
 
-public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
+public class AFLFunction extends Function implements qwerty4967.AFL.ParseTree.HasChildren 
 {
 		
 		// It is also any bock of independent code, which for all intents and purposes is a void function with no perameters.
 		
 		private ArrayList<Element> children=new ArrayList<Element>();
-		private final String name;
-		private final int perameters; // how many perameters the functionalGroup has.
-		// TODO figure out how perameters work better.
-		/**
-		 * 
-		 * @param name
-		 */
-		public AFLFunction(String name)
-		{
-			this(name, 0);
-		}	
 		
-		public AFLFunction(String name, int perameters)
+		public AFLFunction(String name, int parameters)
 		{
-			this.name=name;
-			this.perameters=perameters;
+			super(name,parameters);
 		}
 		
+		public Token call(Token[] parameters)
+		{
+			//TODO! this v
+			assert(false);
+			return null;
+		}
 		
 		/**
 		 * adds a child to the group. returns ID.
@@ -101,8 +95,8 @@ public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
 			
 			
 			return "\n\nAFLFunction:\n" 
-					+ "name: " + name
-					+ "\nperameters:" + perameters 
+					+ "name: " + getName()
+					+ "\nperameters:" + getParameters()
 					+ "\n\nChildren:" +  tree ;
 		}
 
@@ -196,24 +190,6 @@ public class AFLFunction implements qwerty4967.AFL.ParseTree.HasChildren
 			children= new ArrayList<Element>();
 		}
 		
-		
-
-		/**
-		 * @return the name
-		 */
-		public String getName()
-		{
-			return name;
-		}
-
-
-		/**
-		 * @return the perameters
-		 */
-		public int getPerameters() 
-		{
-			return perameters;
-		}
 		
 		
 		protected void updateChildrenIDs()

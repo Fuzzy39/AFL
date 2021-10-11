@@ -1,8 +1,9 @@
 package qwerty4967.AFL;
 import java.util.Scanner;
 
-import qwerty4967.AFL.Parse.Parser;
-
+import qwerty4967.AFL.Function.*;
+import qwerty4967.AFL.Parse.*;
+import qwerty4967.AFL.ParseTree.*;
 
 
 public class Shell 
@@ -16,21 +17,9 @@ public class Shell
 	
 	
 	
-	// Project Information
-	// 4/30/21 Started
-	// 5/1/21 Shell class probably finished, aside from errors
-	// 5/7/21 Ready to begin work on pass 1
-	// 5/11/21 Pass 1 done, with the exception of functions
-	// 5/X/21 Began major refactor pass 1 would be pass 3.
-	// 5/X/21 Stopped working on the project
-	// 7/13/21 Started work on the project again, capable of identifing all token types. 
-	// 7/1X/21 tokenPass, pass 1, complete.
-	// 8/13/21 b 328 Decided to massively refactor the code. Renamed from Ziker 4 to AFL (Arguably Functional Language)
-	// 9/27/21 b 385 All Ziker functionality restored.
+
 	
-	private static final int build = 413;
-	
-	private static int debugLevel = 4; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
+	protected static int debugLevel = 4; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
 	/*
 	 * As a general Guideline for which debug level to use:
@@ -43,34 +32,19 @@ public class Shell
 	private static Scanner sc= new Scanner( System.in ); // Setup the Scanner for gathering user input. 
 	
 	
-	/**
-	 * I don't think I've done this to the main method before...
-	 * Oh well, it's about what you expect
-	 * If you want more detailed explanations of what things do and how they work, they might be in the code's comments
-	 * only sometimes, of course.
-	 * @param args does nothing, yet. 
-	 */
-	public static void main(String[] args) 
+
+	protected static String getUserInput() 
 	{
-		
-		  
-		
-		// What to put here?
-		// let's worry about that later...
-		
-		// TODO replace this with an AFL function in the very long term.
-		out("WARNING: not functional in the slightest! | build: "+build+" | debug: "+debugLevel);
-		out("");
-		
+	
 		
 		// and now the actual stuff.
 		
-		String inputBuffer="";
+		String toReturn="";
 		while(true)
 		{
 			//Grab the input
 			String currentLine = Shell.in();
-			inputBuffer+=currentLine.strip();
+			toReturn+=currentLine.strip();
 			
 			if(checkString(currentLine))
 			{
@@ -78,26 +52,16 @@ public class Shell
 				continue;
 			}
 			
-			//input is done.
-			out("Input Recieved: \""+inputBuffer+"\"", 1);
-			
-			
-			
-			// Attempt to parse the program:
-			Parser.parse(inputBuffer);
-			
-			// clear the input buffer
-			inputBuffer="";
-			
-			//TODO You know, try running the program
-			// something like Interpreter.run("_Main");
-			
-			
-			
+			break;
 		}
-		
-		
+			//input is done.
+		out("Input Recieved: \""+toReturn+"\"", 1);
+		return toReturn;
+			
+	
 	}
+	
+	
 	/**
 	 * Sets debug level to a valid value.
 	 * @param debugLevel 

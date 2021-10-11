@@ -23,6 +23,11 @@ public abstract class Element
 	// As it turns out, very helpful.
 	protected int ID;
 	
+	public Element()
+	{
+		// sit around with your hands on your butt, I guess?
+		ID=-1;
+	}
 	
 	public Element(HasChildren parent)
 	{
@@ -38,6 +43,10 @@ public abstract class Element
 	 */
 	public int getID()
 	{
+		if(parent==null)
+		{
+			return ID;
+		}
 		assert this==parent.getChild(ID);
 		return ID;
 	}
@@ -114,7 +123,8 @@ public abstract class Element
 	protected void remove()
 	{
 		// delete the object, basically.
-		
+		// or just detach it from it's parent.
+		// not exactly a death sentence.
 	
 		this.parent=null;
 		this.ID=-1;

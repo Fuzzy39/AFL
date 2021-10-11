@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Function.AFLFunction;
+import qwerty4967.AFL.Interpret.Namespace;
 import qwerty4967.AFL.Lang.Lang;
 import qwerty4967.AFL.Lang.TokenType;
 import qwerty4967.AFL.ParseTree.*;
@@ -138,18 +139,13 @@ public class Contextualizer
 			return false;
 		}
 		
-		// TODO MAKE THIS ACTUALLY WORK WHEN STUFF IS READY!
+		
 		FunctionCall f =  (FunctionCall)(s.getChild(0));
 		String name =((Token)f.getChild(0)).getData();
 		String parameterData =((Token)f.getChild(1)).getData();
 		int parameters = Integer.parseInt(parameterData);
 		AFLFunction function = new AFLFunction(name, parameters); 
 		
-		// create the thing! TODO
-		/*if(!Namespaces.newFunction(function))
-		{
-			return false;
-		}*/
 		
 		// transfer tokens to function.
 		AFLFunction main = s.getFunction();
@@ -159,7 +155,11 @@ public class Contextualizer
 			return false;
 		}
 		
-		
+		if(!Namespace.addFunction(function))
+		{
+			Shell.error("Function '"+function.getName()+"', with "+function.getParameters()+" parameters, already exists. ", startIndex+1);
+			return false;
+		}
 		
 		return true;
 				

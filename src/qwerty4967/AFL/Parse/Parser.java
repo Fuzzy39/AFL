@@ -3,6 +3,7 @@ package qwerty4967.AFL.Parse;
 import java.util.ArrayList;
 
 import qwerty4967.AFL.Function.*;
+import qwerty4967.AFL.Interpret.Namespace;
 import qwerty4967.AFL.ParseTree.*;
 import qwerty4967.AFL.*;
 
@@ -24,7 +25,8 @@ public class Parser
 		Shell.out("Begining Parsing...", 1);
 		
 		// probably should make the AFLFunction everything will end up in
-		AFLFunction main = new AFLFunction("_main");
+		Namespace.removeFunction("_main",0);
+		AFLFunction main = new AFLFunction("_main",0);
 		
 		// Here we're just splitting all of the code by ';' to determine statements.
 		// I know that this presents a problem with ; not being able to be part of strings,
@@ -67,8 +69,9 @@ public class Parser
 		}
 		Shell.out("Results of Contextuallizer:"+main+"\n",1);
 		
-		// TODO everything.
-		return null;
+		// probably add main to the thing
+		Namespace.addFunction(main);
+		return main;
 		// Template
 		/*
 		Shell.out("Calling Example Function.",3);

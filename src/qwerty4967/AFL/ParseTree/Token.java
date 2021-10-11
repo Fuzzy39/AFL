@@ -12,7 +12,13 @@ public class Token extends Element
 	private String data;
 	private TokenType type;
 	
-
+	public Token(String data, TokenType type) 
+	{
+		super();
+		this.data = data;
+		this.type = type;
+	}
+	
 	public Token(String data, TokenType type, HasChildren parent) 
 	{
 		super(parent);

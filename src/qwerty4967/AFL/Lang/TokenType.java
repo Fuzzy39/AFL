@@ -10,5 +10,6 @@ public enum TokenType
 	string,
 	character,
 	operator,
-	groupPointer 
+	groupPointer,
+	error
 }
