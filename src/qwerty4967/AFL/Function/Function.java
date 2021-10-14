@@ -41,6 +41,13 @@ public abstract class Function
 	{
 		return "Function [name=" + NAME + ", parameters=" + PARAMS + "]";
 	}
+	
+	// because AFLFunction's toStrings are incredibly unwieldy in some cases.
+	public String toShortString() 
+	{
+		return "Function [name=" + NAME + ", parameters=" + PARAMS + "]";
+	}
+
 
 
 	// mmm, auto generated

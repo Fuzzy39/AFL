@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import qwerty4967.AFL.Parse.*;
+import qwerty4967.AFL.ParseTree.*;
 import qwerty4967.AFL.Function.*;
+import qwerty4967.AFL.Interpret.*;
+import qwerty4967.AFL.Lang.TokenType;
 
 public class Main 
 {
@@ -23,7 +26,7 @@ public class Main
 	// 10/0X/21 b ??? finished AFL.Parse (control Statements functional)
 	// 10/9/21 b 412 Began work on foundations for interpreter
 	
-	protected static final int BUILD = 421;
+	protected static final int BUILD = 425;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -42,7 +45,9 @@ public class Main
 		}
 		
 		
+
 		
+		/*
 		if(usesShell)
 		{
 			// TODO replace this with a JavaFunction in the long term.
@@ -61,13 +66,14 @@ public class Main
 				execute(getCodeFromFile(p));
 			}
 			return;
-		}
+		}*/
 		
 	}
 	
 	private static boolean interpretArgs(String[] args)
 	{
-	
+		// Now, I'll acknowledge that this method isn't great.
+		// but it works, and I'm not here to process command line arguments, I'm here to process AFL code
 		// exillerating, I'm sure.
 		String run = "run";
 		String debug = "debug";
