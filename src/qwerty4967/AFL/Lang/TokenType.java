@@ -10,6 +10,9 @@ public enum TokenType
 	string,
 	character,
 	operator,
+	// used during parsing
 	groupPointer,
-	error
+	// used during interpreting
+	error, 
+	voidToken // void's a keyword, oof.
 }

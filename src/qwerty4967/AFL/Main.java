@@ -26,7 +26,7 @@ public class Main
 	// 10/0X/21 b ??? finished AFL.Parse (control Statements functional)
 	// 10/9/21 b 412 Began work on foundations for interpreter
 	
-	protected static final int BUILD = 425;
+	protected static final int BUILD = 435;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -47,7 +47,7 @@ public class Main
 		
 
 		
-		/*
+		
 		if(usesShell)
 		{
 			// TODO replace this with a JavaFunction in the long term.
@@ -56,17 +56,21 @@ public class Main
 			
 			while(true)
 			{
-				execute(Shell.getUserInput());
+				 execute(Shell.getUserInput());
 			}
 		}
 		else
 		{
 			for(Path p: toExecute)
 			{
-				execute(getCodeFromFile(p));
+				Token t = execute(getCodeFromFile(p));
+				if(t!=null)
+				{
+					Shell.out("File \""+p+"\" returned: "+t.getData());
+				}
 			}
 			return;
-		}*/
+		}
 		
 	}
 	
@@ -189,10 +193,11 @@ public class Main
 		jf.call(new Token[0]);*/
 	}
 	
-	private static void execute(String code)
+	private static Token execute(String code)
 	{
 		AFLFunction toExecute = Parser.parse(code);
-		//Interpreter.interpret(toExecute);
+		Token returned = Interpreter.interpret(toExecute);
+		return returned;
 	}
 	
 	private static String getCodeFromFile(Path p)

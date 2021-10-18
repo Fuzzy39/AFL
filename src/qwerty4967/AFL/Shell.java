@@ -19,7 +19,7 @@ public class Shell
 	
 
 	
-	protected static int debugLevel = 4; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
+	protected static int debugLevel = 0; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
 	/*
 	 * As a general Guideline for which debug level to use:
@@ -248,29 +248,15 @@ public class Shell
 	 * @param line the line number the message came from/
 	 * @return returns true if the message was displayed
 	 */
-	public static boolean error( String toOut, int line )
+	public static void error( String toOut, int line )
 	{
 		
-		
-		// you might argue that 0 should be a final like MAX_DEBUG_LEVEL, and you might be right. but it isn't.
-		// check that debugLevel is valid, though I guess it doesn't really matter.
-		if( Shell.debugLevel > MAX_DEBUG_LEVEL || Shell.debugLevel < 0 )
-		{
-			throw new IllegalArgumentException
-			(
-					 " Attempted to send an error message \"" + toOut + "\" with invalid debug level " 
-					+ Shell.debugLevel + ". Expected range is 0-" + MAX_DEBUG_LEVEL + "."
-			);
-		}
-		
-		// if the debugLevel of the message is higher than the shell's, we don't show the message.
-		if(Shell.debugLevel < debugLevel)
-		{
-			return false;
-		}
-		
-		
 		System.out.println( "AFL: Error on line "+line+": "+toOut);
-		return true;
+		
+	}
+	
+	public static void errorAt(String name, int line)
+	{
+		System.out.println("    at "+name+", line: "+line);
 	}
 }

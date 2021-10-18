@@ -428,7 +428,7 @@ public class Contextualizer
 	private static ControlStatement transformToControlStatement(Statement s)
 	{
 		// is it really this simple?
-		return new ControlStatement(s);
+		return new ControlStatement(s.getStatementNumber(), s);
 	}
 	
 	private static ControlStatement transformElseToControlStatement(Statement s)
@@ -462,7 +462,7 @@ public class Contextualizer
 		elseCompare.addChild(ifParameter);
 		
 		
-		return new ControlStatement(s);
+		return new ControlStatement(s.getStatementNumber(), s);
 	}
 	
 	private static Container getHigherLevelContainer(Container c)

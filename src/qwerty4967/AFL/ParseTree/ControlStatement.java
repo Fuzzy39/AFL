@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import qwerty4967.AFL.Function.AFLFunction;
 
-public class ControlStatement extends Container 
+public class ControlStatement extends Statement 
 {
 	// this thing is a bit of a wacky fusion of a Statement and a FunctionCall
 	
@@ -12,9 +12,9 @@ public class ControlStatement extends Container
 	private Group parameters;
 	
 	// take a statement, husk it's corpse, etc.
-	public ControlStatement( Statement from)
+	public ControlStatement(int num, Statement from)
 	{
-		super(from.getParent());
+		super(num, from.getParent());
 		
 		// do some prep.
 		HasChildren parent = from.getParent();
@@ -22,14 +22,14 @@ public class ControlStatement extends Container
 		
 		parameters= new Group();
 		
-		// check that the parent is a legal entity, and not some ne'er-do-well.
-		if( (!(parent instanceof ControlStatement)) & (! (parent instanceof AFLFunction)))
+		if(from instanceof ControlStatement)
 		{
-			System.out.println("CONTROL STATEMENT HAS INVALID PARENT!");
+			// who are you trying to trick here?
+			// begone, fool!
+			System.out.println("ATTEMPTED TO CREATE CONTROL STATEMENT FROM CONTROLSTATEMENT: "+from);
 			System.exit(-1);
 		}
-		
-		
+			
 		// now, attempt to grab the children!
 		if(!(from.getChild(0) instanceof FunctionCall))
 		{
