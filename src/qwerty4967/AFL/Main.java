@@ -26,7 +26,11 @@ public class Main
 	// 10/0X/21 b ??? finished AFL.Parse (control Statements functional)
 	// 10/9/21 b 412 Began work on foundations for interpreter
 	
+<<<<<<< HEAD
 	protected static final int BUILD = 441;
+=======
+	protected static final int BUILD = 436;
+>>>>>>> 1b3740a9ece32b705565efb585ef79885ccb39b3
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
