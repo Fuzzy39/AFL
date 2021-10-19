@@ -29,7 +29,20 @@ public class Interpreter
 		{
 			return null;
 		}
-		Element currentChild = toInterpret.getChild(0);
+		
+		// this would work, if it weren't a control statement.
+		Element currentChild = getFirstChild(toInterpret);
+		
+		if(currentChild instanceof Token)
+		{
+			// uh-oh, we didn't get the child, we got a return value.
+			Token toReturn = (Token)currentChild;
+			if(toReturn.getType()==TokenType.error)
+			{
+				Shell.errorAt(toInterpret.getName(), currentChild.getStatementNumber());	
+			}
+			return toReturn;
+		}
 		
 		while(true)
 		{
@@ -63,6 +76,26 @@ public class Interpreter
 		}
 	}
 	
+	private static Element getFirstChild(AFLFunction function)
+	{
+		// this would work, if it weren't a control statement.
+		Element e = function.getChild(0);
+		
+		// it is totally a statement of some kind though.
+		Statement s = (Statement)e;
+		
+		// what do we do if it is?
+		// well right now we can claim ineptitude.
+		if(!(s instanceof ControlStatement))
+		{
+			return s;
+		}
+		
+		// it is a control statement.
+		Shell.error("AFL does not yet support control statements.", 1);
+		return new Token ("Error", TokenType.error);
+		
+	}
 	private static Token attemptResolve(Element toResolve)
 	{
 		// this is explicitly not a control statement.

@@ -134,12 +134,12 @@ public class Namespace
 			
 			if(variableHasInvalidScope(varName, scope))
 			{
-				Shell.error("Variable '"+name+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber);
+				Shell.error("Variable '"+varName+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber);
 				return null;
 			}
 			if(!variableExists(varName,scope))
 			{
-				Shell.error("Variable '"+name+"' is not defined.",lineNumber);
+				Shell.error("Variable '"+varName+"' is not defined.",lineNumber);
 				return null;
 			}
 

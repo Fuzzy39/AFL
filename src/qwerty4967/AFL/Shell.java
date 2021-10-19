@@ -257,6 +257,6 @@ public class Shell
 	
 	public static void errorAt(String name, int line)
 	{
-		System.out.println("    at "+name+", line: "+line);
+		System.out.println("AFL:    on line "+line+" of "+name);
 	}
 }
