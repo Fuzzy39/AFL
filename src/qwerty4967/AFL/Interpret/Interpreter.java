@@ -104,7 +104,7 @@ public class Interpreter
 		
 		Statement resolvable = (Statement)toResolve;
 		
-		Token result = Resolver.resolve(resolvable);
+		Token result = Resolver.resolve(resolvable.getChild(0));
 		if(result!=null)
 		{
 			if(result.getType()!=TokenType.error)

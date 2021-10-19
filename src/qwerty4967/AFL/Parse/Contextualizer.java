@@ -53,6 +53,7 @@ public class Contextualizer
 				{
 					return false;
 				}
+				i=0;
 				continue;
 			}
 		}
