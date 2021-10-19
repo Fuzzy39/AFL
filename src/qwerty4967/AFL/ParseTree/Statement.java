@@ -18,7 +18,7 @@ public class Statement extends Container
 		super(parent);
 		
 		statementNumber=num;
-		name="Statement";
+		name="Statement (Line: "+num+")";
 		
 		//statements can only have ControlStatements and AFL Functions as parents
 		// check that the parent is a legal entity, and not some ne'er-do-well.
@@ -41,8 +41,14 @@ public class Statement extends Container
 	{
 		return statementNumber;
 	}
+		
 	
-	
+	public void setStatementNumber(int statementNumber) 
+	{
+		this.statementNumber = statementNumber;
+	}
+
+
 	@Override
 	public int addChild( Element toAdd)
 	{

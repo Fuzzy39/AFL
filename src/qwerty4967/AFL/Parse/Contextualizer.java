@@ -279,6 +279,20 @@ public class Contextualizer
 			oldF.removeChild(toMove);
 		}
 		
+		correctLineNumbers(oldF);
+		correctLineNumbers(newF);
+		
+	}
+	
+	private static void correctLineNumbers(AFLFunction f)
+	{
+		for(int i = 0; i<f.getSize(); i++)
+		{
+			// so, just do the thing, I guess.
+			Element e = f.getChild(i);
+			Statement s = (Statement)e;
+			s.setStatementNumber(i+1);
+		}
 	}
 	
 	// a bizzare and arcane process...
