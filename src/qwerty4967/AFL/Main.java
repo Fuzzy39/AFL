@@ -27,7 +27,7 @@ public class Main
 	// 10/9/21 b 412 Began work on foundations for interpreter
 	
 
-	protected static final int BUILD = 443;
+	protected static final int BUILD = 448;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -201,7 +201,7 @@ public class Main
 		{
 			return null;
 		}
-		Token returned = Interpreter.interpret(toExecute);
+		Token returned = Interpreter.interpret(toExecute, new Token[0] );
 		return returned;
 	}
 	

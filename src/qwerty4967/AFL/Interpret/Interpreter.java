@@ -18,7 +18,7 @@ public class Interpreter
 	// but a plan.
 	
 	
-	public static Token interpret(AFLFunction toInterpret)
+	public static Token interpret(AFLFunction toInterpret, Token[] parameters)
 	{
 		// okay, the modus operandi here is we try to get the next child, and if we can't,  we call onEndOfContainer
 		// when we get the next child, we check whether it's a control.
@@ -109,7 +109,10 @@ public class Interpreter
 		{
 			if(result.getType()!=TokenType.error)
 			{
-				Shell.out(result.getData());
+				if(result.getType()!=TokenType.voidToken)
+				{
+					Shell.out(result.getData());
+				}
 				
 			}
 			else

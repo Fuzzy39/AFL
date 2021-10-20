@@ -1,6 +1,8 @@
 package qwerty4967.AFL.Function;
 
 import java.util.ArrayList;
+
+import qwerty4967.AFL.Interpret.Interpreter;
 import qwerty4967.AFL.ParseTree.*;
 
 public class AFLFunction extends Function implements qwerty4967.AFL.ParseTree.HasChildren 
@@ -17,9 +19,8 @@ public class AFLFunction extends Function implements qwerty4967.AFL.ParseTree.Ha
 		
 		public Token call(Token[] parameters)
 		{
-			//TODO! this v
-			assert(false);
-			return null;
+			
+			return Interpreter.interpret(this, parameters);
 		}
 		
 		/**

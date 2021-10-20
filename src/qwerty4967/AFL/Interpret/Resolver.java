@@ -1,5 +1,6 @@
 package qwerty4967.AFL.Interpret;
 import qwerty4967.AFL.Shell;
+import qwerty4967.AFL.Function.*;
 import qwerty4967.AFL.Lang.*;
 import qwerty4967.AFL.ParseTree.*;
 public class Resolver 
@@ -26,7 +27,10 @@ public class Resolver
 		}
 		
 		// okay, on to, you know, actually resolving it!
-		return null;
+		Token toReturn = resolveFunction(f);
+		return toReturn;
+		
+		
 	}
 	
 	// this is primarily to grab variables.
@@ -73,5 +77,39 @@ public class Resolver
 		
 		return true;
 			
+	}
+	
+	private static Token resolveFunction(FunctionCall f)
+	{
+		// we know that f exists. which is nice.
+		// we do need to, of course, grab it.
+		String functionName = f.getFunctionName();
+		int functionParameters = f.getSize();
+		Function toCall = Namespace.getFunction(functionName, functionParameters);
+		
+		Token[] parameters = new Token[functionParameters];
+		
+		for(int i = 0; i<functionParameters; i++)
+		{
+			// resolving tokens.
+			Element e = f.getChild(i);
+			Token param = resolve(e);
+			
+			if(param == null)
+			{
+				Shell.error("The partial result of a statement cannot be void.", f.getStatementNumber());
+				return new Token ("Error", TokenType.error);
+			}
+			
+			if(param.getType() == TokenType.error)
+			{
+				return param;
+			}
+		}
+		
+		// now we should have are parameter array all filled up.
+		// that's good.
+		// call the function and ship off it's result!
+		return toCall.call(parameters);
 	}
 }
