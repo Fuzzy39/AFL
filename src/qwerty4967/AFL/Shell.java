@@ -250,7 +250,11 @@ public class Shell
 	 */
 	public static void error( String toOut, int line )
 	{
-		
+		if(line ==-2)
+		{
+			System.out.println( "AFL: Error on [Native Code]: "+toOut);
+			return;
+		}
 		System.out.println( "AFL: Error on line "+line+": "+toOut);
 		
 	}

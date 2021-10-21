@@ -27,7 +27,7 @@ public class Main
 	// 10/9/21 b 412 Began work on foundations for interpreter
 	
 
-	protected static final int BUILD = 448;
+	protected static final int BUILD = 449;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -185,7 +185,31 @@ public class Main
 
 	private static boolean initializeFunctions()
 	{
-		// this does nothing at the moment, but be sure that it will.
+		// just a test to add addition
+		// TODO add string concatenation.
+		MethodCode mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			Token a = tokens[0];
+			Token b = tokens[1];
+			
+			boolean aIsInvalid = a.getType()!=TokenType.number;
+			boolean bIsInvalid = b.getType()!=TokenType.number;
+			
+			if(aIsInvalid || bIsInvalid)
+			{
+				Shell.error("Operands for addition must be of type num.", -2);
+				return new Token ("Error", TokenType.error);
+			}
+			// they be numbers!
+			double aNum= Double.parseDouble(a.getData());
+			double bNum= Double.parseDouble(b.getData());
+			double result = aNum+bNum;
+			return new Token(result+"", TokenType.number);
+		});
+		
+		JavaFunction jf = new JavaFunction("+",2,mc);
+		Namespace.addFunction(jf);
 		return true;
 		
 		// example javaFunction.

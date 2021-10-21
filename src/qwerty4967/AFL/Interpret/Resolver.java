@@ -105,6 +105,7 @@ public class Resolver
 			{
 				return param;
 			}
+			parameters[i]=param;
 		}
 		
 		// now we should have are parameter array all filled up.
