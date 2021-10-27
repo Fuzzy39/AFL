@@ -2,14 +2,17 @@ package qwerty4967.AFL.Function;
 
 import java.util.ArrayList;
 
+import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Interpret.Interpreter;
+import qwerty4967.AFL.Lang.Lang;
+import qwerty4967.AFL.Lang.TokenType;
 import qwerty4967.AFL.ParseTree.*;
 
 public class AFLFunction extends Function implements qwerty4967.AFL.ParseTree.HasChildren 
 {
 		
 		// It is also any bock of independent code, which for all intents and purposes is a void function with no perameters.
-		
+		private static int nestedCalls = 0; // to prevent calamity (stack overflows)
 		private ArrayList<Element> children=new ArrayList<Element>();
 		
 		public AFLFunction(String name, int parameters)
@@ -19,8 +22,16 @@ public class AFLFunction extends Function implements qwerty4967.AFL.ParseTree.Ha
 		
 		public Token call(Token[] parameters)
 		{
-			
-			return Interpreter.interpret(this, parameters);
+			nestedCalls++;
+			if(nestedCalls>=Lang.MAXIMUM_DEPTH)
+			{
+				// UH OH! Stack Overflow!
+				Shell.error("Stack overflow on function '"+this.getName()+"'", 0);
+				return new Token("Error", TokenType.error);
+			}
+			Token toReturn = Interpreter.interpret(this, parameters);
+			nestedCalls--;
+			return toReturn;
 		}
 		
 		/**

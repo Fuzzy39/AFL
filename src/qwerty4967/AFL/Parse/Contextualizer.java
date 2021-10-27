@@ -44,16 +44,16 @@ public class Contextualizer
 			if(isFunctionDefinition(s))
 			{
 				
-				i=getFunctionEnd(s);
-				if(i== -1)
+				int x=getFunctionEnd(s);
+				if(x== -1)
 				{
 					return false;
 				}
-				if(!createFunction(s, s.getID(), i))
+				if(!createFunction(s, s.getID(), x))
 				{
 					return false;
 				}
-				i=0;
+				i--;
 				continue;
 			}
 		}
@@ -150,7 +150,12 @@ public class Contextualizer
 		
 		// transfer tokens to function.
 		AFLFunction main = s.getFunction();
-		transferTokens(main, function, startIndex, endIndex);
+		
+		if(!transferTokens(main, function, startIndex, endIndex))
+		{
+			return false;
+		}
+		
 		if(!contextualizeFunction(function))
 		{
 			return false;
@@ -258,7 +263,7 @@ public class Contextualizer
 	}
 	
 	
-	private static void transferTokens(AFLFunction oldF, AFLFunction newF, int startIndex, int endIndex)
+	private static boolean transferTokens(AFLFunction oldF, AFLFunction newF, int startIndex, int endIndex)
 	{
 		// DOCTOR, I'VE GOT A CASE OF:
 		//gremlonic-physikeosphere
@@ -276,13 +281,19 @@ public class Contextualizer
 		for(;length>0; length--)
 		{
 			Element toMove = oldF.getChild(startIndex);
+			Statement s = (Statement)toMove;
+			if(isFunctionDefinition(s))
+			{
+				Shell.error("Function definitions cannot be nested. Or did you forget an 'end()'?", s.getStatementNumber());
+				return false;
+			}
 			newF.addChild(toMove);
 			oldF.removeChild(toMove);
 		}
 		
 		correctLineNumbers(oldF);
 		correctLineNumbers(newF);
-		
+		return true;
 	}
 	
 	private static void correctLineNumbers(AFLFunction f)
