@@ -240,8 +240,12 @@ public class Shell
 			return false;
 		}
 		
+		String[] out = toOut.split("\n");
+		for(String s: out)
+		{
+			System.out.println( origin + ": " + s );
+		}
 		
-		System.out.println( origin + ": " + toOut );
 		return true;
 	}
 	

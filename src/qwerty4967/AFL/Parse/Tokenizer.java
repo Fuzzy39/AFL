@@ -468,40 +468,67 @@ public class Tokenizer
 	// returns length of string.
 	private static int createString(int startingIndex, String statement, Container parent)
 	{
-		int toReturn = validateString(startingIndex, statement);
-		if(toReturn == -1)
+		int escapes=0;
+		int endingIndex = -1;
+		for(int i = startingIndex+1; i<statement.length(); i++)
 		{
+			
+			if(statement.charAt(i)=='\\')
+			{
+				// a chase is afoot!
+				// We've found an escape sequence!
+				// but we're not sure whether it is valid.
+				// first we have to check that the statement continues after the \.
+				if(i+1>=statement.length())
+				{
+					continue;
+				}
+				
+				// okay, now we check the next character.
+				char toEscape = statement.charAt(i+1);
+				char escaped = getEscape(toEscape);
+				// make sure it was a valid escape sequence.
+				if(escaped == '?')
+				{
+					Shell.error("Invalid Escape Sequence in String.", lineNumber);
+					return -1;
+				}
+				
+				// okay, no doubt about it, it's valid.
+				// our job is to modify the string we're building, then.
+				// I've not really used StringBuilder, but it seems cool.
+				StringBuilder sb = new StringBuilder(statement);
+				sb.deleteCharAt(i);
+				sb.deleteCharAt(i);
+				sb.insert(i, escaped);
+				statement=sb.toString();
+				escapes++;
+				continue;
+			}
+			
+			if(statement.charAt(i)=='"')
+			{
+				endingIndex=i+escapes;
+				break;
+			}
+		}
+		
+		if(endingIndex==-1)
+		{
+			Shell.error("Invalid String.", lineNumber);
 			return -1;
 		}
 		
-		String string = statement.substring(startingIndex+1, toReturn+1);
+		// ending index is not 0.
+		String string = statement.substring(startingIndex+1, endingIndex-escapes);
+		
 		Shell.out("Found string \""+string+"\".", 3);
 		
 		new Token(string,TokenType.string, parent);
 		
-		return toReturn+1;
+		return endingIndex;
 	}
 	
-	/**
-	 *  
-	 * @param startingIndex
-	 * @param statement
-	 * @return the character index of the end of the string
-	 */
-	private static int validateString(int startingIndex, String statement)
-	{
-		
-		for(int i = startingIndex+1; i<statement.length(); i++)
-		{
-			if(statement.charAt(i)=='"')
-			{
-				return i-1;
-			}
-		}
-		
-		Shell.error("Invalid String.", lineNumber);
-		return -1;
-	}
 	
 	private static void locateFunctionCalls(Statement s)
 	{
