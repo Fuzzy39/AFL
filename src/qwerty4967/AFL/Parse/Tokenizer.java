@@ -102,8 +102,17 @@ public class Tokenizer
 				 		}
 				 		
 				 		currentTokenType=null; // not sure if this is required...
+				 		
 				 		i+=2; // a character's length.
+				 		
+				 		// if it's an escape sequence. this is SUPER lazy.
+				 		if(i+1<toTokenize.length())
+				 		{
+				 				if(toTokenize.charAt(i+1)=='\'')
+				 					i++;
+				 		}
 				 		continue;
+				 		
 				 	case string:
 				 		int newI =createString(i, toTokenize, container);
 				 		if(newI==-1)
@@ -334,7 +343,7 @@ public class Tokenizer
 		}
 		
 		// we are assuming that the character is perfectly fine.
-		String character = Character.toString(statement.charAt(startingIndex+1));
+		String character = ""+getCharacterFromExpression(startingIndex,statement);
 		new Token(character,TokenType.character, parent);
 		return true;
 	}
@@ -343,7 +352,7 @@ public class Tokenizer
 	{
 		// perform various checks
 		// first, bounds.
-		if(startingIndex+2>=statement.length())
+		if(startingIndex+2 >= statement.length())
 		{
 			return false;
 		}
@@ -354,16 +363,106 @@ public class Tokenizer
 		{
 			return false;
 		}
+			
+		// outer bound.
+		if(statement.charAt(startingIndex+2)=='\'')
+		{
+			// is the character a '\'? if so, BURN IT
+			
+			
+			
+			if(statement.charAt(startingIndex+1)=='\'' )
+			{
+				return false;
+			}
 		
-		if(statement.charAt(startingIndex+2)!='\'')
+			// sorry, that was violent.
+			if(statement.charAt(startingIndex+1)!='\\' )
+			{
+				return true;
+			}
+			
+		}
+		
+		
+		// is it an escape sequence?
+		
+		// check that bounds are valid.
+		if(startingIndex+3 >= statement.length())
 		{
 			return false;
 		}
 		
-		// seems good
+		// check that the quoute is in the right place
+		if(statement.charAt(startingIndex+3)!='\'')
+		{
+			return false;
+		}
 		
-		return true;
+		// Check that it is an escape sequence
+		if(statement.charAt(startingIndex+1)!='\\')
+		{
+			return false;
+		}
+		// it is!
+		// is it valid though?
 		
+		char toEscape = statement.charAt(startingIndex+2);
+		
+		
+		for(char c :Lang.ESCAPED_CHARS)
+		{
+			if(toEscape==c)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+		
+		
+	}
+	
+	private static char getCharacterFromExpression( int startingIndex, String expression)
+	{
+		// get's the intended character from an expression like 'a' or '\n'.
+		// this method assumes that the expresion is a valid character.
+		// get the juicy bits.
+		
+		expression = expression.substring(startingIndex+1);
+		// okay, we need to find the first quote.
+		int finalIndex = expression.indexOf('\'');
+		expression = expression.substring(0,finalIndex);
+		
+		// now, does this look silly? yes, yes it does. but it works
+		// this code is attrocious.
+		if(expression.equals("\\"))
+		{
+			return '\'';
+		}
+		if(expression.length()==1)
+		{
+			return expression.charAt(0);
+		}
+		
+		return getEscape(expression.charAt(1));
+		
+	}
+	
+	private static char getEscape (char c)
+	{
+		switch(c)
+		{
+			case 'n':
+				return '\n';
+			case '\\':
+				return '\\';
+			case '\'':
+				return '\'';
+			case '"':
+				return '"';
+		}
+		return '?';
 	}
 	
 	// returns length of string.

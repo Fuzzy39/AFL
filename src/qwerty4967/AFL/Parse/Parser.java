@@ -104,7 +104,7 @@ public class Parser
 		}
 		
 		
-		String[] tokens = code.split(";");
+		String[] tokens = splitBySemicolon(code); //code.split(";");
 		
 		// we need to remove any and all whitespace from our precious new baby statements.
 		for(int i = 0; i<tokens.length;i++)
@@ -125,5 +125,53 @@ public class Parser
 		
 		
 		
+	}
+	
+	private static String[] splitBySemicolon(String s)
+	{
+		ArrayList<String> lines=new ArrayList<String>();
+		int lastLine = -1; // the last char of the last line that was split.
+		
+		for(int i = 0; i<s.length();i++)
+		{
+			char c = s.charAt(i);
+			if(c==';')
+			{
+				// check that there is no escape sequence.
+				if(i-1>-1)
+				{
+					if(s.charAt(i-1)=='\\')
+					{
+						// just absolutely destroy that little \.
+						s=s.substring(0, i-1)+s.substring(i,s.length());
+						continue;
+					}
+				}
+				
+				// snip snip
+				String line = s.substring(lastLine+1,i);
+				lines.add(line);
+				lastLine=i;
+			}
+		}
+		
+		// grab the straggler.
+		String line = s.substring(lastLine+1,s.length());
+		lines.add(line);
+		
+		// Oh, you can convert an arraylist to an array pretty easily.
+		// good to know.
+		// heh nope, apparently you can't cast an Object[] to a String[].
+		// ugh
+		
+		String[] toReturn = new String[lines.size()];
+		int i = 0;
+		for(String a: lines)
+		{
+			toReturn[i]=a;
+			i++;
+		}
+		return toReturn;
+				
 	}
 }

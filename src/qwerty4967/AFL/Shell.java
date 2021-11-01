@@ -119,6 +119,10 @@ public class Shell
 		// you doof, this thing still calls itself ziker...
 		// pah, I'll do it myself.
 		
+		// Note from Half a year future self, revisiting this method for (hopefully) the final time:
+		// joke still isn't good.
+		// The project is going well, at least.
+		
 		if(string.length()==0)
 		{
 			//doesn't really matter.
@@ -129,10 +133,17 @@ public class Shell
 		
 		out("Line Recieved: \""+string+"\"",2);
 		
+		// yeah okay, this used to cut it.
 		if( string.charAt(string.length()-1)==';')
 		{
-			out("Input Continuing...", 3);
-			return true;
+			if(string.length()>1)
+			{
+				if(string.charAt(string.length()-2)!='\\')
+				{
+					out("Input Continuing...", 3);
+					return true;
+				}
+			}
 		}
 		
 		out("End of Input.", 3);
