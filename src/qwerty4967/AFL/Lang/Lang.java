@@ -1,5 +1,7 @@
 package qwerty4967.AFL.Lang;
 
+import qwerty4967.AFL.Function.ControlFunction;
+
 public class Lang 
 {
 
@@ -18,7 +20,9 @@ public class Lang
 		
 		public static final int MAXIMUM_DEPTH =100; //  wanted the int limit, but that gave me errors...
 		
-		public static final String[] CONTROL_FUNCTIONS = {"if","else","while","=","return","end"};
+		//public static final String[] CONTROL_FUNCTIONS = {"if","else","while","=","return","end"};
+		// set by main
+		public static ControlFunction[] controlFunctions;
 		
 		// this list doesn't include semicolons, because those are dealt with stupidly.
 		public static final char[] ESCAPED_CHARS = {'n','\'','\"','\\'};

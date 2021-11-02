@@ -25,6 +25,7 @@ public class Main
 	// 9/27/21 b 385 All Ziker functionality restored. (parentheses, operations, functions)
 	// 10/0X/21 b ??? finished AFL.Parse (control Statements functional)
 	// 10/9/21 b 412 Began work on foundations for interpreter
+	// 10/31/21 b 454 Interpreter basics complete.
 	
 
 	protected static final int BUILD = 464;
