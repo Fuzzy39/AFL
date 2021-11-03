@@ -60,9 +60,11 @@ public class Statement extends Container
 		{
 			// I should probably throw an exception, that would be the polite thing to do
 			// or maybe this should be an assertion?
-			System.out.println("ATTEMPTED TO GIVE A STATEMENT MORE THAN ONE CHILD");
-			System.exit(-1);
-			
+			if(!(this instanceof ControlStatement ))
+			{
+				System.out.println("ATTEMPTED TO GIVE A STATEMENT MORE THAN ONE CHILD");
+				System.exit(-1);
+			}
 		}
 		
 		return super.addChild(toAdd);

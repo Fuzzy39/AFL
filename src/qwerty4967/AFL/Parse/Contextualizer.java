@@ -316,7 +316,7 @@ public class Contextualizer
 		// we need to measure depth.
 		
 		int depth = 0;
-		Container currentContainer = null;
+		Container currentContainer = null; // null when container is the function.
 		ArrayList<Element> toProcess=getFunctionStatements(function);
 		
 		for(Element e:toProcess)
@@ -378,13 +378,14 @@ public class Contextualizer
 					addToContainer(cs, currentContainer);
 					break;
 				case "else":
-					cs = transformElseToControlStatement(s);
-					addToContainer(cs, currentContainer);
-					currentContainer=cs;
-					if(currentContainer ==null)
+					
+					cs = transformElseToControlStatement(s, currentContainer);
+					if(cs == null)
 					{
 						return false;
 					}
+					addToContainer(cs, currentContainer);
+					currentContainer=cs;
 					depth++;
 					break;
 				default:
@@ -472,7 +473,7 @@ public class Contextualizer
 		return new ControlStatement(s.getStatementNumber(), s);
 	}
 	
-	private static ControlStatement transformElseToControlStatement(Statement s)
+	private static ControlStatement transformElseToControlStatement(Statement s, HasChildren currentContainer)
 	{
 		// Start by getting the if's conditional.
 		
@@ -481,7 +482,24 @@ public class Contextualizer
 		s.removeChild(elseFunc);
 		
 		
-		Element ifElement = s.getParent().getChild(s.getID()-1);
+		Element ifElement;
+		if(currentContainer==null)
+		{
+			ifElement= s.getParent().getChild(s.getID()-1);
+		}
+		else
+		{
+			if(currentContainer.getSize()==0)
+			{
+				Shell.error("An If must precede an else.", s.getStatementNumber());
+				return null;
+			}
+			else
+			{
+				ifElement=currentContainer.getChild(currentContainer.getSize()-1);
+			}
+		}
+		
 		if(!(ifElement instanceof ControlStatement))
 		{
 			Shell.error("An If must precede an else.", s.getStatementNumber());
@@ -505,6 +523,8 @@ public class Contextualizer
 		
 		return new ControlStatement(s.getStatementNumber(), s);
 	}
+	
+	
 	
 	private static Container getHigherLevelContainer(Container c)
 	{

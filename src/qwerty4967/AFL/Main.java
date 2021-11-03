@@ -29,7 +29,7 @@ public class Main
 	// 10/31/21 b 454 Interpreter basics complete.
 	
 
-	protected static final int BUILD = 469;
+	protected static final int BUILD = 472;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
