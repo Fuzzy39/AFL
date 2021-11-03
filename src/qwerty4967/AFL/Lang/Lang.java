@@ -1,5 +1,7 @@
 package qwerty4967.AFL.Lang;
 
+import java.util.ArrayList;
+
 import qwerty4967.AFL.Function.ControlFunction;
 
 public class Lang 
@@ -22,7 +24,7 @@ public class Lang
 		
 		//public static final String[] CONTROL_FUNCTIONS = {"if","else","while","=","return","end"};
 		// set by main
-		public static ControlFunction[] controlFunctions;
+		public static ArrayList<ControlFunction> controlFunctions;
 		
 		// this list doesn't include semicolons, because those are dealt with stupidly.
 		public static final char[] ESCAPED_CHARS = {'n','\'','\"','\\'};

@@ -8,6 +8,7 @@ import qwerty4967.AFL.Parse.*;
 import qwerty4967.AFL.ParseTree.*;
 import qwerty4967.AFL.Function.*;
 import qwerty4967.AFL.Interpret.*;
+import qwerty4967.AFL.Lang.Lang;
 import qwerty4967.AFL.Lang.TokenType;
 
 public class Main 
@@ -28,7 +29,7 @@ public class Main
 	// 10/31/21 b 454 Interpreter basics complete.
 	
 
-	protected static final int BUILD = 464;
+	protected static final int BUILD = 469;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -186,6 +187,37 @@ public class Main
 
 	private static boolean initializeFunctions()
 	{
+		Lang.controlFunctions=new ArrayList<ControlFunction>();
+		
+		// Initialize controlFunctions.
+		// block creating functions
+		ControlFunction IF = new ControlFunction("if",1);
+		Lang.controlFunctions.add(IF);
+		ControlFunction ELSE = new ControlFunction("else",0);
+		Lang.controlFunctions.add(ELSE);
+		ControlFunction WHILE = new ControlFunction("while",1);
+		Lang.controlFunctions.add(WHILE);
+		ControlFunction FOR = new ControlFunction("for",3);
+		Lang.controlFunctions.add(FOR);
+		
+		// Non block creating functions
+		ControlFunction END = new ControlFunction("end",0);
+		Lang.controlFunctions.add(END);
+		ControlFunction FUNCTION = new ControlFunction("function",2);
+		Lang.controlFunctions.add(FUNCTION);
+		ControlFunction RETURN = new ControlFunction("return",1);
+		Lang.controlFunctions.add(RETURN);
+		ControlFunction RETURN2 = new ControlFunction("return",0);
+		Lang.controlFunctions.add(RETURN2);
+		ControlFunction ASSIGN = new ControlFunction("=",2);
+		Lang.controlFunctions.add(ASSIGN);
+		ControlFunction BREAK = new ControlFunction("break",0);
+		Lang.controlFunctions.add(BREAK);
+		ControlFunction CONTINUE = new ControlFunction("continue",0);
+		Lang.controlFunctions.add(CONTINUE);
+		// that should be everything
+				
+		
 		// just a test to add addition
 		// TODO add string concatenation.
 		MethodCode mc = ((Token[] tokens) ->

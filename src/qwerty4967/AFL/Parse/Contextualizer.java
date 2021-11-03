@@ -3,7 +3,7 @@ package qwerty4967.AFL.Parse;
 import java.util.ArrayList;
 
 import qwerty4967.AFL.Shell;
-import qwerty4967.AFL.Function.AFLFunction;
+import qwerty4967.AFL.Function.*;
 import qwerty4967.AFL.Interpret.Namespace;
 import qwerty4967.AFL.Lang.Lang;
 import qwerty4967.AFL.Lang.TokenType;
@@ -211,11 +211,13 @@ public class Contextualizer
 		String functionName = name.getData();
 		
 		// check the name
-		for(String str: Lang.CONTROL_FUNCTIONS)
+		for(ControlFunction f: Lang.controlFunctions)
 		{
+			String str = f.getName();
 			if(str.equals(functionName))
 			{
-				Shell.error("Invalid function definition. Control Function's are reserved name.", s.getStatementNumber());
+				Shell.error("Invalid function definition. \'"+str+"\' is a protected function, and it cannot be overloaded."
+, s.getStatementNumber());
 				return false;
 			}
 		}
@@ -356,6 +358,19 @@ public class Contextualizer
 						return false;
 					}
 					currentContainer= getHigherLevelContainer(currentContainer);
+					break;
+				case "break":
+				case "continue":
+					cs =transformToControlStatement(s);
+					
+					// check we're in a loop
+					if(!isInLoop(currentContainer))
+					{
+						Shell.error("Cannot use '"+name+"' outside of a loop.", e.getStatementNumber());
+						return false;
+					}
+					
+					addToContainer(cs, currentContainer);
 					break;
 				case "return":
 				case "=":
@@ -500,5 +515,22 @@ public class Contextualizer
 		}
 		
 		return null;
+	}
+	
+	private static boolean isInLoop(HasChildren s)
+	{
+		// loop-de-doop, poop-de-loop
+		HasChildren parent=s;
+		while(parent instanceof ControlStatement)
+		{
+				ControlStatement cs = (ControlStatement)parent;
+				if(cs.getFunctionName().equals("while"))
+				{
+					return true;
+				}
+				parent = cs.getParent();
+		}
+		return false;
+		
 	}
 }

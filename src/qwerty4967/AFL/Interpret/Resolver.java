@@ -55,8 +55,9 @@ public class Resolver
 	{
 		// first check that the function doesn't have a resereved name, then check that the function exists.
 		String functionName = f.getFunctionName();
-		for(String s : Lang.CONTROL_FUNCTIONS)
+		for(ControlFunction cf : Lang.controlFunctions)
 		{
+			String s = cf.getName();
 			if(functionName.equals(s))
 			{
 				// we've got ourselves a problemo, kids!
