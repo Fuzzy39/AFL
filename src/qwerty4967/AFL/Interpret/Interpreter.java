@@ -31,6 +31,7 @@ public class Interpreter
 		}
 		
 		// this would work, if it weren't a control statement.
+		
 		Element currentChild = getFirstChild(toInterpret);
 		
 		if(currentChild instanceof Token)
@@ -39,7 +40,7 @@ public class Interpreter
 			Token toReturn = (Token)currentChild;
 			if(toReturn.getType()==TokenType.error)
 			{
-				Shell.errorAt(toInterpret.getName(), currentChild.getStatementNumber());	
+				Shell.errorAt(toInterpret.getName(), 1);	
 			}
 			return toReturn;
 		}
@@ -59,6 +60,7 @@ public class Interpreter
 			}
 			
 			// now, we get the next child, and attemp to start again.
+			Element pastChild = currentChild;
 			currentChild=getNextChild(currentChild);
 			
 			if(currentChild instanceof Token)
@@ -67,7 +69,7 @@ public class Interpreter
 				Token toReturn = (Token)currentChild;
 				if(toReturn.getType()==TokenType.error)
 				{
-					Shell.errorAt(toInterpret.getName(), currentChild.getStatementNumber());	
+					Shell.errorAt(toInterpret.getName(), pastChild.getStatementNumber()+1);	
 				}
 				return toReturn;
 			}
@@ -92,8 +94,11 @@ public class Interpreter
 		}
 		
 		// it is a control statement.
-		Shell.error("AFL does not yet support control statements.", 1);
-		return new Token ("Error", TokenType.error);
+		if(!interpretControlStatement((ControlStatement)s))
+		{
+			return new Token ("Error", TokenType.error);
+		}
+		return getNextChild(s);
 		
 	}
 	private static Token attemptResolve(Element toResolve)
@@ -153,12 +158,79 @@ public class Interpreter
 		Statement nextChildCanidate = (Statement)currentContainer.getChild(currentID+1);
 		if(nextChildCanidate instanceof ControlStatement)
 		{
-			Shell.error("AFL does not yet support control statements.", currentID+1);
-			return new Token ("Error", TokenType.error);
+			
+			// BATTEN DOWN THE HATCHES!
+			// All Men on Deck!
+			// etc.
+			// this is a level one gremlin conspircacy!
+			
+			if(!interpretControlStatement((ControlStatement)nextChildCanidate))
+			{
+				return new Token ("Error", TokenType.error);
+			}
+			return getNextChild(nextChildCanidate);
 		}
 		
 		// it does not.
 		return nextChildCanidate;
 		
 	}
+	
+	private static boolean interpretControlStatement(ControlStatement cs)
+	{
+		// have you ever consumed a spicy gremlin?
+		//yes
+		// fantastic!
+		// well, that's what this code does, exactly
+		String name = cs.getFunctionName();
+		switch(name)
+		{
+			case "=":
+				Element toAssign = cs.getParameters().getChild(1);
+				Element toAssignTo = cs.getParameters().getChild(0);
+				
+				Token variable;
+				if(!(toAssignTo instanceof Token))
+				{
+					Shell.error("Cannot assign values to expressions.", cs.getStatementNumber());
+					return false;
+				}
+				variable=(Token)toAssignTo;
+				
+				if(variable.getType()!=TokenType.variable)
+				{
+					Shell.error("Cannot assign values to constants.", cs.getStatementNumber());
+					return false;
+				}
+				// ought to be good.
+				
+			
+				Token variableValue = Resolver.resolve(toAssign);
+				if(variableValue.getType()==TokenType.error)
+				{
+					return false;
+				}
+				if(variableValue.getType()==TokenType.voidToken)
+				{
+					Shell.error("Variables cannot be assigned nothing.", cs.getStatementNumber());
+					return false;
+				}
+				
+				// everything *should* be valid.
+				if(!Namespace.setVariable(variable, variableValue, cs.getFunction()))
+				{
+					return false;
+				}
+				
+				break;
+			default:
+				Shell.error("AFL does not yet support control statement '"+name+"'.", cs.getStatementNumber());
+				return false;
+		}
+		
+		return true;
+		
+		
+	}
 }
+

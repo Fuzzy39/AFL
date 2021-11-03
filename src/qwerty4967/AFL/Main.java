@@ -29,7 +29,7 @@ public class Main
 	// 10/31/21 b 454 Interpreter basics complete.
 	
 
-	protected static final int BUILD = 472;
+	protected static final int BUILD = 480;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -55,7 +55,7 @@ public class Main
 		{
 			// TODO replace this with a JavaFunction in the long term.
 			// maybe.
-			Shell.out("NOTE: not yet functional! Build: "+BUILD+" | debug: "+Shell.getDebugLevel()+"\n");
+			Shell.out("NOTE: not very functional  Build: "+BUILD+" | debug: "+Shell.getDebugLevel()+"\n");
 			
 			while(true)
 			{
@@ -231,8 +231,7 @@ public class Main
 			
 			if(aIsInvalid || bIsInvalid)
 			{
-				Shell.error("Operands for addition must be of type num.", -2);
-				return new Token ("Error", TokenType.error);
+				return new Token(a.getData()+b.getData(), TokenType.string);
 			}
 			// they be numbers!
 			double aNum= Double.parseDouble(a.getData());
