@@ -184,7 +184,7 @@ public class Namespace
 	
 	private static boolean variableHasInvalidScope(String name, AFLFunction Scope)
 	{
-		// okay, here's the thing
+		// okay, here's the thing	
 		// if Scope is null, only find matching.
 		// if scope is not null, find matching, or null;
 		for(Variable v: variables)

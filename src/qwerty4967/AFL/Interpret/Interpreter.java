@@ -17,6 +17,8 @@ public class Interpreter
 	// not necessarily a great one.
 	// but a plan.
 	
+	static Token toAFLReturn;
+	static Element nextChild = null;
 	
 	public static Token interpret(AFLFunction toInterpret, Token[] parameters)
 	{
@@ -24,6 +26,7 @@ public class Interpreter
 		// when we get the next child, we check whether it's a control.
 		// if it isn't, we call resolveNormally
 		// if it is, we absolutely destroy whoever dare attempted to do such a thing...
+		toAFLReturn=new Token("Error",TokenType.error);
 		
 		if(toInterpret.getSize()==0)
 		{
@@ -87,19 +90,26 @@ public class Interpreter
 		Statement s = (Statement)e;
 		
 		// what do we do if it is?
-		// well right now we can claim ineptitude.
-		if(!(s instanceof ControlStatement))
+		if(s instanceof ControlStatement)
 		{
-			return s;
+			nextChild=null;
+			
+			ControlStatement cs = (ControlStatement)s;
+			
+			if(!interpretControlStatement(cs))
+			{
+				return toAFLReturn;
+			}
+			
+			
+			if(nextChild==null)
+			{
+				return getNextChild(s);
+			}
+			
+			return nextChild;
 		}
-		
-		// it is a control statement.
-		if(!interpretControlStatement((ControlStatement)s))
-		{
-			return new Token ("Error", TokenType.error);
-		}
-		return getNextChild(s);
-		
+		return s;
 	}
 	private static Token attemptResolve(Element toResolve)
 	{
@@ -148,7 +158,14 @@ public class Interpreter
 			}
 			else
 			{
-				Shell.error("AFL does not yet support control statements, and if you're seeing this, something went wrong.", currentID);
+				ControlStatement currentControlStatement = (ControlStatement)currentContainer;
+				if(currentControlStatement.getFunctionName().equals("if"))
+				{
+					// we know what to do here!
+					return getNextChild(currentControlStatement);
+				}
+				
+				Shell.error("AFL does not yet support loops, and if you're seeing this, something went wrong.", currentID);
 				return new Token ("Error", TokenType.error);
 			}
 		}
@@ -163,12 +180,22 @@ public class Interpreter
 			// All Men on Deck!
 			// etc.
 			// this is a level one gremlin conspircacy!
+			nextChild=null;
 			
-			if(!interpretControlStatement((ControlStatement)nextChildCanidate))
+			ControlStatement cs = (ControlStatement)nextChildCanidate;
+			
+			if(!interpretControlStatement(cs))
 			{
-				return new Token ("Error", TokenType.error);
+				return toAFLReturn;
 			}
-			return getNextChild(nextChildCanidate);
+			
+			
+			if(nextChild==null)
+			{
+				return getNextChild(nextChildCanidate);
+			}
+			
+			return nextChild;
 		}
 		
 		// it does not.
@@ -186,50 +213,115 @@ public class Interpreter
 		switch(name)
 		{
 			case "=":
-				Element toAssign = cs.getParameters().getChild(1);
-				Element toAssignTo = cs.getParameters().getChild(0);
+				return processAssignment(cs);
+			case "return":
+				// returns are processed separately, because they can return things
+				processReturn(cs);
+				return false;
+			case "if":
+				return processIf(cs);
 				
-				Token variable;
-				if(!(toAssignTo instanceof Token))
-				{
-					Shell.error("Cannot assign values to expressions.", cs.getStatementNumber());
-					return false;
-				}
-				variable=(Token)toAssignTo;
-				
-				if(variable.getType()!=TokenType.variable)
-				{
-					Shell.error("Cannot assign values to constants.", cs.getStatementNumber());
-					return false;
-				}
-				// ought to be good.
-				
-			
-				Token variableValue = Resolver.resolve(toAssign);
-				if(variableValue.getType()==TokenType.error)
-				{
-					return false;
-				}
-				if(variableValue.getType()==TokenType.voidToken)
-				{
-					Shell.error("Variables cannot be assigned nothing.", cs.getStatementNumber());
-					return false;
-				}
-				
-				// everything *should* be valid.
-				if(!Namespace.setVariable(variable, variableValue, cs.getFunction()))
-				{
-					return false;
-				}
-				
-				break;
 			default:
 				Shell.error("AFL does not yet support control statement '"+name+"'.", cs.getStatementNumber());
 				return false;
 		}
 		
-		return true;
+		//return true;
 		
+		
+	}
+	
+	private static boolean processAssignment(ControlStatement cs)
+	{
+		Element toAssign = cs.getParameters().getChild(1);
+		Element toAssignTo = cs.getParameters().getChild(0);
+		
+		Token variable;
+		if(!(toAssignTo instanceof Token))
+		{
+			Shell.error("Cannot assign values to expressions.", cs.getStatementNumber());
+			return false;
+		}
+		variable=(Token)toAssignTo;
+		
+		if(variable.getType()!=TokenType.variable)
+		{
+			Shell.error("Cannot assign values to constants.", cs.getStatementNumber());
+			return false;
+		}
+		// ought to be good.
+		
+	
+		Token variableValue = Resolver.resolve(toAssign);
+		if(variableValue.getType()==TokenType.error)
+		{
+			return false;
+		}
+		if(variableValue.getType()==TokenType.voidToken)
+		{
+			Shell.error("Variables cannot be assigned nothing.", cs.getStatementNumber());
+			return false;
+		}
+		
+		// everything *should* be valid.
+		if(!Namespace.setVariable(variable, variableValue, cs.getFunction()))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private static void processReturn(ControlStatement cs)
+	{
+		int params = cs.getParameters().getSize();
+		if(params==0)
+		{
+			toAFLReturn=new Token("Void",TokenType.voidToken);
+			return;
+		}
+		// params is one
+		Element returnExpression = cs.getParameters().getChild(0);
+		Token toReturn = Resolver.resolve(returnExpression);
+		if(toReturn.getType()==TokenType.error)
+		{
+			return;
+		}
+		// it's good
+		toAFLReturn = toReturn;
+		return;
+	}
+	
+	private static boolean processIf(ControlStatement cs)
+	{
+		Element condition = cs.getParameters().getChild(0);
+		Token conditionValue = Resolver.resolve(condition);
+		
+		if(conditionValue.getType()==TokenType.error)
+		{
+			return false;
+		}
+		
+		if(conditionValue.getType()!=TokenType.bool)
+		{
+			Shell.error("If statements require boolean conditions.", cs.getStatementNumber());
+			return false;
+		}
+		
+		// things are seemingly valid.
+		boolean ifCondition = Boolean.parseBoolean(conditionValue.getData());
+		if(cs.getSize()==0)
+		{
+			ifCondition=false;
+		}
+		
+		if(ifCondition)
+		{
+			nextChild=cs.getChild(0);
+		}
+		
+		
+		return true;
 		
 	}
 }

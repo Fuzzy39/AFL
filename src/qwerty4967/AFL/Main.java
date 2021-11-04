@@ -27,9 +27,9 @@ public class Main
 	// 10/0X/21 b ??? finished AFL.Parse (control Statements functional)
 	// 10/9/21 b 412 Began work on foundations for interpreter
 	// 10/31/21 b 454 Interpreter basics complete.
-	
+	// 11/4/21 Note: I kinda wished I just used exceptions instead of making the code more contrived...
 
-	protected static final int BUILD = 480;
+	protected static final int BUILD = 487;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
