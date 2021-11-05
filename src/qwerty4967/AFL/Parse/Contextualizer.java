@@ -104,7 +104,7 @@ public class Contextualizer
 			FunctionCall f = (FunctionCall)e;
 			String function = f.getFunctionName();
 			
-			if(function.equals("while")|| function.equals("if")|| function.equals("else"))
+			if(function.equals("while")|| function.equals("if")|| function.equals("else")|| function.equals("for"))
 			{
 				depth++;
 			}
@@ -198,13 +198,13 @@ public class Contextualizer
 		
 		if(name.getType()!=TokenType.string)
 		{
-			Shell.error("Invalid function definition. The first parameter should be a string.", s.getStatementNumber());
+			Shell.error("Invalid function definition. The first parameter should be a string constant.", s.getStatementNumber());
 			return false;
 		}
 		
 		if(parameters.getType()!=TokenType.number)
 		{
-			Shell.error("Invalid function definition. The second parameter should be a number.", s.getStatementNumber());
+			Shell.error("Invalid function definition. The second parameter should be a number constant.", s.getStatementNumber());
 			return false;
 		}
 		
@@ -518,7 +518,7 @@ public class Contextualizer
 		FunctionCall ifFunc = new FunctionCall("if", s);
 		FunctionCall elseCompare = new FunctionCall("==", ifFunc);
 		new Token("false",TokenType.bool,elseCompare);
-		elseCompare.addChild(ifParameter);
+		elseCompare.addChild(ifParameter.copy());
 		
 		
 		return new ControlStatement(s.getStatementNumber(), s);

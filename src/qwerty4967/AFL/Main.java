@@ -29,7 +29,7 @@ public class Main
 	// 10/31/21 b 454 Interpreter basics complete.
 	// 11/4/21 Note: I kinda wished I just used exceptions instead of making the code more contrived...
 
-	protected static final int BUILD = 487;
+	protected static final int BUILD = 489;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -218,8 +218,7 @@ public class Main
 		// that should be everything
 				
 		
-		// just a test to add addition
-		// TODO add string concatenation.
+		// ADDITION OPERATOR
 		MethodCode mc = ((Token[] tokens) ->
 		{
 			// get the tokens
@@ -242,6 +241,44 @@ public class Main
 		
 		JavaFunction jf = new JavaFunction("+",2,mc);
 		Namespace.addFunction(jf);
+
+		
+		
+		// == Operator
+		mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			Token a = tokens[0];
+			Token b = tokens[1];
+			
+			if(a.getType()==b.getType())
+			{
+				// are they numbers?
+				if(a.getType()==TokenType.number)
+				{
+					// guh
+					double aValue = Double.parseDouble(a.getData());
+					double bValue = Double.parseDouble(b.getData());
+					if(aValue==bValue)
+					{
+						return new Token("true", TokenType.bool);
+					}
+				}
+				else
+				{
+					if(a.getData().equals(b.getData()))
+					{
+						return new Token("true", TokenType.bool);
+					}
+				}
+			}
+			return new Token("false", TokenType.bool);
+		});
+		
+		jf = new JavaFunction("==",2,mc);
+		Namespace.addFunction(jf);
+		
+		
 		return true;
 		
 		// example javaFunction.

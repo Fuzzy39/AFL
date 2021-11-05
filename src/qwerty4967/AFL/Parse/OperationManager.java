@@ -91,7 +91,7 @@ public class OperationManager
 		{
 			if(c.getSize()==1)
 			{
-				Shell.error("Operator '"+operator.getData()+"' only has no operands. Expected two.", operator.getStatementNumber());	
+				Shell.error("Operator '"+operator.getData()+"' doesn't have any operands. Expected two.", operator.getStatementNumber());	
 			}
 			else
 			{

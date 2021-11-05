@@ -35,7 +35,9 @@ public abstract class Element
 		this.ID=parent.addChild(this);
 		this.parent=parent;
 	}
-
+	
+	public abstract Element copy();
+	
 	
 	/** 
 	 * get the id

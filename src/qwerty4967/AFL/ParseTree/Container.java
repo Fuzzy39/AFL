@@ -19,10 +19,13 @@ public class Container extends Element implements HasChildren
 	// what is the name for anyways?
 	// toString, right.
 	
-	/**
-	 * 
-	 * @param group
-	 */
+
+	public Container()
+	{
+		super();
+		this.name="Container";
+	}
+	
 	public Container( HasChildren parent)
 	{
 		super(parent);
@@ -30,7 +33,16 @@ public class Container extends Element implements HasChildren
 	}
 	
 	
-	
+	public Container copy()
+	{
+		Container toReturn = new Container();
+		for(int i = 0; i<this.getSize(); i++)
+		{
+			Element child = getChild(i);
+			toReturn.addChild(child.copy());
+		}
+		return toReturn;
+	}
 	/**
 	 * adds a child to the element.
 	 * returns the id of the child.

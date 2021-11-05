@@ -25,6 +25,11 @@ public class Token extends Element
 		this.data = data;
 		this.type = type;
 	}
+	
+	public Token copy()
+	{
+		return new Token(this.getData(), this.getType());
+	}
 
 
 	public String getData() {

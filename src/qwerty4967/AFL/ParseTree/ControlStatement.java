@@ -2,6 +2,7 @@ package qwerty4967.AFL.ParseTree;
 
 import java.util.ArrayList;
 
+import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Function.AFLFunction;
 
 public class ControlStatement extends Statement 
@@ -11,7 +12,7 @@ public class ControlStatement extends Statement
 	private String function;
 	private Group parameters;
 	
-	// take a statement, husk it's corpse, etc.
+	// take a statement, husk its corpse, etc.
 	public ControlStatement(int num, Statement from)
 	{
 		super(num, from.getParent());
@@ -77,6 +78,12 @@ public class ControlStatement extends Statement
 		return toReturn;
 	}
 	
+	public ControlStatement copy()
+	{
+		Shell.out("CANNOT COPY CONTROLSTATEMENT (due to laziness, rather than any good reason)");
+		System.exit(-1);
+		return null;
+	}
 	public String getFunctionName() 
 	{
 		return function;

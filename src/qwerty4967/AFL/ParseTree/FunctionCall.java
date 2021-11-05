@@ -5,6 +5,13 @@ public class FunctionCall extends Container
 {
 	private String functionName;
 	
+	public FunctionCall( String functionName)
+	{
+		super();
+		this.functionName = functionName;
+		this.name="Function "+functionName;
+	}
+	
 	public FunctionCall( String functionName, HasChildren parent)
 	{
 		super(parent);
@@ -12,6 +19,16 @@ public class FunctionCall extends Container
 		this.name="Function "+functionName;
 	}
 	
+	public FunctionCall copy()
+	{
+		FunctionCall toReturn = new FunctionCall(getFunctionName());
+		for(int i = 0; i<this.getSize(); i++)
+		{
+			Element child = getChild(i);
+			toReturn.addChild(child.copy());
+		}
+		return toReturn;
+	}
 	
 	public String getFunctionName()
 	{

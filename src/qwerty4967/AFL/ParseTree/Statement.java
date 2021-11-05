@@ -8,6 +8,12 @@ public class Statement extends Container
 	
 	private int statementNumber;
 	
+	public Statement(int num)
+	{
+		super();	
+		statementNumber=num;
+		name="Statement (Line: "+num+")";
+	}
 	/**
 	 * 
 	 * @param num
@@ -31,6 +37,16 @@ public class Statement extends Container
 
 	}
 	
+	public Statement copy()
+	{
+		Statement toReturn = new Statement(statementNumber);
+		for(int i = 0; i<this.getSize(); i++)
+		{
+			Element child = getChild(i);
+			toReturn.addChild(child.copy());
+		}
+		return toReturn;
+	}
 	
 	/**
 	 * 

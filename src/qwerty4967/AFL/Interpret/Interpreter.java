@@ -141,7 +141,7 @@ public class Interpreter
 	
 	private static Element getNextChild(Element currentChild)
 	{
-		// currentChild, is, of course, a statement, and not a controlStatement, either.
+		// currentChild, is, of course, a statement.
 		// get the parent
 		HasChildren currentContainer = currentChild.getParent();
 		int currentID=currentChild.getID();
