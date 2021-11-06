@@ -96,18 +96,36 @@ public class Interpreter
 			
 			ControlStatement cs = (ControlStatement)s;
 			
-			if(!interpretControlStatement(cs))
+			// control statements can be nested.
+			// this is an issue for the first statment.
+			while(true)
 			{
-				return toAFLReturn;
+				// if the control statement is return or has an error or something.
+				if(!interpretControlStatement(cs))
+				{
+					return toAFLReturn;
+				}
+				
+				// if the control statement doesn't call for itself to be dropped into.
+				if(nextChild==null)
+				{
+					return getNextChild(s);
+				}
+				
+				
+				
+				
+				// things are not nested.
+				if(!(nextChild instanceof ControlStatement))
+				{
+					
+					return nextChild;
+				}
+				// they are!
+				s=(Statement)nextChild;
+				cs=(ControlStatement)nextChild;
 			}
 			
-			
-			if(nextChild==null)
-			{
-				return getNextChild(s);
-			}
-			
-			return nextChild;
 		}
 		return s;
 	}

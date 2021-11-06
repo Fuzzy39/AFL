@@ -29,7 +29,7 @@ public class Main
 	// 10/31/21 b 454 Interpreter basics complete.
 	// 11/4/21 Note: I kinda wished I just used exceptions instead of making the code more contrived...
 
-	protected static final int BUILD = 489;
+	protected static final int BUILD = 492;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
