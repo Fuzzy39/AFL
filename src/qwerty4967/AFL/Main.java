@@ -29,7 +29,10 @@ public class Main
 	// 10/31/21 b 454 Interpreter basics complete.
 	// 11/4/21 Note: I kinda wished I just used exceptions instead of making the code more contrived...
 
-	protected static final int BUILD = 492;
+
+
+
+	protected static final int BUILD = 493;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -279,6 +282,73 @@ public class Main
 		Namespace.addFunction(jf);
 		
 		
+		//!= operator
+		mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			Token a = tokens[0];
+			Token b = tokens[1];
+			
+			if(a.getType()==b.getType())
+			{
+				// are they numbers?
+				if(a.getType()==TokenType.number)
+				{
+					// guh
+					double aValue = Double.parseDouble(a.getData());
+					double bValue = Double.parseDouble(b.getData());
+					if(aValue==bValue)
+					{
+						return new Token("false", TokenType.bool);
+					}
+				}
+				else
+				{
+					if(a.getData().equals(b.getData()))
+					{
+						return new Token("false", TokenType.bool);
+					}
+				}
+			}
+			return new Token("true", TokenType.bool);
+		});
+		
+		jf = new JavaFunction("!=",2,mc);
+		Namespace.addFunction(jf);
+		
+		mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			Token a = tokens[0];
+			Token b = tokens[1];
+			
+			if(a.getType()==b.getType())
+			{
+				// are they numbers?
+				if(a.getType()==TokenType.number)
+				{
+					// guh
+					double aValue = Double.parseDouble(a.getData());
+					double bValue = Double.parseDouble(b.getData());
+					if(aValue>=bValue)
+					{
+						return new Token("true", TokenType.bool);
+					}
+					else
+					{
+						return new Token("false", TokenType.bool);
+					}
+				}
+				
+			}
+			Shell.error("The '>=' operator requires operands of type num.", -2);
+			return new Token("Error", TokenType.error);
+		});
+	
+		jf = new JavaFunction(">=",2,mc);
+		Namespace.addFunction(jf);
+		
+		//TODO more crap
 		return true;
 		
 		// example javaFunction.
