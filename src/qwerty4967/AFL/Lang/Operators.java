@@ -11,6 +11,7 @@ public class Operators
 		{"*","/","%"}, // multiply and divide	
 		{"+","-"}, // add and subtract.
 		{"==","!=",">=","<=",">","<"}, // compare
+		{"||","&"}, // logic
 		{"="} // assign
 		
 	};
@@ -21,6 +22,7 @@ public class Operators
 		multiply,
 		add, 
 		compare,
+		logic,
 		assign
 		
 		

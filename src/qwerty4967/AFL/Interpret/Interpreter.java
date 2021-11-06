@@ -202,18 +202,33 @@ public class Interpreter
 			
 			ControlStatement cs = (ControlStatement)nextChildCanidate;
 			
-			if(!interpretControlStatement(cs))
+			while(true)
 			{
-				return toAFLReturn;
+				// if the control statement is return or has an error or something.
+				if(!interpretControlStatement(cs))
+				{
+					return toAFLReturn;
+				}
+				
+				// if the control statement doesn't call for itself to be dropped into.
+				if(nextChild==null)
+				{
+					return getNextChild(nextChildCanidate);
+				}
+				
+				
+				
+				
+				// things are not nested.
+				if(!(nextChild instanceof ControlStatement))
+				{
+					
+					return nextChild;
+				}
+				// they are!
+				nextChildCanidate=(Statement)nextChild;
+				cs=(ControlStatement)nextChild;
 			}
-			
-			
-			if(nextChild==null)
-			{
-				return getNextChild(nextChildCanidate);
-			}
-			
-			return nextChild;
 		}
 		
 		// it does not.
