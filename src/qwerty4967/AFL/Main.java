@@ -32,7 +32,7 @@ public class Main
 
 
 
-	protected static final int BUILD = 494;
+	protected static final int BUILD = 496;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -221,187 +221,9 @@ public class Main
 		// that should be everything
 				
 		
-		// ADDITION OPERATOR
-		MethodCode mc = ((Token[] tokens) ->
-		{
-			// get the tokens
-			Token a = tokens[0];
-			Token b = tokens[1];
-			
-			boolean aIsInvalid = a.getType()!=TokenType.number;
-			boolean bIsInvalid = b.getType()!=TokenType.number;
-			
-			if(aIsInvalid || bIsInvalid)
-			{
-				return new Token(a.getData()+b.getData(), TokenType.string);
-			}
-			// they be numbers!
-			double aNum= Double.parseDouble(a.getData());
-			double bNum= Double.parseDouble(b.getData());
-			double result = aNum+bNum;
-			return new Token(result+"", TokenType.number);
-		});
-		
-		JavaFunction jf = new JavaFunction("+",2,mc);
-		Namespace.addFunction(jf);
-
-		
-		
-		// == Operator
-		mc = ((Token[] tokens) ->
-		{
-			// get the tokens
-			Token a = tokens[0];
-			Token b = tokens[1];
-			
-			if(a.getType()==b.getType())
-			{
-				// are they numbers?
-				// are they numbers?
-				if(areBothOfType(a,b,TokenType.number))
-				{
-					
-					// guh
-					double aValue = Double.parseDouble(a.getData());
-					double bValue = Double.parseDouble(b.getData());
-					return toToken(aValue==bValue);
-					
-				}
-				else
-				{
-					return toToken(a.getData().equals(b.getData()));
-					
-				}
-			}
-			return new Token("false", TokenType.bool);
-		});
-		
-		jf = new JavaFunction("==",2,mc);
-		Namespace.addFunction(jf);
-		
-		
-		//!= operator
-		mc = ((Token[] tokens) ->
-		{
-			// get the tokens
-			Token a = tokens[0];
-			Token b = tokens[1];
-			
-			if(a.getType()==b.getType())
-			{
-				// are they numbers?
-				if(areBothOfType(a,b,TokenType.number))
-				{
-					
-					// guh
-					double aValue = Double.parseDouble(a.getData());
-					double bValue = Double.parseDouble(b.getData());
-					return toToken(aValue!=bValue);
-					
-				}
-				else
-				{
-					return toToken(!(a.getData().equals(b.getData())));
-					
-				}
-			}
-			return new Token("true", TokenType.bool);
-		});
-		
-		jf = new JavaFunction("!=",2,mc);
-		Namespace.addFunction(jf);
-		
-		mc = ((Token[] tokens) ->
-		{
-			// get the tokens
-			Token a = tokens[0];
-			Token b = tokens[1];
-			
-			if(areBothOfType(a,b,TokenType.number))
-			{
-				
-				// guh
-				double aValue = Double.parseDouble(a.getData());
-				double bValue = Double.parseDouble(b.getData());
-				return toToken(aValue>=bValue);
-				
-			}
-			Shell.error("The '>=' operator requires operands of type num.", -2);
-			return new Token("Error", TokenType.error);
-		});
-	
-		jf = new JavaFunction(">=",2,mc);
-		Namespace.addFunction(jf);
-		
-		
-		mc = ((Token[] tokens) ->
-		{
-			// get the tokens
-			Token a = tokens[0];
-			Token b = tokens[1];
-			
-			if(areBothOfType(a,b,TokenType.number))
-			{
-				
-				// guh
-				double aValue = Double.parseDouble(a.getData());
-				double bValue = Double.parseDouble(b.getData());
-				return toToken(aValue<=bValue);
-				
-			}
-			Shell.error("The '<=' operator requires operands of type num.", -2);
-			return new Token("Error", TokenType.error);
-		});
-	
-		jf = new JavaFunction("<=",2,mc);
-		Namespace.addFunction(jf);
-		
-		
-		mc = ((Token[] tokens) ->
-		{
-			// get the tokens
-			Token a = tokens[0];
-			Token b = tokens[1];
-			
-			if(areBothOfType(a,b,TokenType.number))
-			{
-				
-				// guh
-				double aValue = Double.parseDouble(a.getData());
-				double bValue = Double.parseDouble(b.getData());
-				return toToken(aValue>bValue);
-				
-			}
-			Shell.error("The '>' operator requires operands of type num.", -2);
-			return new Token("Error", TokenType.error);
-		});
-	
-		jf = new JavaFunction(">",2,mc);
-		Namespace.addFunction(jf);
-		
-		
-		mc = ((Token[] tokens) ->
-		{
-			// get the tokens
-			Token a = tokens[0];
-			Token b = tokens[1];
-			
-			if(areBothOfType(a,b,TokenType.number))
-			{
-				
-				// guh
-				double aValue = Double.parseDouble(a.getData());
-				double bValue = Double.parseDouble(b.getData());
-				return toToken(aValue<bValue);
-				
-			}
-			Shell.error("The '<' operator requires operands of type num.", -2);
-			return new Token("Error", TokenType.error);
-		});
-	
-		jf = new JavaFunction("<",2,mc);
-		Namespace.addFunction(jf);
-		
+		// this is pretty important, for a single line of code.
+		// be rest assured there's more than one in that function.
+		JavaFunctionInitializer.initJavaFunctions();
 		
 		//TODO more crap
 		return true;
@@ -412,30 +234,7 @@ public class Main
 		jf.call(new Token[0]);*/
 	}
 	
-	private static boolean areBothOfType(Token a, Token b, TokenType t)
-	{
-		if(a.getType()==b.getType())
-		{
-			// are they numbers?
-			if(a.getType()==TokenType.number)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private static Token toToken(Boolean b)
-	{
-		if(b)
-		{
-			return new Token("true", TokenType.bool);
-		}
-		else
-		{
-			return new Token("false", TokenType.bool);
-		}
-	}
+
 	
 	private static Token execute(String code)
 	{
