@@ -21,7 +21,7 @@ public class ControlStatement extends Statement
 		HasChildren parent = from.getParent();
 		this.name="ControlStatement";
 		
-		parameters= new Group();
+		parameters= new Group(this);
 		
 		if(from instanceof ControlStatement)
 		{
@@ -44,7 +44,10 @@ public class ControlStatement extends Statement
 		
 		for(int i = 0; i<function.getSize();)
 		{
-			parameters.addChild(function.getChild(i));
+			Element param =function.getChild(i);
+			parameters.addChild(param);
+			
+			
 		}
 		
 		// the children have been snatched!

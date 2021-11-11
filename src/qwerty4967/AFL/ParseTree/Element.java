@@ -19,6 +19,7 @@ public abstract class Element
 	
 	private HasChildren parent;
 	
+	
 	// I'm not sure if this is necessary, but I'll put it in because it can only make things easier.
 	// As it turns out, very helpful.
 	protected int ID;
@@ -27,6 +28,7 @@ public abstract class Element
 	{
 		// sit around with your hands on your butt, I guess?
 		ID=-1;
+		
 	}
 	
 	public Element(HasChildren parent)
@@ -34,6 +36,7 @@ public abstract class Element
 		
 		this.ID=parent.addChild(this);
 		this.parent=parent;
+	
 	}
 	
 	public abstract Element copy();
@@ -88,10 +91,22 @@ public abstract class Element
 	
 	public HasChildren getRoot()
 	{
-		HasChildren p = parent;
+		HasChildren p;
+		
+		p=parent;
+		
+		
 		while(p instanceof Container)
 		{
 			p=((Container)p).getParent();
+		}
+		
+		if(p instanceof Group)
+		{
+			if( (((Group)p).getControlStatement())!=null)
+			{
+				return ((Group)p).getControlStatement().getRoot();
+			}
 		}
 		return p;
 	}
@@ -106,6 +121,8 @@ public abstract class Element
 	public boolean moveTo( HasChildren newParent, int id)
 	{
 		// this is only false during an element's initialization.
+		
+		
 		if(parent!=null)
 		{
 			parent.removeChild(this);
@@ -130,7 +147,6 @@ public abstract class Element
 	
 		this.parent=null;
 		this.ID=-1;
-	
 		
 	}
 	
@@ -162,8 +178,11 @@ public abstract class Element
 	// gets the correct statement number, unless, of course, the element is part of a group.
 	public int getStatementNumber()
 	{
-	
-		HasChildren p = parent;
+		HasChildren p;
+		
+		p=parent;
+		
+		
 		while (p instanceof Container)
 		{
 			if(p instanceof Statement)
@@ -182,4 +201,6 @@ public abstract class Element
 		return -1;
 		
 	}
+	
+	
 }

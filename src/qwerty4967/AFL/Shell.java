@@ -18,7 +18,7 @@ public class Shell
 	
 	
 
-	
+
 	protected static int debugLevel = 0; // ranges from 0 to max, inclusive, determines the prevalence of debug messages.
 	public static final int MAX_DEBUG_LEVEL=4; // may as well make it public, it's final.
 	/*

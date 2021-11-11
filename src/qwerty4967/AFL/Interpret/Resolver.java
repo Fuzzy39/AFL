@@ -8,7 +8,7 @@ public class Resolver
 	protected static Token resolve( Element e )
 	{
 		
-
+		
 		if(e instanceof Token)
 		{
 			return useToken((Token)e);
