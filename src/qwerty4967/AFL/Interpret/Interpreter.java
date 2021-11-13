@@ -100,6 +100,7 @@ public class Interpreter
 			// this is an issue for the first statment.
 			while(true)
 			{
+				nextChild=null;
 				// if the control statement is return or has an error or something.
 				if(!interpretControlStatement(cs))
 				{
@@ -183,12 +184,33 @@ public class Interpreter
 					return getNextChild(currentControlStatement);
 				}
 				
-				Shell.error("AFL does not yet support loops, and if you're seeing this, something went wrong.", currentID);
+				if(currentControlStatement.getFunctionName().equals("while"))
+				{
+					// we need to check the conditional, then act on it.
+					nextChild=null;
+					
+					boolean b = processConditional(currentControlStatement);
+					if(!b)
+					{
+						return new Token ("Error", TokenType.error);
+					}
+					if(nextChild==null)
+					{
+						// b is false. alas.
+						return getNextChild(currentControlStatement);
+					}
+					// yet another loop
+		 			return nextChild;
+					
+				}
+				
+				Shell.error("AFL has discovered a new breed of controlStatement, and if you're seeing this, something went very wrong.", currentID);
 				return new Token ("Error", TokenType.error);
 			}
 		}
 		
 		// there is, cool
+		
 		// check if it's a control statement.
 		Statement nextChildCanidate = (Statement)currentContainer.getChild(currentID+1);
 		if(nextChildCanidate instanceof ControlStatement)
@@ -204,6 +226,7 @@ public class Interpreter
 			
 			while(true)
 			{
+				nextChild=null;
 				// if the control statement is return or has an error or something.
 				if(!interpretControlStatement(cs))
 				{
@@ -252,11 +275,15 @@ public class Interpreter
 				processReturn(cs);
 				return false;
 			case "if":
-				return processIf(cs);
-				
+			case "while":
+				return processConditional(cs);
+			case "break":
+				processBreak(cs);
+				return true;
 			default:
 				Shell.error("AFL does not yet support control statement '"+name+"'.", cs.getStatementNumber());
 				return false;
+			
 		}
 		
 		//return true;
@@ -325,7 +352,7 @@ public class Interpreter
 		return;
 	}
 	
-	private static boolean processIf(ControlStatement cs)
+	private static boolean processConditional(ControlStatement cs)
 	{
 		Element condition = cs.getParameters().getChild(0);
 		Token conditionValue = Resolver.resolve(condition);
@@ -337,7 +364,7 @@ public class Interpreter
 		
 		if(conditionValue.getType()!=TokenType.bool)
 		{
-			Shell.error("If statements require boolean conditions.", cs.getStatementNumber());
+			Shell.error("Conditional statements require boolean conditions.", cs.getStatementNumber());
 			return false;
 		}
 		
@@ -357,5 +384,25 @@ public class Interpreter
 		return true;
 		
 	}
+	
+	private static void processBreak(ControlStatement cs)
+	{
+		// what do we need to do?
+		// the thing!
+		// woo!
+		ControlStatement parent = (ControlStatement)cs.getParent();
+		while(true)
+		{
+			// get the loop that we are to break out of
+			
+			if(parent.getFunctionName().equals("while")) 
+			{
+				nextChild=getNextChild(parent);
+				return;
+			}
+			parent = (ControlStatement)parent.getParent();
+		}
+	}
+	
 }
 
