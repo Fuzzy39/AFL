@@ -32,7 +32,7 @@ public class Main
 
 
 
-	protected static final int BUILD = 501;
+	protected static final int BUILD = 506;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -58,7 +58,7 @@ public class Main
 		{
 			// TODO replace this with a JavaFunction in the long term.
 			// maybe.
-			Shell.out("NOTE: not very functional  Build: "+BUILD+" | debug: "+Shell.getDebugLevel()+"\n");
+			Shell.out("NOTE: IN DEVELOPMENT! Not Fully Functional.  Build: "+BUILD+" | debug: "+Shell.getDebugLevel()+"\n");
 			
 			while(true)
 			{
@@ -192,7 +192,9 @@ public class Main
 	{
 		Lang.controlFunctions=new ArrayList<ControlFunction>();
 		
+		
 		// Initialize controlFunctions.
+		// this part feels disgusting.
 		// block creating functions
 		ControlFunction IF = new ControlFunction("if",1);
 		Lang.controlFunctions.add(IF);
@@ -200,8 +202,8 @@ public class Main
 		Lang.controlFunctions.add(ELSE);
 		ControlFunction WHILE = new ControlFunction("while",1);
 		Lang.controlFunctions.add(WHILE);
-		ControlFunction FOR = new ControlFunction("for",3);
-		Lang.controlFunctions.add(FOR);
+		//ControlFunction FOR = new ControlFunction("for",3);
+		//Lang.controlFunctions.add(FOR);
 		
 		// Non block creating functions
 		ControlFunction END = new ControlFunction("end",0);

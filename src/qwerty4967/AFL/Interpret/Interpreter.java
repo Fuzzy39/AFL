@@ -98,34 +98,7 @@ public class Interpreter
 			
 			// control statements can be nested.
 			// this is an issue for the first statment.
-			while(true)
-			{
-				nextChild=null;
-				// if the control statement is return or has an error or something.
-				if(!interpretControlStatement(cs))
-				{
-					return toAFLReturn;
-				}
-				
-				// if the control statement doesn't call for itself to be dropped into.
-				if(nextChild==null)
-				{
-					return getNextChild(s);
-				}
-				
-				
-				
-				
-				// things are not nested.
-				if(!(nextChild instanceof ControlStatement))
-				{
-					
-					return nextChild;
-				}
-				// they are!
-				s=(Statement)nextChild;
-				cs=(ControlStatement)nextChild;
-			}
+			return getNextChildOfControlStatement( cs );
 			
 		}
 		return s;
@@ -199,7 +172,14 @@ public class Interpreter
 						// b is false. alas.
 						return getNextChild(currentControlStatement);
 					}
+					
 					// yet another loop
+		 			if(nextChild instanceof ControlStatement)
+		 			{
+		 				ControlStatement cs = (ControlStatement)nextChild;
+		 				return getNextChildOfControlStatement( cs );
+		 			}
+		 			
 		 			return nextChild;
 					
 				}
@@ -215,48 +195,55 @@ public class Interpreter
 		Statement nextChildCanidate = (Statement)currentContainer.getChild(currentID+1);
 		if(nextChildCanidate instanceof ControlStatement)
 		{
+			// okay, the standard thing.
+			// Edges are annoying.
+			return getNextChildOfControlStatement( ((ControlStatement)nextChildCanidate) );
 			
-			// BATTEN DOWN THE HATCHES!
-			// All Men on Deck!
-			// etc.
-			// this is a level one gremlin conspircacy!
-			nextChild=null;
-			
-			ControlStatement cs = (ControlStatement)nextChildCanidate;
-			
-			while(true)
-			{
-				nextChild=null;
-				// if the control statement is return or has an error or something.
-				if(!interpretControlStatement(cs))
-				{
-					return toAFLReturn;
-				}
-				
-				// if the control statement doesn't call for itself to be dropped into.
-				if(nextChild==null)
-				{
-					return getNextChild(nextChildCanidate);
-				}
-				
-				
-				
-				
-				// things are not nested.
-				if(!(nextChild instanceof ControlStatement))
-				{
-					
-					return nextChild;
-				}
-				// they are!
-				nextChildCanidate=(Statement)nextChild;
-				cs=(ControlStatement)nextChild;
-			}
 		}
 		
 		// it does not.
 		return nextChildCanidate;
 		
+	}
+	
+	private static Element getNextChildOfControlStatement(ControlStatement cs)
+	{
+		// BATTEN DOWN THE HATCHES!
+		// All Men on Deck!
+		// etc.
+		// this is a level one gremlin conspircacy!
+	
+		
+	
+		
+		while(true)
+		{
+			nextChild=null;
+			// if the control statement is return or has an error or something.
+			if(!interpretControlStatement(cs))
+			{
+				return toAFLReturn;
+			}
+			
+			// if the control statement doesn't call for itself to be dropped into.
+			if(nextChild==null)
+			{
+				return getNextChild(cs);
+			}
+			
+			
+			
+			
+			// things are not nested.
+			if(!(nextChild instanceof ControlStatement))
+			{
+				
+				return nextChild;
+			}
+			// they are!
+			
+			cs=(ControlStatement)nextChild;
+		}
 	}
 	
 	private static boolean interpretControlStatement(ControlStatement cs)
@@ -279,6 +266,9 @@ public class Interpreter
 				return processConditional(cs);
 			case "break":
 				processBreak(cs);
+				return true;
+			case "continue":
+				processContinue(cs);
 				return true;
 			default:
 				Shell.error("AFL does not yet support control statement '"+name+"'.", cs.getStatementNumber());
@@ -390,6 +380,8 @@ public class Interpreter
 		// what do we need to do?
 		// the thing!
 		// woo!
+		// what a useless comment, jeez.
+		
 		ControlStatement parent = (ControlStatement)cs.getParent();
 		while(true)
 		{
@@ -397,11 +389,57 @@ public class Interpreter
 			
 			if(parent.getFunctionName().equals("while")) 
 			{
+				// we found it, and now we set the next child to the element after the loop.
+				// this functionally means that we stop running code in the loop and start running the code after it
+				// we've broken free!
 				nextChild=getNextChild(parent);
 				return;
 			}
 			parent = (ControlStatement)parent.getParent();
 		}
+	}
+	
+	private static void processContinue(ControlStatement cs)
+	{
+		// Desperately pretending this method wasn't a copy-paste of processBreak...
+	
+		
+		ControlStatement parent = (ControlStatement)cs.getParent();
+		while(true)
+		{
+			// get the loop that we are to break out of
+			
+			if(parent.getFunctionName().equals("while")) 
+			{
+				// We found our loop.
+				// we set the start of the loop as our next child.
+				// this isn't good enough, and you'll shortly see why if you don't already know.
+				
+				// hopefully assuming that the loop has at least one child is fine.
+				// why wouldn't it be?
+				nextChild=parent.getChild(0);
+				break;
+			}
+			parent = (ControlStatement)parent.getParent();
+		}
+		
+		// that problem, you're asking?
+		// well, the first child of the loop could be a control statement.
+		// if it is, and we don't catch it here, we crash, because attemptResolve cannot resolve a ControlStatement.
+		// I'm starting to realize that there are probably smarter ways to deal with this...
+		// oh well.
+		// this is probably the last of the code that I'm going to end up writing in interpreter, so...
+		// it's fine, I swear.
+		// whether this is a smart way to deal with this or not, it's not too hard to deal with.
+		
+		if(nextChild instanceof ControlStatement)
+		{
+			// not literal returning, in this case...
+			// this class is poorly coded, I'll admit that.
+			ControlStatement toReturn = (ControlStatement)nextChild;
+			nextChild =  getNextChildOfControlStatement(toReturn);
+		}
+		
 	}
 	
 }

@@ -195,6 +195,12 @@ public class Tokenizer
 			return false;
 		}
 		
+		if(type== TokenType.number)
+		{
+			// just for consistent formatting.
+			tokenData = Double.parseDouble(tokenData)+"";
+		}
+		
 		if(type!=TokenType.operator)
 		{
 			new Token(tokenData, type, parent);
