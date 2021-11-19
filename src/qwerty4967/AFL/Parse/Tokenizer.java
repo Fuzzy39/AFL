@@ -21,18 +21,29 @@ public class Tokenizer
 
 		// the parsing of each line of code is separate, so we can just loop through each line
 		// and parse it individually.
-		
-		for( int i=0; i<statements.size(); i++)
+		int j=0;
+		lineNumber=1;
+		for( int i = 0; i<statements.size(); i++)
 		{
 			// if this method returns false, the user has made some kind of syntax error. 
 			// we need to pass this info up the chain.
-			lineNumber=i+1;
+			
+			int size = main.getSize();
+			
 			if(!tokenizeStatement(main, statements.get(i)))
 			{
 				return null;
 			}
-			locateFunctionCalls((Statement)main.getChild(i));
-			
+			if(size==main.getSize())
+			{
+				// the line was a comment.
+				continue;
+			}
+		
+			locateFunctionCalls((Statement)main.getChild(j));
+			j++;
+			// this code is awful.
+			lineNumber=j+1;
 		}
 		
 		return main;
@@ -55,7 +66,25 @@ public class Tokenizer
 		{
 			
 			 char currentChar=toTokenize.charAt(i);
-			 
+			 if(currentChar == '#')
+			 {
+				// abort everything, fools!
+				// fly! fly!
+				// create a token with the last bit of data
+				if(currentTokenData.length()>0)
+				{
+					
+					 return createToken(container, currentTokenData, currentTokenType);
+					
+				}
+				
+				main.removeChild(statement);
+				return true;
+				// make sure it's not all borken
+				// I'm keeping that spelling.
+				
+				
+			 }
 			 currentCharType=getCharType(currentChar);
 			 
 			 if(currentCharType!=currentTokenType)

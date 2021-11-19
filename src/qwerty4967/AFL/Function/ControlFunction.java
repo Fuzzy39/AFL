@@ -11,7 +11,7 @@ public class ControlFunction extends Function
 	{
 		super(name,params);
 	}
-	
+			
 	@Override
 	public Token call(Token[] Tokens) 
 	{

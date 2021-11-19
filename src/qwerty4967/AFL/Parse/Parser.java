@@ -35,7 +35,9 @@ public class Parser
 		// also it would probably take more energy to solve than I care to attempt, at least at the moment.
 		Shell.out("Creating Statement Array..", 2);
 		ArrayList<String> statements = seperateStatements(code);
+		//statements = removeComments(statements);
 		Shell.out("Statement Array Created:\n"+statements, 1);
+		
 		
 		
 		// next we identify and separate important tokens ( strings, numbers, operators, etc.) i
@@ -174,4 +176,30 @@ public class Parser
 		return toReturn;
 				
 	}
+	
+	/*private static ArrayList<String> removeComments(ArrayList<String> toRemoveFrom)
+	{
+		// Comments are started with a #.
+		// they go for a single line.
+		ArrayList<String> toReturn = new ArrayList<String>();
+		for(String s : toRemoveFrom)
+		{
+			if(!s.contains("#"))
+			{
+				toReturn.add(s);
+				continue;
+			}
+			// if the entire thing is a comment, just plain remove it.
+			if(s.charAt(0)=='#')
+			{
+				continue;
+			}
+			// only remove part of the string.
+			String code = s.substring(0,s.indexOf('#'));
+			System.out.println(code);
+			toReturn.add(code);
+			
+		}
+		return toReturn;
+	}*/
 }
