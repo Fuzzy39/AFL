@@ -1,5 +1,7 @@
 package qwerty4967.AFL;
 
+import java.util.ArrayList;
+
 import qwerty4967.AFL.Function.JavaFunction;
 import qwerty4967.AFL.Function.MethodCode;
 import qwerty4967.AFL.Interpret.Namespace;
@@ -20,6 +22,7 @@ public class JavaFunctionInitializer
 	protected static void initJavaFunctions()
 	{
 		initOperators();
+		initArrays();
 	}
 	
 	private static void initOperators()
@@ -361,6 +364,77 @@ public class JavaFunctionInitializer
 				
 	}
 	
+	private static void initArrays()
+	{
+		MethodCode mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			return Namespace.newArray();
+		});
+	
+		JavaFunction jf = new JavaFunction("newArray",0,mc);
+		Namespace.addFunction(jf);
+		
+		
+		
+		// arrayAdd(array, toAdd)
+		mc = ((Token[] tokens) ->
+		{
+			Token arrayPointer= tokens[0];
+			Token toAdd = tokens[1];
+			// Check for types.
+			if(arrayPointer.getType()!=TokenType.arrayPointer)
+			{
+				Shell.error("Parameter 0 must be of type array.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			// add the new thing.
+			ArrayList<Token>array = Namespace.getArray(arrayPointer);
+			array.add(toAdd);
+			Namespace.setArray(arrayPointer, array);
+			return new Token("Void",TokenType.voidToken);
+			
+		});
+	
+		jf = new JavaFunction("arrayAdd",2,mc);
+		Namespace.addFunction(jf);
+		
+		
+		// arrayGet(array, index)
+		mc = ((Token[] tokens) ->
+		{
+			Token arrayPointer= tokens[0];
+			Token arrayIndex = tokens[1];
+			// check that everything is of the correct type.
+			if(arrayPointer.getType()!=TokenType.arrayPointer)
+			{
+				Shell.error("Parameter 0 must be of type array.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			if(arrayIndex.getType()!=TokenType.number)
+			{
+				Shell.error("Parameter 1 must be of type num.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			// get the array.
+			ArrayList<Token>array = Namespace.getArray(arrayPointer);
+			// get the index.
+			double index = Double.parseDouble(arrayIndex.getData());
+			if(!arrayIndexIsValid(array, index))
+			{
+				return new Token ("Error", TokenType.error);
+			}
+			int i = (int)index;
+			
+			return array.get(i);
+			
+		});
+	
+		jf = new JavaFunction("arrayGet",2,mc);
+		Namespace.addFunction(jf);
+	}
+	
 	private static boolean areBothOfType(Token a, Token b, TokenType t)
 	{
 		if(a.getType()==b.getType())
@@ -391,6 +465,27 @@ public class JavaFunctionInitializer
 		return new Token (d+"",TokenType.number);
 	}
 	
-	
+	private static boolean arrayIndexIsValid(ArrayList<Token> array, double index)
+	{
+		if(index%1!=0 || index<0)
+		{
+			Shell.error("Index "+index+" is invalid. Indexes must be whole numbers.", -2);
+			return false;
+		}
+		
+		// I mean, this makes some sense but it still feels like a weird edge case.
+		if(array.size()==0)
+		{
+			Shell.error("Index "+index+" is out of bounds for array size "+array.size()+".", -2);
+			return false;
+		}
+		
+		if((index-1)>array.size())
+		{
+			Shell.error("Index "+index+" is out of bounds for array size "+array.size()+".", -2);
+			return false;
+		}
+		return true;
+	}
 
 }

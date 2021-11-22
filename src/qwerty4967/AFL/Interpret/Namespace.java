@@ -290,6 +290,18 @@ public class Namespace
 		
 	}
 	
+	public static boolean setArray(Token pointer, ArrayList<Token> array)
+	{
+		if(pointer.getType()!=TokenType.arrayPointer)
+		{
+			Shell.error("Invalid array pointer... This seems like an internal error? That seems bad.", -2);
+			return false;
+		}
+		int index;
+		index = Integer.parseInt(pointer.getData());
+		return setArray(index, array);
+	}
+	
 	public static boolean setArray(int index, ArrayList<Token> array)
 	{
 		if(index>=arrays.size())

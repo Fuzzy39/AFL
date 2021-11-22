@@ -1,6 +1,9 @@
 package qwerty4967.AFL.ParseTree;
 
+import java.util.ArrayList;
+
 import qwerty4967.AFL.Function.AFLFunction;
+import qwerty4967.AFL.Interpret.Namespace;
 import qwerty4967.AFL.Lang.*;
 
 public class Token extends Element 
@@ -56,5 +59,33 @@ public class Token extends Element
 	{
 		return "Token [ ID:"+this.ID+" | \""+data  + "\", " + type + "]";
 	}
-
+	
+	public String toOutputString()
+	{
+		if(this.getType()==TokenType.arrayPointer)
+		{
+			// type out the array pointer
+			String toReturn ="{";
+			ArrayList<Token> array= Namespace.getArray(this);
+			for(Token t: array)
+			{
+				toReturn+=", ";
+				if(t.getType()==TokenType.string)
+				{
+					toReturn+="\"";
+				}
+				
+				toReturn+=t.toOutputString();
+				
+				if(t.getType()==TokenType.string)
+				{
+					toReturn+="\"";
+				}
+			}
+			toReturn +=" }";
+			toReturn = toReturn.substring(0, 1) + toReturn.substring(2);
+			return toReturn;
+		}
+		return this.getData();
+	}
 }

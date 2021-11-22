@@ -16,7 +16,7 @@ public class Lang
 		// it seems like you should be able to just add stuff to these and expect it to work,
 		// that won't always be the case.
 		
-		public static final String[] TYPES= {"num","string","char","bool"};
+		public static final String[] TYPES= {"num","string","char","bool","array"};
 		
 		public static final String[] BOOLS= {"true","false"}; // wow
 		

@@ -118,7 +118,7 @@ public class Interpreter
 			{
 				if(result.getType()!=TokenType.voidToken)
 				{
-					Shell.out(result.getData());
+					Shell.out(result.toOutputString());
 				}
 				
 			}
