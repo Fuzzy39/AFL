@@ -13,6 +13,7 @@ public enum TokenType
 	// used during parsing
 	groupPointer,
 	// used during interpreting
+	arrayPointer,
 	error, 
 	voidToken // void's a keyword, oof.
 }

@@ -13,8 +13,12 @@ public class Namespace
 	// well, only kind of
 	// but hey, it's in the Interpret package, that's got to count for something
 	
+	// The namespace class contains 3 seperate namespaces of things that AFL uses.
+	// Functions, variables, and arrays-
 	private static ArrayList<Function> functions = new ArrayList<Function>();
 	private static ArrayList<Variable>variables = new ArrayList<Variable>();
+	// never made a two dimensional arraylist I don't think...
+	private static ArrayList<ArrayList<Token>>arrays = new ArrayList<ArrayList<Token>>();
 	
 	public static boolean addFunction(Function toAdd)
 	{
@@ -250,6 +254,53 @@ public class Namespace
 		return null;
 	}
 	
+	public static Token newArray()
+	{
+		// create the array.
+		ArrayList<Token> newArray = new ArrayList<Token>();
+		arrays.add(newArray);
+		
+		// prepare the pointer
+		int index = arrays.size()-1;
+		return new Token(index+"", TokenType.arrayPointer);
+	}
+	
+	public static ArrayList<Token> getArray(Token pointer)
+	{
+		if(pointer.getType()!=TokenType.arrayPointer)
+		{
+			Shell.error("Invalid array pointer... This seems like an internal error? That seems bad.", -2);
+			return null;
+		}
+		int index;
+		index = Integer.parseInt(pointer.getData());
+		
+		return getArray(index);
+	}
+	
+	public static ArrayList<Token> getArray(int index)
+	{
+		if(index>=arrays.size())
+		{
+			Shell.error("Invalid array refrence... This seems like an internal error? That seems bad.", -2);
+			return null;		
+		}
+		
+		return arrays.get(index);
+		
+	}
+	
+	public static boolean setArray(int index, ArrayList<Token> array)
+	{
+		if(index>=arrays.size())
+		{
+			Shell.error("Invalid array refrence... This seems like an internal error? That seems bad.", -2);
+			return false;
+		}
+		
+		arrays.set(index, array);
+		return true;
+	}
 	// more for testing purposes than anything else.
 	// I wonder if it will be used at all when all of this is done?
 	public static void clearVariables()

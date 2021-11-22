@@ -270,6 +270,11 @@ public class Shell
 			System.out.println( "AFL: Error on [Native Code]: "+toOut);
 			return;
 		}
+		if(line == -1)
+		{
+			System.out.println( "AFL: Error on line [Unknown]: "+toOut);
+			return;
+		}
 		System.out.println( "AFL: Error on line "+line+": "+toOut);
 		
 	}
