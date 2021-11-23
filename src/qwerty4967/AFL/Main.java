@@ -32,7 +32,7 @@ public class Main
 	
 
 
-	protected static final int BUILD = 520;
+	protected static final int BUILD = 522;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	

@@ -118,7 +118,7 @@ public class JavaFunctionInitializer
 			
 			if(aIsInvalid || bIsInvalid)
 			{
-				return new Token(a.getData()+b.getData(), TokenType.string);
+				return new Token(a.toOutputString()+b.toOutputString(), TokenType.string);
 			}
 			// they be numbers!
 			double aNum= Double.parseDouble(a.getData());
@@ -432,6 +432,66 @@ public class JavaFunctionInitializer
 		});
 	
 		jf = new JavaFunction("arrayGet",2,mc);
+		Namespace.addFunction(jf);
+		
+		
+		// arraySize(array)
+		mc = ((Token[] tokens) ->
+		{
+			Token arrayPointer= tokens[0];
+			
+			// Check for types.
+			if(arrayPointer.getType()!=TokenType.arrayPointer)
+			{
+				Shell.error("Parameter 0 must be of type array.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			
+			ArrayList<Token>array = Namespace.getArray(arrayPointer);
+			
+			return toToken(array.size());
+			
+		});
+	
+		jf = new JavaFunction("arraySize",1,mc);
+		Namespace.addFunction(jf);
+		
+		// arrayset(array, index, value)
+		mc = ((Token[] tokens) ->
+		{
+			Token arrayPointer= tokens[0];
+			Token arrayIndex = tokens[1];
+			Token value = tokens[2];
+			
+			// check that everything is of the correct type.
+			if(arrayPointer.getType()!=TokenType.arrayPointer)
+			{
+				Shell.error("Parameter 0 must be of type array.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			if(arrayIndex.getType()!=TokenType.number)
+			{
+				Shell.error("Parameter 1 must be of type num.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			// get the array.
+			ArrayList<Token>array = Namespace.getArray(arrayPointer);
+			// get the index.
+			double index = Double.parseDouble(arrayIndex.getData());
+			if(!arrayIndexIsValid(array, index))
+			{
+				return new Token ("Error", TokenType.error);
+			}
+			int i = (int)index;
+			
+			array.set(i, value);
+			return new Token("Void",TokenType.voidToken);
+			
+		});
+	
+		jf = new JavaFunction("arraySet",3,mc);
 		Namespace.addFunction(jf);
 	}
 	
