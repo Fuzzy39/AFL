@@ -391,7 +391,15 @@ public class JavaFunctionInitializer
 			// add the new thing.
 			ArrayList<Token>array = Namespace.getArray(arrayPointer);
 			array.add(toAdd);
-			Namespace.setArray(arrayPointer, array);
+			
+			
+			if(tokenIsInArray(arrayPointer, array))
+			{
+				Shell.error("An array cannot be added to itself.", -2);
+				array.remove(array.size()-1);
+				return new Token("Error",TokenType.error);
+			}
+			//Namespace.setArray(arrayPointer, array);
 			return new Token("Void",TokenType.voidToken);
 			
 		});
@@ -485,7 +493,11 @@ public class JavaFunctionInitializer
 				return new Token ("Error", TokenType.error);
 			}
 			int i = (int)index;
-			
+			if(tokenIsInArray(arrayPointer, array))
+			{
+				Shell.error("An array cannot be added to itself.", -2);
+				return new Token("Error",TokenType.error);
+			}
 			array.set(i, value);
 			return new Token("Void",TokenType.voidToken);
 			
@@ -529,23 +541,43 @@ public class JavaFunctionInitializer
 	{
 		if(index%1!=0 || index<0)
 		{
-			Shell.error("Index "+index+" is invalid. Indexes must be whole numbers.", -2);
+			Shell.error("Index "+index+" is invalid. Indexes must be positive whole numbers.", -2);
 			return false;
 		}
 		
 		// I mean, this makes some sense but it still feels like a weird edge case.
-		if(array.size()==0)
+		/*if(array.size()==0)
 		{
 			Shell.error("Index "+index+" is out of bounds for array size "+array.size()+".", -2);
 			return false;
-		}
+		}*/
 		
-		if((index-1)>array.size())
+		if(index>=array.size())
 		{
 			Shell.error("Index "+index+" is out of bounds for array size "+array.size()+".", -2);
 			return false;
 		}
 		return true;
 	}
-
+	
+	private static boolean tokenIsInArray(Token checkAgainst, ArrayList<Token> array)
+	{
+		// do... stuff.
+		//  we need to check that a token is not anywhere within an array or children arrays
+		// which means this probably recursive
+		for(Token t: array)
+		{
+			// check if it matches, then check if it's an array.
+			if(t==checkAgainst)
+			{
+				return true;
+			}
+			
+			if(t.getType()==TokenType.arrayPointer)
+			{
+				return(tokenIsInArray(checkAgainst, Namespace.getArray(t)));
+			}
+		}
+		return false;
+	}
 }
