@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import qwerty4967.AFL.Function.JavaFunction;
 import qwerty4967.AFL.Function.MethodCode;
 import qwerty4967.AFL.Interpret.Namespace;
+import qwerty4967.AFL.Lang.Lang;
 import qwerty4967.AFL.Lang.TokenType;
 import qwerty4967.AFL.ParseTree.Token;
 
@@ -23,6 +24,7 @@ public class JavaFunctionInitializer
 	{
 		initOperators();
 		initArrays();
+		initMisc();
 	}
 	
 	private static void initOperators()
@@ -507,6 +509,79 @@ public class JavaFunctionInitializer
 		Namespace.addFunction(jf);
 	}
 	
+	private static void initMisc()
+	{
+		// get input.
+		MethodCode mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			return new Token(Shell.in(), TokenType.string);
+		});
+	
+		JavaFunction jf = new JavaFunction("input",0,mc);
+		Namespace.addFunction(jf);
+		
+		// typeOf(value) function. 
+		mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			TokenType type = tokens[0].getType();
+			switch(type)
+			{
+				case number:
+					return new Token(Lang.TYPES[0],TokenType.type);
+				case string:
+					return new Token(Lang.TYPES[1],TokenType.type);
+				case character:
+					return new Token(Lang.TYPES[2],TokenType.type);
+				case bool:
+					return new Token(Lang.TYPES[3],TokenType.type);
+				case arrayPointer:
+					return new Token(Lang.TYPES[4],TokenType.type);
+				case type:
+					return new Token(Lang.TYPES[5],TokenType.type);
+				default:
+					Shell.error("Internal Error. Could not ascertain type.", -2);
+					return new Token("Error",TokenType.error);                                                                           
+				
+			}
+			
+		});
+	
+		jf = new JavaFunction("typeOf",1,mc);
+		Namespace.addFunction(jf);
+		
+		// toCharArray(String) function.
+		mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			Token string = tokens[0];
+			// check validity.
+			if(string.getType()!=TokenType.string)
+			{
+				Shell.error("First Parameter must be of type 'string'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			// return a char array, I guess.
+			char[] chars = string.getData().toCharArray();
+			Token toReturn = Namespace.newArray();
+			ArrayList<Token> arrayToReturn = new ArrayList<Token>();
+			
+			for(char c: chars)
+			{
+				Token charToken = new Token(""+c, TokenType.character);
+				arrayToReturn.add(charToken);
+			}
+			Namespace.setArray(toReturn, arrayToReturn);
+			return toReturn;
+		});
+	
+		jf = new JavaFunction("toCharArray",1,mc);
+		Namespace.addFunction(jf);
+		
+	}
+	 
 	private static boolean areBothOfType(Token a, Token b, TokenType t)
 	{
 		if(a.getType()==b.getType())

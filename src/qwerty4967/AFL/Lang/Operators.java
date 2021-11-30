@@ -12,10 +12,10 @@ public class Operators
 		{"+","-"}, // add and subtract.
 		{"==","!=",">=","<=",">","<"}, // compare
 		{"||","&"}, // logic
-		{"="} // assign
+		{"="} // assign (also special, but less than (). )
 		
 	};
-		
+	
 	public static enum PRIORITY_GROUP
 	{
 		organize,

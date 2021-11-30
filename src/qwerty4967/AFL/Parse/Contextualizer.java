@@ -144,7 +144,7 @@ public class Contextualizer
 		FunctionCall f =  (FunctionCall)(s.getChild(0));
 		String name =((Token)f.getChild(0)).getData();
 		String parameterData =((Token)f.getChild(1)).getData();
-		int parameters = Integer.parseInt(parameterData);
+		int parameters = (int)Double.parseDouble(parameterData);
 		AFLFunction function = new AFLFunction(name, parameters); 
 		
 		
@@ -229,14 +229,15 @@ public class Contextualizer
 		}
 		
 		String parameterString=parameters.getData();
+		double parameterPotential = Double.parseDouble(parameterString);
 		
-		if(parameterString.contains("."))
+		if(Math.floor(parameterPotential)!=parameterPotential)
 		{
 			Shell.error("Invalid function definition. Functions must have a whole number of parameters.", s.getStatementNumber());
 			return false;
 		}
 		
-		int parameterNumber=Integer.parseInt(parameterString);
+		int parameterNumber=(int)(parameterPotential);
 		
 		if(parameterNumber<0 || parameterNumber>=256)
 		{
