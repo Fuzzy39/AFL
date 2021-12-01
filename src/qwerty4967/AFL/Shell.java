@@ -283,4 +283,26 @@ public class Shell
 	{
 		System.out.println("AFL:    on line "+line+" of "+name);
 	}
+	
+
+	// thanks, stack overflow!
+	public static void clear()
+	{
+	    //Clears Screen in java
+	    try 
+	    {
+	        if (System.getProperty("os.name").contains("Windows"))
+	        {
+	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	        }
+	        else
+	        {
+	            Runtime.getRuntime().exec("clear");
+	        }
+	    } 
+	    catch(Exception e) 
+	    {
+	    	e.printStackTrace();System.exit(-1);
+	    }
+	}
 }

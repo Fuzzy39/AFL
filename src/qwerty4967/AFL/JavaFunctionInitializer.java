@@ -1,12 +1,14 @@
 package qwerty4967.AFL;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import qwerty4967.AFL.Function.JavaFunction;
 import qwerty4967.AFL.Function.MethodCode;
 import qwerty4967.AFL.Interpret.Namespace;
 import qwerty4967.AFL.Lang.Lang;
 import qwerty4967.AFL.Lang.TokenType;
+import qwerty4967.AFL.Parse.Tokenizer;
 import qwerty4967.AFL.ParseTree.Token;
 
 public class JavaFunctionInitializer 
@@ -387,7 +389,7 @@ public class JavaFunctionInitializer
 			// Check for types.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arrayAdd' must be of type array.", -2);
 				return new Token("Error",TokenType.error);
 			}
 			// add the new thing.
@@ -418,12 +420,12 @@ public class JavaFunctionInitializer
 			// check that everything is of the correct type.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arrayGet' must be of type array.", -2);
 				return new Token("Error",TokenType.error);
 			}
 			if(arrayIndex.getType()!=TokenType.number)
 			{
-				Shell.error("Parameter 1 must be of type num.", -2);
+				Shell.error("Parameter 1 of 'arrayGet' must be of type num.", -2);
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -453,7 +455,7 @@ public class JavaFunctionInitializer
 			// Check for types.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arraySize' must be of type array.", -2);
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -477,12 +479,12 @@ public class JavaFunctionInitializer
 			// check that everything is of the correct type.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arraySet' must be of type array.", -2);
 				return new Token("Error",TokenType.error);
 			}
 			if(arrayIndex.getType()!=TokenType.number)
 			{
-				Shell.error("Parameter 1 must be of type num.", -2);
+				Shell.error("Parameter 1 of 'arraySet' must be of type num.", -2);
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -559,7 +561,7 @@ public class JavaFunctionInitializer
 			// check validity.
 			if(string.getType()!=TokenType.string)
 			{
-				Shell.error("First Parameter must be of type 'string'.", -2);
+				Shell.error("Parameter 0 of 'toCharArray' must be of type 'string'.", -2);
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -580,7 +582,148 @@ public class JavaFunctionInitializer
 		jf = new JavaFunction("toCharArray",1,mc);
 		Namespace.addFunction(jf);
 		
+		
+		// isType: check if a string is of a type.
+		// ugh this will suck.
+		// isType(string, type)
+		mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			Token string = tokens[0];
+			Token type = tokens[1];
+			
+			// check validity.
+			if(string.getType()!=TokenType.string)
+			{
+				Shell.error("Parameter 0 of 'isType' must be of type 'string'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			if(type.getType()!=TokenType.type)
+			{
+				Shell.error("Parameter 1 of 'isType' must be of type 'type'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			if(type.getData().equals("array"))
+			{
+				Shell.error("Arrays are not a valid type to check for.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			return toToken(stringMatchesType(string.getData(), type.getData()));
+		});
+	
+		jf = new JavaFunction("isType",2,mc);
+		Namespace.addFunction(jf);
+		
+		// isType: check if a string is of a type.
+		// ugh this will suck.
+		// isType(string, type)
+		mc = ((Token[] tokens) ->
+		{
+			// get the tokens
+			Token string = tokens[0];
+			Token type = tokens[1];
+			
+			// check validity.
+			if(string.getType()!=TokenType.string)
+			{
+				Shell.error("Parameter 0 of 'isType' must be of type 'string'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			if(type.getType()!=TokenType.type)
+			{
+				Shell.error("Parameter 1 of 'isType' must be of type 'type'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			if(type.getData().equals("array"))
+			{
+				Shell.error("Arrays are not a valid type to check for.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			if(!stringMatchesType(string.getData(), type.getData()))
+			{
+				Shell.error("Cannot convert string \""+string.getData()+"\" to type \'"+type.getData()+"\'", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			string.setType(toTokenType(type.getData()));
+			return string;
+		});
+	
+		jf = new JavaFunction("toType",2,mc);
+		Namespace.addFunction(jf);
+		
+		mc = ((Token[] tokens) ->
+		{
+			// wow, that's simple
+			return toToken(Math.random());
+			
+		});
+	
+		jf = new JavaFunction("random",0,mc);
+		Namespace.addFunction(jf);
+		
+		// Error(message)
+		mc = ((Token[] tokens) ->
+		{
+			Token string = tokens[0];
+			if(string.getType()!=TokenType.string)
+			{
+				Shell.error("Parameter 0 of 'error' must be of type 'string'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			Shell.error(string.getData(), -2);
+			return new Token("Error", TokenType.error); 
+			
+		});
+	
+		jf = new JavaFunction("error",1,mc);
+		Namespace.addFunction(jf);
+		
+		mc = ((Token[] tokens) ->
+		{
+			// wow, that's simple
+			Shell.clear();
+			return new Token("Void",TokenType.voidToken);
+			
+		});
+	
+		jf = new JavaFunction("clear",0,mc);
+		Namespace.addFunction(jf);
+		
+		
+		mc = ((Token[] tokens) ->
+		{
+			Token milliseconds = tokens[0];
+			if(milliseconds.getType()!=TokenType.number)
+			{
+				Shell.error("Parameter 0 of 'sleep' must be of type 'num'.", -2);
+				return new Token("Error", TokenType.error);
+			}
+			double ms=Double.parseDouble(milliseconds.getData());
+			try
+			{
+				TimeUnit.MILLISECONDS.sleep(((long)ms));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				System.exit(-1);
+			}
+			return new Token("Void",TokenType.voidToken);
+			
+		});
+	
+		jf = new JavaFunction("sleep",1,mc);
+		Namespace.addFunction(jf);
 	}
+	
 	 
 	private static boolean areBothOfType(Token a, Token b, TokenType t)
 	{
@@ -654,5 +797,69 @@ public class JavaFunctionInitializer
 			}
 		}
 		return false;
+	}
+	
+	private static boolean stringMatchesType(String s, String t)
+	{
+		switch(t)
+		{
+			case "num":
+				return stringIsNum(s);
+			case "bool":
+				return(s.equals("true")|| s.equals("false"));
+			case "string":
+				return true;
+			case "char":
+				if(s.length()==1)
+				{
+					return true;
+				}
+				return false;
+			case "type":
+				for(String type :Lang.TYPES)
+				{
+					if(type.equals(s))
+					{
+						return true;
+					}
+				}
+				return false;
+			default:
+				Shell.out("Error involving invalid type");
+		}
+		return false;
+	}
+	
+	private static boolean stringIsNum(String s)
+	{
+		char[] chars = s.toCharArray();
+		for(char c:chars)
+		{
+			if(!(Character.isDigit(c)||c=='.'))
+			{
+				return false;
+			}
+		}
+		return Tokenizer.validateNumber(s);
+	}
+	
+	private static TokenType toTokenType(String type)
+	{
+		switch(type)
+		{
+			case "num":
+				return TokenType.number;
+			case "string":
+				return TokenType.string;
+			case "char":
+				return TokenType.character;
+			case "bool":
+				return TokenType.bool;
+			case "array":
+				return TokenType.arrayPointer;
+			case "type":
+				return TokenType.type;
+		}
+		return TokenType.error;
 	}
 }

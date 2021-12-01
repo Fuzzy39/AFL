@@ -268,7 +268,7 @@ public class Tokenizer
 		
 	}
 	
-	private static boolean validateNumber(String s)
+	public static boolean validateNumber(String s)
 	{
 		// can't have more than 1 decimal point & decimal point cannot be at the end of the string.
 		
