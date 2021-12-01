@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Interpret.Interpreter;
+import qwerty4967.AFL.Interpret.Namespace;
+import qwerty4967.AFL.Interpret.Variable;
 import qwerty4967.AFL.Lang.Lang;
 import qwerty4967.AFL.Lang.TokenType;
 import qwerty4967.AFL.ParseTree.*;
@@ -29,9 +31,33 @@ public class AFLFunction extends Function implements qwerty4967.AFL.ParseTree.Ha
 				Shell.error("Stack overflow on function '"+this.getName()+"'", 0);
 				return new Token("Error", TokenType.error);
 			}
+			// we need to make the parameters available to the AFL Code.
+			// this means putting it in an array.
+			createParameterArray(parameters);
 			Token toReturn = Interpreter.interpret(this, parameters);
 			nestedCalls--;
 			return toReturn;
+		}
+		
+		private void createParameterArray(Token[] parameters)
+		{
+			// first step, create the token that refers to the array.
+			Token arrayPointer =Namespace.newArray();
+			// next create the variable that will provide access to the array.
+			Token variable = new Token("params", TokenType.variable);
+			Namespace.setVariable(variable, arrayPointer, this);
+			
+			
+			ArrayList<Token> params = new ArrayList<Token>();
+			// copy over the params.
+			for( Token t : parameters)
+			{
+				params.add(t);
+			}
+			
+			Namespace.setArray(arrayPointer, params);
+			
+			
 		}
 		
 		/**
