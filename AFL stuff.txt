@@ -1,0 +1,197 @@
+#fibanocci sequence
+a=0;
+b=1;
+c=0;
+function("fib"0);
+	c=a+b;
+	a=b;
+	b=c;
+	c;
+	if(c>=100);
+		return();
+	end();
+	fib();
+end()
+
+# prime numbers
+
+number=1;
+divisor=2;
+b=100;
+function("prime"0);
+	number=number+1;
+	divisor=2;
+	isPrime();
+	if(number>=b);
+		return();
+	end();
+	prime();
+end();
+function("isPrime"0);
+	if(divisor>=number);
+		number;
+		return();
+	end();
+	if(number%divisor==0);
+		return();
+	end();
+	divisor=divisor+1;
+	isPrime();
+end()
+
+
+# Triangular numbers (by kendrick)
+
+number = 0;
+step = 1;
+
+function("generate"0);
+	number = number + step;
+	step = step + 1;
+	number;
+	if (step == 100);
+		return();
+	end();
+	generate();
+end()
+
+
+
+
+# prime numbers, but with loops
+number=1;
+limit=1000;
+while(number<=1000);
+	number=number+1;
+	divisor=2;
+	while(divisor<number);
+		if(number%divisor==0);
+			break();
+		end();
+		divisor=divisor+1;
+	end();
+	if(divisor>=number);
+		number;
+	end();
+end()
+
+
+
+#loop test;
+x=0;
+while(x<10);
+	x=x+1;
+	x;
+end()
+
+x=0;while(x<1);x=x+1;x;end()
+
+x=true;while(x);x=false;end()
+
+# timer thing.
+function("countdown"1);
+	time=arrayGet(params 0);
+	if(typeOf(time)!=num);
+		error("Countdown must have a num time");
+	end();
+	time=time*10;
+	while(time>0);
+		clear();
+		time/10;
+		time=time-1;
+		sleep(100);
+	end();
+	clear();
+	0;
+	"Time's up!";
+end()
+
+#silly bar.
+function("drawBar"1);
+	str="|";
+	filled = arrayGet(params 0);
+	unfilled=16-filled;
+	while(filled>0);
+		str=str+"#";
+		filled=filled-1;
+	end();
+	while(unfilled>0);
+		str=str+" ";
+		unfilled=unfilled-1;
+	end();
+	str=str+"|";
+	clear();
+	str;
+end()
+progress=0;
+while(true);
+	while(progress<16);
+		drawBar(progress);
+		progress=progress+1;
+		sleep(50);
+	end();
+	while(progress>0);
+		drawBar(progress);
+		progress=progress-1;
+		sleep(50);
+	end();
+end()
+	
+
+#intermission
+Meurrty? Concubine cankle  tooth fairy juice crush it, it probably tastes like toothpaste. 
+On a rare occasion many flowers bloom at once. It’s called a bloom, because botanists or whoever are apparently defcent at naming things. 
+Whatever the case may be, many have lamented the death of my late honey bee, sugar bell, though the FDA has no remorce. That honey was very questionable.
+An old man muttered to himself, "If only..."
+"If only", they said, louder than before, "If only I could spell a signle word in the english dictionary". Those words are truely impossible to spell, especially when
+you have never learned to read the dictionary. That would seem to be a problem. 
+"If only." A bright flash. They turn to look, and are immediately evescerated. What a shame.
+
+In other news, a cow has gotten a spleen transplant, and is now incredibly skilled at icelandic rules men's handball. This year is the second year they have managed
+to come out on top in the icelandic national handball tournament, and it appears they are set to participate in the Icelandic handball team in the upcomming 2024
+summer olympics in paris. The olympic commision has expressed some hesitancy over whether cows should be allowed to participate, but it seems unlikely that they would
+prevent the icelandic team from fielding their 'golden goose' of a cow, over fears of the controversy and scandal it would inevitably spark.
+
+functions required by AFL
+
+_Java_Functions___________
+X | getInput()
+X | typeOf(something)
+X | toCharArray(string)
+X | isType(string, type)
+X | toType(string, type)
+X | random() #from 0 to 1
+X | error(message)
+X | clear() #dunno how to do that one.
+X | sleep(time) #dunno how to do that one either.
+
+#### Lib/Lang ####
+_Math.AFL__________________
+  | neg(num)
+  | root(number, power)
+  | pow(number, power)
+  | pi()
+  | e()
+  | floor(num)
+  | round(num)
+  | ceiling(num)
+  | round(number, places)
+  | random(lower, upper)
+  | randomInt(lower,upper)
+_Util.AFL___________________
+X | not(toInvert)
+X | numInput()
+  | isWhitespace(char)
+  | strip(string)
+  | split(string, char)
+  | arrayInsert(array, item, index)	
+  | arrayRemove(array) # removes the last item in the array
+  | arrayRemove(array, index)
+
+# SHELL.AFL
+help()
+help(articleID)
+demos()
+#some demo stuff
+horcrux()
+(a*a+a/a)-a*a+a/a

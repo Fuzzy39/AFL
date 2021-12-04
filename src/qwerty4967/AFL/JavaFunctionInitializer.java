@@ -1,4 +1,4 @@
-package qwerty4967.AFL;
+	package qwerty4967.AFL;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -652,6 +652,12 @@ public class JavaFunctionInitializer
 			}
 			
 			string.setType(toTokenType(type.getData()));
+			
+			if(type.getData().equals("num"))
+			{
+				 string.setData(Double.parseDouble(string.getData())+"");
+			}
+			
 			return string;
 		});
 	

@@ -1,0 +1,29 @@
+# Utility Functions;
+
+# invert boolean;
+function("not" 1);
+	toReturn=arrayGet(params 0);
+	if(typeOf(toReturn)!=bool);
+		error("Parameter 0 of 'not' must be of type 'bool'.");
+	end();
+	return(toReturn==false);
+end();
+
+#Get a number from the user;
+function("numInput"0);
+	while(true);
+		input=input();
+		if(not(isType(input num)));
+			"Expecting number.";
+			continue();
+		end();
+		break();
+	end();
+	toReturn =toType(input num);
+	return(toReturn);
+end();
+
+
+
+
+"Loaded util component."

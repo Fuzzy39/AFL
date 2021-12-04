@@ -153,9 +153,13 @@ public class Shell
 	
 	
 	public static String in()
-	{
+	{	
+
+		
 		System.out.print(">:");
 		return sc.nextLine();
+		
+		
 	}
 	
 	

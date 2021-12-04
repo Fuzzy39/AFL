@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import qwerty4967.AFL.Parse.*;
 import qwerty4967.AFL.ParseTree.*;
@@ -32,7 +33,7 @@ public class Main
 	
 
 
-	protected static final int BUILD = 538;
+	protected static final int BUILD = 548;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -56,10 +57,13 @@ public class Main
 		
 		if(usesShell)
 		{
-			// TODO replace this with a JavaFunction in the long term.
-			// maybe.
-			Shell.out("NOTE: IN DEVELOPMENT! Not Fully Functional.  Build: "+BUILD+" | debug: "+Shell.getDebugLevel()+"\n");
-			
+			// display some kind of greeting
+			Shell.out("Tip: If you're seeing this message, you're probably running AFL from your IDE."
+					+ "\nUnfortunately, Clearing the console isn't possible in an IDE, so for a better\n"
+					+ "experience, try running AFL from the command line, or use the provided script. Thanks!\n ");
+			Shell.clear();
+			Shell.out("########## Arguably Functional Language v0.0."+BUILD+" | debug: "+Shell.getDebugLevel()+" ##########");
+			Shell.out("Use 'help()' for documentation and code examples.\n ");
 			while(true)
 			{
 				 execute(Shell.getUserInput());
@@ -227,13 +231,74 @@ public class Main
 		// be rest assured there's more than one in that function.
 		JavaFunctionInitializer.initJavaFunctions();
 		
+		
 		//TODO more crap
+		
+		
+		
+	
+		
+		// check if the lib/lang folder exists.
+		Path langPath = Paths.get("lib/lang");
+		if(!Files.exists(langPath))
+		{
+			Shell.out("AFL could not find any of its standard components.\nAFL can still run, but functionality will be reduced significantly.");
+			Shell.out("Press enter to continue launching AFL.");
+			Shell.in();
+			return true;
+		}
+		
+		// check for and run lang.util
+		Path utilPath = Paths.get("lib/lang/util.AFL");
+		if(Files.exists(utilPath))
+		{
+			// okay, so what to do now?
+			String util = getCodeFromFile(utilPath);
+			Token returned = execute(util);
+			if(returned==null||(returned.getType()==TokenType.error))
+			{
+				Shell.out("Component 'util' has encountered an error. (see above) AFL cannot start.");
+				return false;
+			}
+		}
+		else
+		{
+			Shell.out("could not find the component 'util'.");
+			Shell.out( "AFL can still run, but some functions related to strings and arrays will not be available.");
+			Shell.out("Press enter to continue launching AFL anyways.");
+			Shell.in();
+			
+		}
+		
+		
+		Path mathPath = Paths.get("lib/lang/math.AFL");
+		if(Files.exists(mathPath))
+		{
+			// okay, so what to do now?
+			String util = getCodeFromFile(mathPath);
+			Token returned = execute(util);
+			if(returned==null||(returned.getType()==TokenType.error))
+			{
+				Shell.out("Component 'math' has encountered an error. (see above) AFL cannot start.");
+				return false;
+			}
+		}
+		else
+		{
+			Shell.out("could not find the component 'math'.");
+			Shell.out( "AFL can still be run, but some functions related to rounding and basic math will not be available.");
+			Shell.out("Press enter to continue launching AFL anyways.");
+			Shell.in();
+			
+		}
 		return true;
 		
 		// example javaFunction.
 		/*MethodCode mc = ((Token[] tokens) ->{System.out.println("pretend that this code does something!");return null;})	;
 		JavaFunction jf = new JavaFunction("test",0,mc);
 		jf.call(new Token[0]);*/
+		
+		
 	}
 	
 
