@@ -164,6 +164,8 @@ X | random() #from 0 to 1
 X | error(message)
 X | clear() #dunno how to do that one.
 X | sleep(time) #dunno how to do that one either.
+X | arrayRemove(array) # removes the last item in the array 
+X | arrayRemove(array, index)
 
 #### Lib/Lang ####
 _Math.AFL__________________
@@ -179,14 +181,16 @@ _Math.AFL__________________
   | random(lower, upper)
   | randomInt(lower,upper)
 _Util.AFL___________________
-X | not(toInvert)
-X | numInput()
-  | isWhitespace(char)
-  | strip(string)
-  | split(string, char)
-  | arrayInsert(array, item, index)	
-  | arrayRemove(array) # removes the last item in the array
-  | arrayRemove(array, index)
+X | not(toInvert)                   | bool
+X | numInput()                      | num
+X | isWhitespace(char)              | bool
+X | fromCharArray(array)            | string
+X | strip(string)                   | string
+X | length(string)                  | num
+X | substring(string, start, end)   | string
+X | split(string, char)             | array
+X | contains(string, char)          | bool
+
 
 # SHELL.AFL
 help()

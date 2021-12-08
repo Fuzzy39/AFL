@@ -509,6 +509,83 @@ public class JavaFunctionInitializer
 	
 		jf = new JavaFunction("arraySet",3,mc);
 		Namespace.addFunction(jf);
+		
+		
+		mc = ((Token[] tokens) ->
+		{
+			Token arrayPointer= tokens[0];
+			
+			// check that everything is of the correct type.
+			if(arrayPointer.getType()!=TokenType.arrayPointer)
+			{
+				Shell.error("Parameter 0 of 'arrayRemove' must be of type array.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			// remove the last element from the array.
+			// get the array.
+			ArrayList<Token>array = Namespace.getArray(arrayPointer);
+			
+			if(array.size()!=0)
+			{
+				array.remove(array.size()-1);
+			}
+
+			return new Token("Void",TokenType.voidToken);
+			
+		});
+	
+		jf = new JavaFunction("arrayRemove",1,mc);
+		Namespace.addFunction(jf);
+		
+		
+		mc = ((Token[] tokens) ->
+		{
+			Token arrayPointer= tokens[0];
+			Token indexToken= tokens[1];
+			
+			// check that everything is of the correct type.
+			if(arrayPointer.getType()!=TokenType.arrayPointer)
+			{
+				Shell.error("Parameter 0 of 'arrayRemove' must be of type 'array'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+			if(indexToken.getType()!=TokenType.number)
+			{
+				Shell.error("Parameter 1 of 'arrayRemove' must be of type 'num'.", -2);
+				return new Token("Error",TokenType.error);
+			}
+			
+		
+			// remove the last element from the array.
+			// get the array.
+			ArrayList<Token>array = Namespace.getArray(arrayPointer);
+			
+			// get the number.
+			// get the index.
+			double index = Double.parseDouble(indexToken.getData());
+			if(!arrayIndexIsValid(array, index))
+			{
+				return new Token ("Error", TokenType.error);
+			}
+			int i = (int)index;
+			
+			
+			
+			if(array.size()!=0)
+			{
+				array.remove(i);
+			}
+			// remove the token.
+			
+
+			return new Token("Void",TokenType.voidToken);
+			
+		});
+	
+		jf = new JavaFunction("arrayRemove",2,mc);
+		Namespace.addFunction(jf);
 	}
 	
 	private static void initMisc()
