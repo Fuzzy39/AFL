@@ -1,1 +1,19 @@
+# some useful constants;
+pi = 3.14159265359;
+e = 2.71828;
+
+function("neg" 1);
+	# Verify Things;
+	toReturn = arrayGet(params 0);
+	
+	if(typeOf(toReturn)!=num);
+		error("Parameter 0 of 'neg' must be of type 'num'.");
+	end();
+	
+	# And negate;
+	return((0-1)*toReturn);
+end();
+
+
+
 "Loaded math component."

@@ -805,6 +805,18 @@ public class JavaFunctionInitializer
 	
 		jf = new JavaFunction("sleep",1,mc);
 		Namespace.addFunction(jf);
+		
+		
+		// debug, I guess?
+		mc = ((Token[] tokens) ->
+		{
+			
+			Shell.out(Namespace.debug());
+			return new Token("Void",TokenType.voidToken);
+		});
+	
+		jf = new JavaFunction("printCompleteNamespace",0,mc);
+		Namespace.addFunction(jf);
 	}
 	
 	 

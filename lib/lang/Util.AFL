@@ -276,5 +276,5 @@ function("contains" 2);
 end();
 	
 	
-# Just a message, to say that the module has loaded;
+# Just a message to say that the module has loaded;
 "Loaded util component."

@@ -169,11 +169,12 @@ X | arrayRemove(array, index)
 
 #### Lib/Lang ####
 _Math.AFL__________________
-  | neg(num)
+X | neg(num)
+  | abs(num)
   | root(number, power)
   | pow(number, power)
-  | pi()
-  | e()
+X | pi
+X | e
   | floor(num)
   | round(num)
   | ceiling(num)

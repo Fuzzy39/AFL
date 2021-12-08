@@ -345,12 +345,17 @@ public class Namespace
 		toReturn+="\n    Functions:";
 		for(Function f: functions)
 		{
-			toReturn+="\n        AFLFunction '"+f.getName()+"' "+f.getParameters()+"Parameter(s)";		
+			toReturn+="\n        Function '"+f.getName()+"' "+f.getParameters()+" Parameter(s)";		
 		}
 		toReturn+="\n    Variables:";
 		for(Variable v: variables)
 		{
 			toReturn+="\n        "+v;
+		}
+		toReturn+="\n    Arrays:";
+		for(ArrayList<Token> a: arrays)
+		{
+			toReturn+="\n        "+a;
 		}
 		return toReturn;
 	}
