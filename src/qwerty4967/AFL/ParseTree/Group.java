@@ -9,15 +9,24 @@ public class Group implements HasChildren
 	// this is basically a straight copy of Container, except it's not an Element.
 	private ControlStatement cs;
 	private ArrayList<Element> children;
+	private HasChildren origin; // the container the group was originally located in.
 	
 	public Group()
 	{
 		children=new ArrayList<Element>();
+		origin = null;
+		cs = null;
+	}
+	
+	public Group(HasChildren parent)
+	{
+		this();
+		origin = parent;
 	}
 	
 	public Group(ControlStatement cs)
 	{
-		children=new ArrayList<Element>();
+		this();
 		this.cs=cs;
 	}
 	
@@ -140,7 +149,10 @@ public class Group implements HasChildren
 		return "Group:    " + tree;
 	}
 	
-	
+	public HasChildren getOrigin()
+	{
+		return origin;
+	}
 	
 	protected void updateChildrenIDs()
 	{

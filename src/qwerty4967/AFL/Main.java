@@ -33,7 +33,7 @@ public class Main
 	
 
 
-	protected static final int BUILD = 552;
+	protected static final int BUILD = 561;
 	private static boolean usesShell = true;
 	private static ArrayList<Path> toExecute;
 	
@@ -264,9 +264,10 @@ public class Main
 		else
 		{
 			Shell.out("could not find the component 'util'.");
-			Shell.out( "AFL can still run, but some functions related to strings and arrays will not be available.");
+			Shell.out( "AFL can still run, but, sine all other components are dependancies of util, functionality will be reduced signifigantly.");
 			Shell.out("Press enter to continue launching AFL anyways.");
 			Shell.in();
+			return false;
 			
 		}
 		

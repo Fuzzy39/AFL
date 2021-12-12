@@ -170,16 +170,15 @@ X | arrayRemove(array, index)
 #### Lib/Lang ####
 _Math.AFL__________________
 X | neg(num)
-  | abs(num)
-  | root(number, power)
-  | pow(number, power)
+X | abs(num)
+X | sqrt(number)
+X | pow(number, power)
 X | pi
 X | e
-  | floor(num)
+  | truncate(num)
   | round(num)
-  | ceiling(num)
   | round(number, places)
-  | random(lower, upper)
+X | random(lower, upper)
   | randomInt(lower,upper)
 _Util.AFL___________________
 X | not(toInvert)                   | bool

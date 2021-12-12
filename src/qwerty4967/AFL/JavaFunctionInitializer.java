@@ -3,6 +3,7 @@
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import qwerty4967.AFL.Function.AFLFunction;
 import qwerty4967.AFL.Function.JavaFunction;
 import qwerty4967.AFL.Function.MethodCode;
 import qwerty4967.AFL.Interpret.Namespace;
@@ -27,6 +28,8 @@ public class JavaFunctionInitializer
 		initOperators();
 		initArrays();
 		initMisc();
+		
+		
 	}
 	
 	private static void initOperators()
@@ -817,6 +820,21 @@ public class JavaFunctionInitializer
 	
 		jf = new JavaFunction("printCompleteNamespace",0,mc);
 		Namespace.addFunction(jf);
+		
+		
+		
+		
+		mc = ((Token[] tokens) ->
+		{
+			// this is the dumbest workaround to a problem.
+			
+			Namespace.setVariable(new Token("params", TokenType.variable), new Token("",TokenType.string), new AFLFunction("_dummy",0));
+			return new Token("Void",TokenType.voidToken);
+			
+		});
+		
+		jf = new JavaFunction("_onStartup",0,mc);
+		jf.call(new Token[0]); // note that we call this one.
 	}
 	
 	 

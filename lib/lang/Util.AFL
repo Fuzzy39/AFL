@@ -1,5 +1,31 @@
 # Utility Functions;
 
+# check parameter, param, type, id, functionName;
+
+function("checkParam" 4);
+	# Oh no, 4 parameters? this is gonna be a nightmare;
+	# good thing we can skip the first;
+	
+	param = arrayGet(params 0);
+	toCheck = arrayGet(params 1);
+	id = arrayGet(params 2);
+	functionName=arrayGet(params 3);
+	
+	if(typeOf(toCheck)!=type);
+		error("Parameter 1 of 'checkParam' must be of type 'type'.");
+	end();
+	if(typeOf(functionName)!=string);
+		error("Parameter 3 of 'checkParam' must be of type 'string'.");
+	end();
+	
+	# Okay, this part is real simple;
+	if(typeOf(param)!=toCheck);
+		error("Parameter "+id+" of '"+functionName+"' must be of type '"+toCheck+"'.");
+	end();
+	return(param);
+end();
+	
+ 
 # invert boolean;
 function("not" 1);
 

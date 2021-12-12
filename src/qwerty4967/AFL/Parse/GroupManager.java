@@ -119,7 +119,7 @@ public class GroupManager
 	private static void ExtractGroup(Container c, int groupStart, int groupEnd)
 	{
 		// create the group, before we extract all of the information from it.
-		Group g = new Group();
+		Group g = new Group(c);
 		Groups.add(g);
 		Container gc = new Container(g);
 		
@@ -148,6 +148,16 @@ public class GroupManager
 	
 	protected static boolean functionizeGroups(Container c)
 	{
+		// fill functionized Groups with nulls, if we have too.
+		int diff = Groups.size()-FunctionizedGroups.size();
+		if(diff>0)
+		{
+			for(;diff>0;diff--)
+			{
+				FunctionizedGroups.add(null);
+			}
+		}
+		
 		setStatementNumber(c);
 		// How hard could this possibly be?
 		for(int i=0; i<Groups.size(); i++)
@@ -158,10 +168,14 @@ public class GroupManager
 			{
 				continue;
 			}
+			if(g.getOrigin()!=c)
+			{
+				continue;
+			}
 			
 			int index = Groups.indexOf(g);
 			Groups.set(index, null);
-			FunctionizedGroups.add(index, g);
+			FunctionizedGroups.set(index, g);
 			
 			// now, actually functionize the group
 			Container toFunctionize = (Container)g.getChild(0);
