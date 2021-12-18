@@ -26,7 +26,7 @@ public class Tokenizer
 		for( int i = 0; i<statements.size(); i++)
 		{
 			// if this method returns false, the user has made some kind of syntax error. 
-			// we need to pass this info up the chain.
+			// we need to pass this info up the chain.	
 			
 			int size = main.getSize();
 			
@@ -42,7 +42,10 @@ public class Tokenizer
 		
 			locateFunctionCalls((Statement)main.getChild(j));
 			j++;
+			
 			// this code is awful.
+			// Reading this comment, I don't know why I said that.
+			// I mean, a bunch of other code in this is awful, but this code is fine.
 			lineNumber=j+1;
 		}
 		

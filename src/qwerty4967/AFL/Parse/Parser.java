@@ -34,6 +34,7 @@ public class Parser
 		// but I'm okay with that, I think. Is it a problem? I guess, but it's logically consistent to me
 		// even if it's not great...
 		// also it would probably take more energy to solve than I care to attempt, at least at the moment.
+		// Later: I fixed it. kinda. you can have strings with ; in them, if nothing else.
 		Shell.out("Creating Statement Array..", 2);
 		ArrayList<String> statements = seperateStatements(code);
 		//statements = removeComments(statements);

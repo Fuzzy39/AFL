@@ -136,7 +136,21 @@ while(true);
 		sleep(50);
 	end();
 end()
+
+
+
+# test
+
+function("zero"0);
+	return();
+end();
+function("one"0);
+   	zero();
+	a;
 	
+end();
+return(one())	
+
 
 #intermission
 Meurrty? Concubine cankle  tooth fairy juice crush it, it probably tastes like toothpaste. 

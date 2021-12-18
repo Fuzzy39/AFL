@@ -135,5 +135,19 @@ function("random" 2);
 	
 	return(lower+rand);
 end();
+
+function("round" 2);
+	toRound=checkParam(arrayGet(params 0) num '0' "round");
+	places=checkParam(arrayGet(params 1) num '1' "round");
 	
+	minUnit = pow(10 neg(places));
+	"this shouldn't happen";
+	
+	roundable= (toRound%minUnit);
+	
+	if(roundable>=minUnit/2);
+		return(toRound-roundable+minUnit);
+	end();
+	return(toRound-roundable);
+end();
 "Loaded math component."

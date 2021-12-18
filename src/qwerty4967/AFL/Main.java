@@ -35,6 +35,7 @@ public class Main
 
 	protected static final int BUILD = 561;
 	private static boolean usesShell = true;
+	private static boolean loadModules = false; // whether to load any modules
 	private static ArrayList<Path> toExecute;
 	
 	public static void main(String[] args) 
@@ -62,7 +63,7 @@ public class Main
 					+ "\nUnfortunately, Clearing the console isn't possible in an IDE, so for a better\n"
 					+ "experience, try running AFL from the command line, or use the provided script. Thanks!\n ");
 			Shell.clear();
-			Shell.out("########## Arguably Functional Language v0.0."+BUILD+" | debug: "+Shell.getDebugLevel()+" ##########");
+			Shell.out("############### Arguably Functional Language v0.0."+BUILD+" | debug: "+Shell.getDebugLevel()+" ###############");
 			Shell.out("Use 'help()' for documentation and code examples.\n ");
 			while(true)
 			{
@@ -234,7 +235,13 @@ public class Main
 		
 		//TODO more crap
 		
-		
+		if(!loadModules)
+		{
+			Shell.out("Skipping loading AFL components for debugging purposes. ");
+			Shell.out("Press enter to continue launching AFL.");
+			Shell.in();
+			return true;
+		}
 		
 	
 		
