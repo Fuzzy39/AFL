@@ -25,7 +25,7 @@ A list of all help topics is below.
 [4] Variables 
 [5] Operators
 [6] Control Statements
-[?] Functions
+[7] Functions
 [?] Arrays
 [?] Components
 [?] Escape Sequences
@@ -42,7 +42,7 @@ A list of all help topics is below.
 
 [0] Welcome To AFL!
 -----------------------
-Arguably Functional Language is a relatively simple programing language made to learn how 
+Arguably Functional Language is a relatively simple programming language made to learn how 
 programming languages work. It has a few features, including functions, (limited) variable 
 scoping, and arrays. If you would like to know more, you can recall a specific entry by 
 typing 'help(EntryID)'. An index of helpful starting points is listed below with their 
@@ -53,8 +53,8 @@ IDs. If you want an index of all articles, type 'help(-1)'.
 [2] AFL Basics 
 [3] Data Types
 [4] Variables 
-[5] Control Statements
-[?] Functions
+[6] Control Statements
+[7] Functions
 [?] Arrays
 [?] Components
 [?] Command Line Arguments
@@ -65,10 +65,10 @@ IDs. If you want an index of all articles, type 'help(-1)'.
 
 [1] General Info
 -----------------------
-Arguably Functional Language is an (arguably) interpreted programing language written in
+Arguably Functional Language is an (arguably) interpreted programming language written in
 Java. AFL is a dynamically and strongly typed language. AFL notably supports variables 
-with limited scoping, functions, arrays, and seperating code into files, called components.
-AFL was built as a learning project, and as such is probably not effecient or properly 
+with limited scoping, functions, arrays, and separating code into files, called components.
+AFL was built as a learning project, and as such is probably not efficient or properly 
 useful, though it should work as expected in most cases. 
 
 There are probably some situations in which AFL doesn't work as expected. If you find a 
@@ -83,8 +83,8 @@ it's a little grisly. Just head over to https://github.com/qwerty4967/AFL
 [2] AFL Basics 
 [3] Data Types
 [4] Variables 
-[5] Control Statements
-[?] Functions
+[6] Control Statements
+[7] Functions
 [?] Arrays
 [?] Components
 -----------------------
@@ -98,7 +98,7 @@ understand most AFL code. Hopefully most of it is relatively straightforward.
 Data Types:
 
 AFL has various types of data that you can manipulate, and has specific ways of writing them
-asnconstants. The various types are num, string, char, bool, array, and type. For more 
+as constants. The various types are num, string, char, bool, array, and type. For more 
 information on data types, see their corresponding entry.
 
 Printing:
@@ -113,9 +113,9 @@ round(1.1)
 
 Multiple Statements: 
 
-Statements in an AFL program are seperated by semicolons. This is always the case, no matter
-where the semicolon is in AFL code. Because statements are seperated by semicolons, and not 
-ended by them, AFL expects the last statement in a peice of code to not be ended by a 
+Statements in an AFL program are separated by semicolons. This is always the case, no matter
+where the semicolon is in AFL code. Because statements are separated by semicolons, and not 
+ended by them, AFL expects the last statement in a piece of code to not be ended by a 
 semicolon. If you want to use a semicolon in a way that does not denote a new statement,
 you can escape them with a backslash. See the entry on escape sequences to learn more about
 escaping other characters.
@@ -155,7 +155,7 @@ call functions, see the corresponding entry on functions below.
 Control Statements:
 
 AFL also supports what it calls control statements, which are functions that modify the flow
-of code execution. These incude the commonplace if(bool) and while(bool). To see syntax for 
+of code execution. These include the commonplace if(bool) and while(bool). To see syntax for 
 them and a list of all control statements, see the corresponding entry below.
 
 -- See also: ----------
@@ -168,7 +168,7 @@ them and a list of all control statements, see the corresponding entry below.
 [5] Operators
 [?] round(num) and round(num num)
 [?] random()
-[?] Functions
+[7] Functions
 [5] Control Statements
 -----------------------
 
@@ -181,7 +181,7 @@ as constants. All types of data can be put into variables. This Entry contains a
 data types, how to enter them as constants, and some assorted notes on them.
 
 num:
-The num data type is for storing numbers. All num's are double percision floating points,
+The num data type is for storing numbers. All num's are double precision floating points,
 completely stolen from java. They may be entered as expected for the most part, but AFL
 refuses to recognize scientific notation, values like NaN and Infinity, and negative numbers
 as numbers, when written as constants, though these values can still be obtained with 
@@ -249,7 +249,7 @@ simple:
 name = value or expression
 -----
 Valid names are of any length, and only consist of upper and lower case letters. The
-reccomended way to capitalize variables is camelCase or UpperCamelCase.
+recommended way to capitalize variables is camelCase or UpperCamelCase.
 some examples of variable assigning:
 -----
 x=12;
@@ -268,8 +268,8 @@ x
 Variable Scoping:
 
 Variables are scoped by functions. This means that a variable first declared outside a 
-function is avaliable to all functions, but a variable declared inside a function is only
-accessable within that function. If that variable is used in another function, it refers
+function is available to all functions, but a variable declared inside a function is only
+accessible within that function. If that variable is used in another function, it refers
 to an unrelated value. A variable cannot be first declared in a function, then used outside
 of one.
 Here is an example:
@@ -289,7 +289,7 @@ b()
 [5] Operators
 [?] Math Component
 [?] sqrt(num)
-[?] Functions
+[7] Functions
 [?] Arrays
 
 
@@ -320,17 +320,18 @@ Add Category Operators:
 The add category operators are + and -, and perform addition and subtraction respectively on
 num type operands.
 + can also utilize operands of other types, and if any operand of + is not a num,
-it will concatinate both types together and output a string.
+it will concatenate both types together and output a string.
 
 Compare Category Operators:
 The compare category operators are ==, !=, >=, <=, >, and <. These operators
 return a boolean value.
-== returns true if its two operands have the same values. It does not compare arrays.
-!= returns true if its two operands do not have the same values. It does not compare arrays.
+== returns true if its two operands have the same values. Arrays are only equal to 
+themselves. Arrays with the same size and list of values will not be equal.
+!= returns true if its two operands do not have the same values.
 >= only operates on num type operands, and returns true if the first operand is greater than
 or equal to the second.
 <= only operates on num type operands, and returns true if the first operand is less than or
-equal to the second.
+equal to the second. 
 > only operates on num type operands, and returns true if the first operand is greater than
 the second.
 < only operates on num type operands, and returns true if the first operand is less than the
@@ -348,7 +349,7 @@ Variables for information on how it works.                                      
 -- See also: ----------
 [3] Data Types
 [4] Variables
-[?] Functions
+[7] Functions
 
 
 
@@ -360,10 +361,12 @@ the normal flow of code. Certain control statements are used with code blocks, w
 with the control statement, and end with the use of the end() function. It is required that
 all code blocks are ended. Code blocks can also be nested. It is customary to indent all 
 code within a code block. This entry lists all control statements, and how they are used.
+control statements cannot be part of an expression, though their parameters can be made
+of expressions.
 
 Code Block Creating Control Statements:
 if(bool):
-  The if control statement executes the code within its block if its perameter is true.
+  The if control statement executes the code within its block if its parameter is true.
   If it is false, the code within its block is ignored and skipped.
 else():
   The else control statement can only be used after the end of an if statement's code block.
@@ -372,9 +375,75 @@ else():
 while(bool):
   The while control statement executes its block of code if the condition is true, similarly
   to the if statement, but after it reaches the end of its block, it checks the condition
-  again, and will continuing exectuing the code in its block until it is false.
+  again, and will continuing executing the code in its block until it is false.
 
 Other Control Statements:
-return() and return(value)
-break()
-continue()
+return() and return(value):
+	The return function is tied to functions. when return is run, the function currently
+	running is stopped, and if any value is returned, it is passed to the code that called
+	the function.
+	For example, imagine you have a function to double a number:
+	-----
+	function("double" 1);
+		return(2*arrayGet(params 0));
+	end()
+	-----
+	the return function here will allow us to get the value the function generates.
+	double(10) # will print "20.0"
+	
+break():
+	The break function only works inside of while loops, and when called, immediately ends
+	running code inside of the loop.
+continue():
+	The continue function only works inside of loops, and when called, returns to the start
+	of the loop.
+
+See also:
+--------------------
+[3] Data Types
+[7] Functions
+[?] Math Component
+--------------------
+
+
+[7] Functions
+--------------------
+Functions are ways to easily group a bunch of code together to run at once, on command.
+This is incredibly powerful, and makes code shorter and easier to read.
+Function syntax involves two parts: creating functions and calling (running) them.
+
+Calling functions:
+if you're reading this, you've already called a function with AFL. when you wrote 'help(7)',
+you called the function help. yep, the help system is a function, and it's actually written
+in AFL code.
+The syntax for calling a function is as follows:
+functionName( parameters )
+every function has a certain number of parameters it expects, and needs to be given that
+amount. parameters are separated by spaces (if required). Here are some examples:
+the function 'clear' expects no parameters, and can be called as 'clear()'
+the function 'pow' expects two parameters and could be called like 'pow(3 3)'
+It should be noted that function calls can both contain epressions in their parameters and
+be part of expressions.
+
+Creating functions:
+Functions work similarly to control statements, in that the function definition
+creates a block of code ended by the end() function. 
+The definition of a function is itself a function (kinda), and looks like this:
+function(functionName params);
+functionName is of string type, and will the name of the function when you call it. It can
+be any combination of letters, and it cannot include any numbers, spaces, or symbols. 
+params is of num type, and is the amount of parameters your function expects. Note that
+expressions cannot be used in the parameters for the function function. Only constants.
+here is an example of a function.
+------
+function("example" 0);
+	"hello there!";
+	# isn't this a cool function? no? whatever;
+	"more words!";
+end()
+-----
+this function can then be called with 'example()'.
+
+blah lnah
+
+
