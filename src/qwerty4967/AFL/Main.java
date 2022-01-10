@@ -33,9 +33,9 @@ public class Main
 	
 
 
-	protected static final int BUILD = 561;
+	protected static final int BUILD = 563;
 	private static boolean usesShell = true;
-	private static boolean loadModules = false; // whether to load any modules
+	private static boolean loadModules = true; // whether to load any modules
 	private static ArrayList<Path> toExecute;
 	
 	public static void main(String[] args) 

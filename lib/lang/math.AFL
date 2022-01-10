@@ -140,8 +140,11 @@ function("round" 2);
 	toRound=checkParam(arrayGet(params 0) num '0' "round");
 	places=checkParam(arrayGet(params 1) num '1' "round");
 	
+	if(places%1!=0);
+		error("Parameter 1 of 'round' must be an integer.");
+	end();
+	
 	minUnit = pow(10 neg(places));
-	"this shouldn't happen";
 	
 	roundable= (toRound%minUnit);
 	
@@ -150,4 +153,14 @@ function("round" 2);
 	end();
 	return(toRound-roundable);
 end();
+
+function("round" 1);
+	return(round(arrayGet(params 0) 0));
+end();
+
+function("truncate" 1);
+	toReturn=checkParam(arrayGet(params 0) num '0' "truncate");
+	return(toReturn-(toReturn%1));
+end();
+	
 "Loaded math component."

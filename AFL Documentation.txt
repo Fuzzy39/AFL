@@ -1,0 +1,380 @@
+Wait, so I can just do more or less anything, as long as it involves energy or is energetic?
+Well, in that case, I'm going to keep putting energy into the thing I was doing earlier today.
+Sorry if it's a bit esoterric.
+Hopefullly this isn't skirting the lines of the assignment or anything.
+
+I expected to get this like half done but I've spent a bit more than an hour and it's like
+15% or something, so...
+
+
+
+
+This document is basically documentation for a 'programming language' I'm making called AFL.
+[?] means that the entry has not yet be written (most of them, jeez)
+Eventually I'll feed all of this into the help utility code.
+
+[-1] Index 
+-----------------------
+A list of all help topics is below.
+
+-- See also: ------------
+[0] Welcome To AFL!
+[1] General Info 
+[2] AFL Basics 
+[3] Data Types
+[4] Variables 
+[5] Operators
+[6] Control Statements
+[?] Functions
+[?] Arrays
+[?] Components
+[?] Escape Sequences
+[?] Command Line Arguments
+[?] Code Examples
+[Reference]
+[?] Default AFL Components
+[?] Function Index
+[?] Core Functions
+[?] Math Component
+[?] Util Component
+[?] Help Component
+
+
+[0] Welcome To AFL!
+-----------------------
+Arguably Functional Language is a relatively simple programing language made to learn how 
+programming languages work. It has a few features, including functions, (limited) variable 
+scoping, and arrays. If you would like to know more, you can recall a specific entry by 
+typing 'help(EntryID)'. An index of helpful starting points is listed below with their 
+IDs. If you want an index of all articles, type 'help(-1)'.
+
+-- See also: ---------
+[1] General Info 
+[2] AFL Basics 
+[3] Data Types
+[4] Variables 
+[5] Control Statements
+[?] Functions
+[?] Arrays
+[?] Components
+[?] Command Line Arguments
+[?] Code Examples
+[?] Default AFL Components
+[?] Function Index
+-----------------------
+
+[1] General Info
+-----------------------
+Arguably Functional Language is an (arguably) interpreted programing language written in
+Java. AFL is a dynamically and strongly typed language. AFL notably supports variables 
+with limited scoping, functions, arrays, and seperating code into files, called components.
+AFL was built as a learning project, and as such is probably not effecient or properly 
+useful, though it should work as expected in most cases. 
+
+There are probably some situations in which AFL doesn't work as expected. If you find a 
+problem, I'd love to hear about it! Email me at jmcraft126@gmail.com, though I wouldn't hold
+your breath for it to get fixed.
+
+If you want to look at AFL's source code, you're welcome to, though fair warning,
+it's a little grisly. Just head over to https://github.com/qwerty4967/AFL
+
+
+-- See also: ----------
+[2] AFL Basics 
+[3] Data Types
+[4] Variables 
+[5] Control Statements
+[?] Functions
+[?] Arrays
+[?] Components
+-----------------------
+
+
+[2] AFL Basics
+-----------------------
+This help entry contains a broad overview for a number of basic topics required to 
+understand most AFL code. Hopefully most of it is relatively straightforward.
+
+Data Types:
+
+AFL has various types of data that you can manipulate, and has specific ways of writing them
+asnconstants. The various types are num, string, char, bool, array, and type. For more 
+information on data types, see their corresponding entry.
+
+Printing:
+
+AFL has no print statement. If you want to print something to the console, just type it out!
+Here are some examples:
+-------
+"Hello, World!"
+1+1
+round(1.1)
+------
+
+Multiple Statements: 
+
+Statements in an AFL program are seperated by semicolons. This is always the case, no matter
+where the semicolon is in AFL code. Because statements are seperated by semicolons, and not 
+ended by them, AFL expects the last statement in a peice of code to not be ended by a 
+semicolon. If you want to use a semicolon in a way that does not denote a new statement,
+you can escape them with a backslash. See the entry on escape sequences to learn more about
+escaping other characters.
+
+Variables & Arrays:
+
+AFL supports variables, which are used to store values. Assigning a variable is fairly 
+simple:
+--------
+name = value
+-------- 
+Using a variable is also fairly simple. Just write out it's name. Try out this example:
+--------
+x = 2+1;
+"x squared:";
+x*x
+--------
+If you want more specific information on variables and variable scoping, check out the 
+entry on variables below.
+
+AFL also supports arrays, which are special variables that can store multiple values. Check
+out the entry on arrays for more information.
+
+Comments:
+
+AFL provides ways to insert comments that are not executed into your code, usually to
+explain the function of your code. AFL uses # to denote a comment for a single line, though
+note that semicolons in comments have to be escaped.
+
+Operators and Functions:
+
+AFL provides various ways to modify values. These include operators such as +, *, and ==,
+and functions, such as round(num) and random(). Functions in particular do not have to
+output any value, however. You can also create your own functions. To learn how to make and
+call functions, see the corresponding entry on functions below.
+
+Control Statements:
+
+AFL also supports what it calls control statements, which are functions that modify the flow
+of code execution. These incude the commonplace if(bool) and while(bool). To see syntax for 
+them and a list of all control statements, see the corresponding entry below.
+
+-- See also: ----------
+[3] Data Types
+[?] error(string)
+[?] Escape Sequences
+[4] Variables
+[?] pow(num num)
+[?] Arrays
+[5] Operators
+[?] round(num) and round(num num)
+[?] random()
+[?] Functions
+[5] Control Statements
+-----------------------
+
+
+
+[3] Data Types
+-----------------------
+AFL has various types of data that you can manipulate, and has various ways as writing them
+as constants. All types of data can be put into variables. This Entry contains a list of
+data types, how to enter them as constants, and some assorted notes on them.
+
+num:
+The num data type is for storing numbers. All num's are double percision floating points,
+completely stolen from java. They may be entered as expected for the most part, but AFL
+refuses to recognize scientific notation, values like NaN and Infinity, and negative numbers
+as numbers, when written as constants, though these values can still be obtained with 
+expressions. Note that there is a utility function for producing a negative number, 
+neg(num).
+
+string:
+The string data type represents text, and is written as a constant using quotation marks,
+like so:
+"Hello, World!"
+Strings can be easily combined (or other types can be appended on to strings) by using the
++ operator. They can also be converted to and from arrays of char type data using the
+toCharArray(string) and fromCharArray(array) functions. Certain characters cannot be easily 
+inputed into strings, and for these characters, escape sequences are available. See the
+entry below for more information.
+
+char:
+The char data type represents a single character, such as 'a', '!' or '1'. They are
+represented by single quotes surrounding the character in question, like shown above.
+Certain characters cannot be easily inputed, and for these characters escape sequences 
+are available. See the entry below for more information.
+
+bool:
+The bool data type represents true or false, and are the results of comparisons e.g. x>10. 
+They are represented by the words true and false, fittingly enough. 
+
+array:
+The array data type cannot be directly represented, though they are stored in variables.
+They are manipulated through array functions. arrays represent multiple values in one,
+indexable by a num. For more information on arrays and how to use them, see the 
+corresponding Entry.
+
+type:
+The type data type represents the data types, num, string, char, bool, array and type, and
+are written as such. types are used most often when determining the type of a potentially
+unknown variable, typically like so:
+-----
+if(typeOf(x)==num);
+    # do something if x is a num
+end();
+else();
+    # do something if x is not a num
+end()
+-----
+
+
+-- See also: ----------
+[4] Variables
+[?] Math Component
+[?] neg(num)
+[5] Operators
+[?] toCharArray(string)
+[?] fromCharArray(array)
+[?] Escape Sequences
+[?] Arrays
+[?] typeOf(value)
+-----------------------
+
+
+[4] Variables 
+-----------------------
+AFL supports variables, which are used to store values. Assigning a variable is fairly 
+simple:
+-----
+name = value or expression
+-----
+Valid names are of any length, and only consist of upper and lower case letters. The
+reccomended way to capitalize variables is camelCase or UpperCamelCase.
+some examples of variable assigning:
+-----
+x=12;
+output = "The answer is: "+27.5+'!'
+someNumber=pi*sqrt(2)
+-----
+Variables can be recalled by using their name in place of a constant value. For full 
+clarity, here is an example:
+-----
+x=27;
+x=x+1;
+# Expected value is 28;
+x
+-----
+
+Variable Scoping:
+
+Variables are scoped by functions. This means that a variable first declared outside a 
+function is avaliable to all functions, but a variable declared inside a function is only
+accessable within that function. If that variable is used in another function, it refers
+to an unrelated value. A variable cannot be first declared in a function, then used outside
+of one.
+Here is an example:
+-----
+# this code will produce an error, as x is undefined in function b.
+function("a" 0);
+    x=201;
+end();
+function("b" 0);
+    x;
+end();
+a();
+b()
+-----
+
+-- See also: ----------
+[5] Operators
+[?] Math Component
+[?] sqrt(num)
+[?] Functions
+[?] Arrays
+
+
+
+[5] Operators
+-----------------------
+AFL uses operators to describe basic operations, such as the + operator for addition. All 
+Operators have two operands, to each side of them. AFL utilizes the order of operations,
+with certain operations being executed before others. This entry describes Each 'priority 
+category' of operators from highest to lowest priority, with notes for certain operators 
+when required.
+
+Organize Category Operators:
+ ( and ) are Organize operators, but they do not correspond to any operations, and
+prioritize the expression inside of them, ensuring all of it is done as a unit.
+Parenthesees are also used to describe function calls, but are used in a slightly different
+capacity. Here is an example of parentheses used as organize operators:
+-----
+4*2+3; # outputs 11
+4*(2+3) # outputs 20
+-----
+
+Multiply Category Operators:
+The multiply category operators are *, /, and %, and perform multiplication, division, and
+modulus (division remainders) respectively on num type operands.
+
+Add Category Operators:
+The add category operators are + and -, and perform addition and subtraction respectively on
+num type operands.
++ can also utilize operands of other types, and if any operand of + is not a num,
+it will concatinate both types together and output a string.
+
+Compare Category Operators:
+The compare category operators are ==, !=, >=, <=, >, and <. These operators
+return a boolean value.
+== returns true if its two operands have the same values. It does not compare arrays.
+!= returns true if its two operands do not have the same values. It does not compare arrays.
+>= only operates on num type operands, and returns true if the first operand is greater than
+or equal to the second.
+<= only operates on num type operands, and returns true if the first operand is less than or
+equal to the second.
+> only operates on num type operands, and returns true if the first operand is greater than
+the second.
+< only operates on num type operands, and returns true if the first operand is less than the
+ second.
+
+Logic Category Operators:
+The logic category operators are || and &, and perform boolean or and and operations.
+or returns true if either operand is true, and and returns true only if both operand are 
+true.	
+
+Assignnment Operator:
+= is the Assignment operator, which is used to assign variables. Refer to the entry on 
+Variables for information on how it works.                                                                                                                                                                                                                          z.
+
+-- See also: ----------
+[3] Data Types
+[4] Variables
+[?] Functions
+
+
+
+
+[6] Control Statements
+-----------------------
+AFL supports a number of what it calls control statements, which are functions that control 
+the normal flow of code. Certain control statements are used with code blocks, which start
+with the control statement, and end with the use of the end() function. It is required that
+all code blocks are ended. Code blocks can also be nested. It is customary to indent all 
+code within a code block. This entry lists all control statements, and how they are used.
+
+Code Block Creating Control Statements:
+if(bool):
+  The if control statement executes the code within its block if its perameter is true.
+  If it is false, the code within its block is ignored and skipped.
+else():
+  The else control statement can only be used after the end of an if statement's code block.
+  The code within its block only runs if the code in the if statement's block did not. Note
+  that any check in an if statement will be run again in the else statement.
+while(bool):
+  The while control statement executes its block of code if the condition is true, similarly
+  to the if statement, but after it reaches the end of its block, it checks the condition
+  again, and will continuing exectuing the code in its block until it is false.
+
+Other Control Statements:
+return() and return(value)
+break()
+continue()

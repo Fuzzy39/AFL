@@ -72,6 +72,17 @@ public class Resolver
 		int size = f.getSize();
 		if(Namespace.getFunction(functionName, size)==null)
 		{
+			// check for help.
+			if(functionName.equals("help"))
+			{
+				if(size<2)
+				{
+					Shell.error("Uh-Oh! AFL couldn't find the help function!"
+							+ "\nThere might be a few reasons for this, including asking AFL to run code from a file."
+							+ "\nIn any case, documentation for AFL is available at qwerty4967.github.io/AFL/docs. ", f.getStatementNumber());
+					return false;
+				}
+			}
 			Shell.error("No overload for function '"+functionName+"' exists with "+size+" parameters. ", f.getStatementNumber());
 			return false;
 		}
