@@ -1,7 +1,9 @@
 package qwerty4967.AFL;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,7 +35,7 @@ public class Main
 	
 
 
-	protected static final int BUILD = 563;
+	protected static final int BUILD = 567;
 	private static boolean usesShell = true;
 	private static boolean loadModules = true; // whether to load any modules
 	private static ArrayList<Path> toExecute;
@@ -160,6 +162,7 @@ public class Main
 			} 
 			catch (IOException e) 
 			{
+				// I don't know if not having read access would cause this issue, actually. Just guessing.
 				Shell.out("There was some unspecified problem with file: '"+p+"'.\nHuh, that seems weird. Do you have read access to the file?");
 				return false;
 				
@@ -197,37 +200,6 @@ public class Main
 	{
 		Lang.controlFunctions=new ArrayList<ControlFunction>();
 		
-		
-		// Initialize controlFunctions.
-		// this part feels disgusting.
-		// block creating functions
-		ControlFunction IF = new ControlFunction("if",1);
-		Lang.controlFunctions.add(IF);
-		ControlFunction ELSE = new ControlFunction("else",0);
-		Lang.controlFunctions.add(ELSE);
-		ControlFunction WHILE = new ControlFunction("while",1);
-		Lang.controlFunctions.add(WHILE);
-		//ControlFunction FOR = new ControlFunction("for",3);
-		//Lang.controlFunctions.add(FOR);
-		
-		// Non block creating functions
-		ControlFunction END = new ControlFunction("end",0);
-		Lang.controlFunctions.add(END);
-		ControlFunction FUNCTION = new ControlFunction("function",2);
-		Lang.controlFunctions.add(FUNCTION);
-		ControlFunction RETURN = new ControlFunction("return",1);
-		Lang.controlFunctions.add(RETURN);
-		ControlFunction RETURN2 = new ControlFunction("return",0);
-		Lang.controlFunctions.add(RETURN2);
-		ControlFunction ASSIGN = new ControlFunction("=",2);
-		Lang.controlFunctions.add(ASSIGN);
-		ControlFunction BREAK = new ControlFunction("break",0);
-		Lang.controlFunctions.add(BREAK);
-		ControlFunction CONTINUE = new ControlFunction("continue",0);
-		Lang.controlFunctions.add(CONTINUE);
-		// that should be everything
-				
-		
 		// this is pretty important, for a single line of code.
 		// be rest assured there's more than one in that function.
 		JavaFunctionInitializer.initJavaFunctions();
@@ -243,7 +215,6 @@ public class Main
 			return true;
 		}
 		
-	
 		
 		// check if the lib/lang folder exists.
 		Path langPath = Paths.get("lib/lang");
@@ -256,49 +227,32 @@ public class Main
 		}
 		
 		// check for and run lang.util
-		Path utilPath = Paths.get("lib/lang/util.AFL");
-		if(Files.exists(utilPath))
+		loadCoreComponent("util", "lib/lang/util.AFL", "much of AFL's functionality");
+		
+		// and lang.math
+		loadCoreComponent("math", "lib/lang/math.AFL", "some functions related to rounding and basic math");
+		
+		
+		// Now, if the situation demands, load the help function.
+		
+		if(usesShell)
 		{
-			// okay, so what to do now?
-			String util = getCodeFromFile(utilPath);
-			Token returned = execute(util);
-			if(returned==null||(returned.getType()==TokenType.error))
-			{
-				Shell.out("Component 'util' has encountered an error. (see above) AFL cannot start.");
-				return false;
-			}
-		}
-		else
-		{
-			Shell.out("could not find the component 'util'.");
-			Shell.out( "AFL can still run, but, sine all other components are dependancies of util, functionality will be reduced signifigantly.");
-			Shell.out("Press enter to continue launching AFL anyways.");
-			Shell.in();
-			return false;
-			
+			loadCoreComponent("help", "lib/shell/help.AFL", "inbuilt documentation");
 		}
 		
 		
-		Path mathPath = Paths.get("lib/lang/math.AFL");
-		if(Files.exists(mathPath))
-		{
-			// okay, so what to do now?
-			String util = getCodeFromFile(mathPath);
-			Token returned = execute(util);
-			if(returned==null||(returned.getType()==TokenType.error))
-			{
-				Shell.out("Component 'math' has encountered an error. (see above) AFL cannot start.");
-				return false;
-			}
-		}
-		else
-		{
-			Shell.out("could not find the component 'math'.");
-			Shell.out( "AFL can still be run, but some functions related to rounding and basic math will not be available.");
-			Shell.out("Press enter to continue launching AFL anyways.");
-			Shell.in();
-			
-		}
+		// now attempt to load User Components.
+		// don't really understand how to use nio and all the guides I found were for io so...
+		File lib = Paths.get("lib").toFile();
+	    for (final File component : lib.listFiles()) 
+	    {
+	        if (!component.isDirectory()) 
+	        {
+	            // okay, we found what (appears to be) a file
+	        	loadComponent(component.toPath());
+	        }
+	    }
+		
 		return true;
 		
 		// example javaFunction.
@@ -309,7 +263,66 @@ public class Main
 		
 	}
 	
-
+	private static boolean loadCoreComponent(String name, String path, String features)
+	{
+		Path componentPath = Paths.get(path);
+		if(Files.exists(componentPath))
+		{
+			// okay, so what to do now?
+			String code = getCodeFromFile(componentPath);
+			Token returned = execute(code);
+			if(returned==null||(returned.getType()==TokenType.error))
+			{
+				// yeah, AFL could probably start anyways, but...
+				Shell.out("Component '"+name+"' has encountered an error [see above].");
+				Shell.out("AFL can still be run, but there may be some instability.");
+				Shell.out("Press enter to continue launching AFL anyways.");
+				Shell.in();
+				return false;
+			}
+			return true;
+		}
+		else
+		{
+			Shell.out("Could not find component '"+name+"'.");
+			Shell.out( "AFL can still be run, but "+features+" will not be available.");
+			Shell.out("Press enter to continue launching AFL anyways.");
+			Shell.in();
+			return false;
+			
+		}
+		
+	}
+	
+	private static void loadComponent(Path component)
+	{
+		String name = component.getFileName().toString();
+		
+		
+		
+		
+		String[] bits = name.split("\\.",0);
+		
+		
+		name = bits[0];
+		
+		String code = getCodeFromFile(component);
+		Token returned = execute(code);
+		if(returned==null||(returned.getType()==TokenType.error))
+		{
+			// yeah, AFL could probably start anyways, but...
+			Shell.out("User component '"+name+"' has encountered an error [see above].");
+			Shell.out("AFL can still be run, but there may be some instability. It may be advisable to remove this component.");
+			Shell.out("Press enter to continue launching AFL anyways.");
+			Shell.in();
+			
+		}
+		else
+		{
+			Shell.out("Loaded user component '"+name+"'.");
+		}
+		
+	}
 	
 	private static Token execute(String code)
 	{

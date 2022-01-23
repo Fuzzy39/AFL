@@ -162,5 +162,19 @@ function("truncate" 1);
 	toReturn=checkParam(arrayGet(params 0) num '0' "truncate");
 	return(toReturn-(toReturn%1));
 end();
+
+function("truncate" 2);
+	toReturn=checkParam(arrayGet(params 0) num '0' "truncate");
+	places=checkParam(arrayGet(params 1) num '1' "truncate");
+	
+	# check that places is an integer;
+	if(places%1!=0);
+		error("Parameter 1 of 'round' must be an integer.");
+	end();
+	
+	# get the factor;
+	factor = pow(10 places);
+	return(toReturn-(toReturn%factor));
+end();
 	
 "Loaded math component."
