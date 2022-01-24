@@ -56,7 +56,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue*bValue);
 				
 			}
-			Shell.error("The '*' operator requires operands of type num.", -2);
+			Shell.error("The '*' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -79,7 +79,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue/bValue);
 				
 			}
-			Shell.error("The '/' operator requires operands of type num.", -2);
+			Shell.error("The '/' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -102,7 +102,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue%bValue);
 				
 			}
-			Shell.error("The '%' operator requires operands of type num.", -2);
+			Shell.error("The '%' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -153,7 +153,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue-bValue);
 				
 			}
-			Shell.error("The '-' operator requires operands of type num.", -2);
+			Shell.error("The '-' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -243,7 +243,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue>=bValue);
 				
 			}
-			Shell.error("The '>=' operator requires operands of type num.", -2);
+			Shell.error("The '>=' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -266,7 +266,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue<=bValue);
 				
 			}
-			Shell.error("The '<=' operator requires operands of type num.", -2);
+			Shell.error("The '<=' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -289,7 +289,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue>bValue);
 				
 			}
-			Shell.error("The '>' operator requires operands of type num.", -2);
+			Shell.error("The '>' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -312,7 +312,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue<bValue);
 				
 			}
-			Shell.error("The '<' operator requires operands of type num.", -2);
+			Shell.error("The '<' operator requires operands of type num.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -338,7 +338,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue||bValue);
 				
 			}
-			Shell.error("The '||' operator requires operands of type bool.", -2);
+			Shell.error("The '||' operator requires operands of type bool.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -361,7 +361,7 @@ public class JavaFunctionInitializer
 				return toToken(aValue&bValue);
 				
 			}
-			Shell.error("The '&' operator requires operands of type bool.", -2);
+			Shell.error("The '&' operator requires operands of type bool.", -2,"");
 			return new Token("Error", TokenType.error);
 		});
 	
@@ -392,7 +392,7 @@ public class JavaFunctionInitializer
 			// Check for types.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 of 'arrayAdd' must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arrayAdd' must be of type array.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			// add the new thing.
@@ -402,7 +402,7 @@ public class JavaFunctionInitializer
 			
 			if(tokenIsInArray(arrayPointer, array))
 			{
-				Shell.error("An array cannot be added to itself.", -2);
+				Shell.error("An array cannot be added to itself.", -2,"");
 				array.remove(array.size()-1);
 				return new Token("Error",TokenType.error);
 			}
@@ -423,12 +423,12 @@ public class JavaFunctionInitializer
 			// check that everything is of the correct type.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 of 'arrayGet' must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arrayGet' must be of type array.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			if(arrayIndex.getType()!=TokenType.number)
 			{
-				Shell.error("Parameter 1 of 'arrayGet' must be of type num.", -2);
+				Shell.error("Parameter 1 of 'arrayGet' must be of type num.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -458,7 +458,7 @@ public class JavaFunctionInitializer
 			// Check for types.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 of 'arraySize' must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arraySize' must be of type array.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -482,12 +482,12 @@ public class JavaFunctionInitializer
 			// check that everything is of the correct type.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 of 'arraySet' must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arraySet' must be of type array.", -2, "");
 				return new Token("Error",TokenType.error);
 			}
 			if(arrayIndex.getType()!=TokenType.number)
 			{
-				Shell.error("Parameter 1 of 'arraySet' must be of type num.", -2);
+				Shell.error("Parameter 1 of 'arraySet' must be of type num.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -502,7 +502,7 @@ public class JavaFunctionInitializer
 			int i = (int)index;
 			if(tokenIsInArray(arrayPointer, array))
 			{
-				Shell.error("An array cannot be added to itself.", -2);
+				Shell.error("An array cannot be added to itself.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			array.set(i, value);
@@ -521,7 +521,7 @@ public class JavaFunctionInitializer
 			// check that everything is of the correct type.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 of 'arrayRemove' must be of type array.", -2);
+				Shell.error("Parameter 0 of 'arrayRemove' must be of type array.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -550,13 +550,13 @@ public class JavaFunctionInitializer
 			// check that everything is of the correct type.
 			if(arrayPointer.getType()!=TokenType.arrayPointer)
 			{
-				Shell.error("Parameter 0 of 'arrayRemove' must be of type 'array'.", -2);
+				Shell.error("Parameter 0 of 'arrayRemove' must be of type 'array'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
 			if(indexToken.getType()!=TokenType.number)
 			{
-				Shell.error("Parameter 1 of 'arrayRemove' must be of type 'num'.", -2);
+				Shell.error("Parameter 1 of 'arrayRemove' must be of type 'num'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -623,7 +623,7 @@ public class JavaFunctionInitializer
 				case type:
 					return new Token(Lang.TYPES[5],TokenType.type);
 				default:
-					Shell.error("Internal Error. Could not ascertain type.", -2);
+					Shell.error("Internal Error. Could not ascertain type.", -2,"");
 					return new Token("Error",TokenType.error);                                                                           
 				
 			}
@@ -641,7 +641,7 @@ public class JavaFunctionInitializer
 			// check validity.
 			if(string.getType()!=TokenType.string)
 			{
-				Shell.error("Parameter 0 of 'toCharArray' must be of type 'string'.", -2);
+				Shell.error("Parameter 0 of 'toCharArray' must be of type 'string'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -675,19 +675,19 @@ public class JavaFunctionInitializer
 			// check validity.
 			if(string.getType()!=TokenType.string)
 			{
-				Shell.error("Parameter 0 of 'isType' must be of type 'string'.", -2);
+				Shell.error("Parameter 0 of 'isType' must be of type 'string'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
 			if(type.getType()!=TokenType.type)
 			{
-				Shell.error("Parameter 1 of 'isType' must be of type 'type'.", -2);
+				Shell.error("Parameter 1 of 'isType' must be of type 'type'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
 			if(type.getData().equals("array"))
 			{
-				Shell.error("Arrays are not a valid type to check for.", -2);
+				Shell.error("Arrays are not a valid type to check for.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -709,25 +709,25 @@ public class JavaFunctionInitializer
 			// check validity.
 			if(string.getType()!=TokenType.string)
 			{
-				Shell.error("Parameter 0 of 'isType' must be of type 'string'.", -2);
+				Shell.error("Parameter 0 of 'isType' must be of type 'string'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
 			if(type.getType()!=TokenType.type)
 			{
-				Shell.error("Parameter 1 of 'isType' must be of type 'type'.", -2);
+				Shell.error("Parameter 1 of 'isType' must be of type 'type'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
 			if(type.getData().equals("array"))
 			{
-				Shell.error("Arrays are not a valid type to check for.", -2);
+				Shell.error("Arrays are not a valid type to check for.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
 			if(!stringMatchesType(string.getData(), type.getData()))
 			{
-				Shell.error("Cannot convert string \""+string.getData()+"\" to type \'"+type.getData()+"\'", -2);
+				Shell.error("Cannot convert string \""+string.getData()+"\" to type \'"+type.getData()+"\'", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
@@ -760,11 +760,11 @@ public class JavaFunctionInitializer
 			Token string = tokens[0];
 			if(string.getType()!=TokenType.string)
 			{
-				Shell.error("Parameter 0 of 'error' must be of type 'string'.", -2);
+				Shell.error("Parameter 0 of 'error' must be of type 'string'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
-			Shell.error(string.getData(), -2);
+			Shell.error(string.getData(), -2,"");
 			return new Token("Error", TokenType.error); 
 			
 		});
@@ -789,7 +789,7 @@ public class JavaFunctionInitializer
 			Token milliseconds = tokens[0];
 			if(milliseconds.getType()!=TokenType.number)
 			{
-				Shell.error("Parameter 0 of 'sleep' must be of type 'num'.", -2);
+				Shell.error("Parameter 0 of 'sleep' must be of type 'num'.", -2,"");
 				return new Token("Error", TokenType.error);
 			}
 			double ms=Double.parseDouble(milliseconds.getData());
@@ -828,7 +828,7 @@ public class JavaFunctionInitializer
 		{
 			// this is the dumbest workaround to a problem.
 			
-			Namespace.setVariable(new Token("params", TokenType.variable), new Token("",TokenType.string), new AFLFunction("_dummy",0));
+			Namespace.setVariable(new Token("params", TokenType.variable), new Token("",TokenType.string), new AFLFunction("_dummy",0,-1));
 			return new Token("Void",TokenType.voidToken);
 			
 		});
@@ -872,7 +872,7 @@ public class JavaFunctionInitializer
 	{
 		if(index%1!=0 || index<0)
 		{
-			Shell.error("Index "+index+" is invalid. Indexes must be positive whole numbers.", -2);
+			Shell.error("Index "+index+" is invalid. Indexes must be positive whole numbers.", -2,"");
 			return false;
 		}
 		
@@ -885,7 +885,7 @@ public class JavaFunctionInitializer
 		
 		if(index>=array.size())
 		{
-			Shell.error("Index "+index+" is out of bounds for array size "+array.size()+".", -2);
+			Shell.error("Index "+index+" is out of bounds for array size "+array.size()+".", -2,"");
 			return false;
 		}
 		return true;

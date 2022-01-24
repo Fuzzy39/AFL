@@ -117,7 +117,7 @@ public class Contextualizer
 				}
 				else
 				{
-					Shell.error("invalid call of function 'end'. This function has no parameters.", f.getStatementNumber());
+					Shell.error("invalid call of function 'end'. This function has no parameters.", f.getStatementNumber(),s.getFunction().getFile());
 					return -1;
 				}
 			}
@@ -128,7 +128,7 @@ public class Contextualizer
 			}
 		}
 		
-		Shell.error("Invalid function definition. No end of function.", s.getStatementNumber());
+		Shell.error("Invalid function definition. No end of function.", s.getStatementNumber(), s.getFunction().getFile());
 		return -1;
 	}
 	
@@ -145,7 +145,7 @@ public class Contextualizer
 		String name =((Token)f.getChild(0)).getData();
 		String parameterData =((Token)f.getChild(1)).getData();
 		int parameters = (int)Double.parseDouble(parameterData);
-		AFLFunction function = new AFLFunction(name, parameters); 
+		AFLFunction function = new AFLFunction(name, parameters,s.getStatementNumber()); 
 		
 		
 		// transfer tokens to function.
@@ -163,7 +163,7 @@ public class Contextualizer
 		
 		if(!Namespace.addFunction(function))
 		{
-			Shell.error("Function '"+function.getName()+"', with "+function.getParameters()+" parameters, already exists. ", startIndex+1);
+			Shell.error("Function '"+function.getName()+"', with "+function.getParameters()+" parameters, already exists. ", startIndex+1,s.getFunction().getFile());
 			return false;
 		}
 		
@@ -177,19 +177,19 @@ public class Contextualizer
 		FunctionCall definition = (FunctionCall)(s.getChild(0));
 		if(definition.getSize()!=2)
 		{
-			Shell.error("Invalid functon definition. Expected 'function(\"name\", parameterNumber)'.", s.getStatementNumber());
+			Shell.error("Invalid functon definition. Expected 'function(\"name\", parameterNumber)'.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		
 		if(!(definition.getChild(0) instanceof Token))
 		{
-			Shell.error("Invalid function definition. Only contstants are allowed as parameters.", s.getStatementNumber());
+			Shell.error("Invalid function definition. Only contstants are allowed as parameters.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		
 		if(!(definition.getChild(1) instanceof Token))
 		{
-			Shell.error("Invalid function definition. Only contstants are allowed as parameters.", s.getStatementNumber());
+			Shell.error("Invalid function definition. Only contstants are allowed as parameters.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		
@@ -198,13 +198,13 @@ public class Contextualizer
 		
 		if(name.getType()!=TokenType.string)
 		{
-			Shell.error("Invalid function definition. The first parameter should be a string constant.", s.getStatementNumber());
+			Shell.error("Invalid function definition. The first parameter should be a string constant.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		
 		if(parameters.getType()!=TokenType.number)
 		{
-			Shell.error("Invalid function definition. The second parameter should be a number constant.", s.getStatementNumber());
+			Shell.error("Invalid function definition. The second parameter should be a number constant.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		
@@ -217,14 +217,14 @@ public class Contextualizer
 			if(str.equals(functionName))
 			{
 				Shell.error("Invalid function definition. \'"+str+"\' is a protected function, and it cannot be overloaded."
-, s.getStatementNumber());
+, s.getStatementNumber(),s.getFunction().getFile());
 				return false;
 			}
 		}
 		
 		if(!onlyHasLetters(functionName))
 		{
-			Shell.error("Invalid function definition. Valid function names only contain letters.", s.getStatementNumber());
+			Shell.error("Invalid function definition. Valid function names only contain letters.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		
@@ -233,7 +233,7 @@ public class Contextualizer
 		
 		if(Math.floor(parameterPotential)!=parameterPotential)
 		{
-			Shell.error("Invalid function definition. Functions must have a whole number of parameters.", s.getStatementNumber());
+			Shell.error("Invalid function definition. Functions must have a whole number of parameters.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		
@@ -241,7 +241,7 @@ public class Contextualizer
 		
 		if(parameterNumber<0 || parameterNumber>=256)
 		{
-			Shell.error("Invalid function definition. Invalid parameter number.", s.getStatementNumber());
+			Shell.error("Invalid function definition. Invalid parameter number.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
 		}
 		return true;
@@ -287,19 +287,19 @@ public class Contextualizer
 			Statement s = (Statement)toMove;
 			if(isFunctionDefinition(s))
 			{
-				Shell.error("Function definitions cannot be nested. Or did you forget an 'end()'?", s.getStatementNumber());
+				Shell.error("Function definitions cannot be nested. Or did you forget an 'end()'?", s.getStatementNumber(),oldF.getFile());
 				return false;
 			}
 			newF.addChild(toMove);
 			oldF.removeChild(toMove);
 		}
 		
-		correctLineNumbers(oldF);
-		correctLineNumbers(newF);
+		//correctLineNumbers(oldF);
+		//correctLineNumbers(newF);
 		return true;
 	}
 	
-	private static void correctLineNumbers(AFLFunction f)
+  /*private static void correctLineNumbers(AFLFunction f)
 	{
 		for(int i = 0; i<f.getSize(); i++)
 		{
@@ -308,7 +308,7 @@ public class Contextualizer
 			Statement s = (Statement)e;
 			s.setStatementNumber(i+1);
 		}
-	}
+	}*/
 	
 	// a bizzare and arcane process...
 	private static boolean contextualizeFunction( AFLFunction function)
@@ -337,7 +337,7 @@ public class Contextualizer
 			// check that the funcition might be a control function, and act accordingly.
 			if(isInvalidControlStatement(f))
 			{
-				Shell.error("Invalid Control Statement \'"+name+"\'. Wrong parameter amount.", e.getStatementNumber());
+				Shell.error("Invalid Control Statement \'"+name+"\'. Wrong parameter amount.", e.getStatementNumber(), e.getFunction().getFile());
 				return false;
 			}
 			
@@ -355,7 +355,7 @@ public class Contextualizer
 					depth--;
 					if(depth<0)
 					{
-						Shell.error("Misplaced 'end()'. Remove this token.", e.getStatementNumber());
+						Shell.error("Misplaced 'end()'. Remove this token.", e.getStatementNumber(), e.getFunction().getFile());
 						return false;
 					}
 					currentContainer= getHigherLevelContainer(currentContainer);
@@ -367,7 +367,7 @@ public class Contextualizer
 					// check we're in a loop
 					if(!isInLoop(currentContainer))
 					{
-						Shell.error("Cannot use '"+name+"' outside of a loop.", e.getStatementNumber());
+						Shell.error("Cannot use '"+name+"' outside of a loop.", e.getStatementNumber(), e.getFunction().getFile());
 						return false;
 					}
 					
@@ -397,7 +397,7 @@ public class Contextualizer
 		
 		if( depth != 0)
 		{
-			Shell.error("Missing expected function 'end'.", function.getSize());
+			Shell.error("Missing expected function 'end'.", function.getChild(currentContainer.getSize()-1).getStatementNumber(), function.getFile());
 			return false;
 		}
 		Shell.out("Produced Function:\n"+function,4);
@@ -492,7 +492,7 @@ public class Contextualizer
 		{
 			if(currentContainer.getSize()==0)
 			{
-				Shell.error("An If must precede an else.", s.getStatementNumber());
+				Shell.error("An If must precede an else.", s.getStatementNumber(), s.getFunction().getFile());
 				return null;
 			}
 			else
@@ -503,13 +503,13 @@ public class Contextualizer
 		
 		if(!(ifElement instanceof ControlStatement))
 		{
-			Shell.error("An If must precede an else.", s.getStatementNumber());
+			Shell.error("An If must precede an else.", s.getStatementNumber(),s.getFunction().getFile());
 			return null;
 		}
 		ControlStatement ifStatement = (ControlStatement)ifElement;
 		if(!ifStatement.getFunctionName().equals("if"))
 		{
-			Shell.error("An If must precede an else.", s.getStatementNumber());
+			Shell.error("An If must precede an else.", s.getStatementNumber(), s.getFunction().getFile());
 			return null;
 		}
 		// if conditional.

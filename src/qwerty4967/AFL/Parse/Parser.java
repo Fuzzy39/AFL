@@ -27,7 +27,7 @@ public class Parser
 		
 		// probably should make the AFLFunction everything will end up in
 		Namespace.removeFunction("_main",0);
-		AFLFunction main = new AFLFunction("_main",0);
+		AFLFunction main = new AFLFunction("_main",0,0);
 		
 		// Here we're just splitting all of the code by ';' to determine statements.
 		// I know that this presents a problem with ; not being able to be part of strings,
@@ -113,7 +113,7 @@ public class Parser
 		// we need to remove any and all whitespace from our precious new baby statements.
 		for(int i = 0; i<tokens.length;i++)
 		{
-			String token = tokens[i].strip();
+			String token = tokens[i];/*.strip();*/
 			
 			// if a token is just whitespace it's probably easier to toss it now.
 			if(token.equalsIgnoreCase(""))

@@ -10,7 +10,7 @@ public class JavaFunction extends Function
 	
 	public JavaFunction(String name, int parameters, MethodCode function)
 	{
-		super(name, parameters);
+		super(name, parameters, "[Native Code]");
 		FUNCTION=function;
 		
 	}

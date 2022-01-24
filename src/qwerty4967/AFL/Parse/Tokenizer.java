@@ -2,6 +2,7 @@ package qwerty4967.AFL.Parse;
 
 import java.util.ArrayList;
 
+import qwerty4967.AFL.Main;
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Function.*;
 import qwerty4967.AFL.ParseTree.*;
@@ -27,16 +28,22 @@ public class Tokenizer
 		{
 			// if this method returns false, the user has made some kind of syntax error. 
 			// we need to pass this info up the chain.	
+			int nextLineNumber = getNextLineNumber(i, statements);
+			
+			
 			
 			int size = main.getSize();
 			
-			if(!tokenizeStatement(main, statements.get(i)))
+			String statementString = statements.get(i).strip();
+			
+			if(!tokenizeStatement(main, statementString))
 			{
 				return null;
 			}
 			if(size==main.getSize())
 			{
 				// the line was a comment.
+				lineNumber=nextLineNumber;
 				continue;
 			}
 		
@@ -46,12 +53,63 @@ public class Tokenizer
 			// this code is awful.
 			// Reading this comment, I don't know why I said that.
 			// I mean, a bunch of other code in this is awful, but this code is fine.
-			lineNumber=j+1;
+			lineNumber=nextLineNumber;
+			
 		}
 		
 		return main;
 		
 	}
+	private static int getNextLineNumber(int currentIndex, ArrayList<String> statements)
+	{
+		// To get the next line number, we must add all of the newlines after the first
+		// non whitespace character in the current statement to all the newlines before
+		// the next non whitespace character in the next statement.
+		// Make sense? no? fair.
+		
+		int toReturn = lineNumber;
+		
+		// check that this isn't the last statement
+		if(currentIndex>=statements.size()-1)
+		{
+			return lineNumber;
+		}
+		
+		// get all of the newlines after the first non whitespace character in the current
+		// statement
+		String current = statements.get(currentIndex);
+		boolean foundNonWhitespace = false;
+		for(int i = 0; i<current.length(); i++)
+		{
+			char toCheck = current.charAt(i);
+			if(!Character.isWhitespace(toCheck))
+			{
+				foundNonWhitespace=true;
+			}
+			if(toCheck=='\n' & foundNonWhitespace)
+			{
+				toReturn++;
+			}
+		}
+		
+		// get all of the newlines before the first non whitespace character in the next line.
+		String next = statements.get(currentIndex+1);
+		for(int i = 0; i<next.length(); i++)
+		{
+			char toCheck = next.charAt(i);
+			if(!Character.isWhitespace(toCheck))
+			{
+				break;
+			}
+			if(toCheck=='\n')
+			{
+				toReturn++;
+			}
+		}
+		
+		return toReturn;
+	}
+	
 	
 	private static boolean tokenizeStatement(AFLFunction main, String toTokenize)
 	{
@@ -156,7 +214,7 @@ public class Tokenizer
 				 		i=newI; // a character's length.
 				 		continue;
 				 	default:
-				 		Shell.error("Internal error. Found invalid token type "+currentCharType, lineNumber);
+				 		Shell.error("Internal error. Found invalid token type "+currentCharType, lineNumber,Main.getCurrentFile());
 				 		System.exit(-1);
 				 }
 			 }
@@ -248,7 +306,7 @@ public class Tokenizer
 			case number:
 				if(!validateNumber(tokenData))
 				{
-					Shell.error("Invalid token '"+tokenData+"'. Is it a number? ", lineNumber);
+					Shell.error("Invalid token '"+tokenData+"'. Is it a number? ", lineNumber,Main.getCurrentFile());
 					return null;
 				}
 				break;
@@ -259,12 +317,12 @@ public class Tokenizer
 			case operator:
 				if(!validateOperator(tokenData, parent))
 				{
-					Shell.error("Invalid Operator '"+tokenData+"'.", lineNumber);
+					Shell.error("Invalid Operator '"+tokenData+"'.", lineNumber,Main.getCurrentFile());
 					return null;
 				}
 				break;
 			default:
-				Shell.error("Internal error. Found invalid token type '"+type+"' while verifying tokens.", -1);
+				Shell.error("Internal error. Found invalid token type '"+type+"' while verifying tokens.", -1,"");
 		 		System.exit(-1);
 		}
 		return type;
@@ -376,7 +434,7 @@ public class Tokenizer
 	{
 		if(!validateCharacter(startingIndex, statement))
 		{
-			Shell.error("Invalid Character.", lineNumber);
+			Shell.error("Invalid Character.", lineNumber,Main.getCurrentFile());
 			return false;
 		}
 		
@@ -528,7 +586,7 @@ public class Tokenizer
 				// make sure it was a valid escape sequence.
 				if(escaped == '?')
 				{
-					Shell.error("Invalid Escape Sequence in String.", lineNumber);
+					Shell.error("Invalid Escape Sequence in String.", lineNumber,Main.getCurrentFile());
 					return -1;
 				}
 				
@@ -553,7 +611,7 @@ public class Tokenizer
 		
 		if(endingIndex==-1)
 		{
-			Shell.error("Invalid String.", lineNumber);
+			Shell.error("Invalid String.", lineNumber,Main.getCurrentFile());
 			return -1;
 		}
 		

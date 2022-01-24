@@ -12,11 +12,18 @@ public abstract class Function
 	
 	private final String NAME;
 	private final int PARAMS; // the amount of parameters the function has.
+	private final String FILE; // the file in which this function is located. null if it was in shell.
 	
-	public Function(String name, int parameters)
+	public Function(String name, int parameters, String file)
 	{
 		NAME=name;
 		PARAMS=parameters;
+		FILE = file;
+	}
+	
+	public String getFile()
+	{
+		return FILE;
 	}
 	
 	public String getName()

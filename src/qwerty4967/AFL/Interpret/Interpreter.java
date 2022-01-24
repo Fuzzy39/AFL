@@ -43,7 +43,7 @@ public class Interpreter
 			Token toReturn = (Token)currentChild;
 			if(toReturn.getType()==TokenType.error)
 			{
-				Shell.errorAt(toInterpret.getName(), 1);	
+				Shell.errorAt(toInterpret.getName(), toInterpret.getStatementNumber(), toInterpret.getFile());	
 			}
 			return toReturn;
 		}
@@ -57,7 +57,7 @@ public class Interpreter
 			{
 				if(returnToken.getType()==TokenType.error)
 				{
-					Shell.errorAt(toInterpret.getName(), currentChild.getStatementNumber());	
+					Shell.errorAt(toInterpret.getName(), currentChild.getStatementNumber(), toInterpret.getFile());	
 				}
 				return returnToken;
 			}
@@ -72,7 +72,7 @@ public class Interpreter
 				Token toReturn = (Token)currentChild;
 				if(toReturn.getType()==TokenType.error)
 				{
-					Shell.errorAt(toInterpret.getName(), pastChild.getStatementNumber()+1);	
+					Shell.errorAt(toInterpret.getName(), pastChild.getStatementNumber()+1, toInterpret.getFile());	
 				}
 				return toReturn;
 			}
@@ -184,7 +184,11 @@ public class Interpreter
 					
 				}
 				
-				Shell.error("AFL has discovered a new breed of controlStatement, and if you're seeing this, something went very wrong.", currentID);
+				Shell.error(
+						"AFL has discovered a new breed of controlStatement, and if you're seeing this, something went very wrong.",
+						currentID, 
+						currentChild.getFunction().getName()
+						);
 				return new Token ("Error", TokenType.error);
 			}
 		}
@@ -271,7 +275,7 @@ public class Interpreter
 				processContinue(cs);
 				return true;
 			default:
-				Shell.error("AFL does not yet support control statement '"+name+"'.", cs.getStatementNumber());
+				Shell.error("AFL does not yet support control statement '"+name+"'.", cs.getStatementNumber(), cs.getFunction().getFile());
 				return false;
 			
 		}
@@ -289,14 +293,14 @@ public class Interpreter
 		Token variable;
 		if(!(toAssignTo instanceof Token))
 		{
-			Shell.error("Cannot assign values to expressions.", cs.getStatementNumber());
+			Shell.error("Cannot assign values to expressions.", cs.getStatementNumber(),cs.getFunction().getFile());
 			return false;
 		}
 		variable=(Token)toAssignTo;
 		
 		if(variable.getType()!=TokenType.variable)
 		{
-			Shell.error("Cannot assign values to constants.", cs.getStatementNumber());
+			Shell.error("Cannot assign values to constants.", cs.getStatementNumber(),cs.getFunction().getFile());
 			return false;
 		}
 		// ought to be good.
@@ -309,7 +313,7 @@ public class Interpreter
 		}
 		if(variableValue.getType()==TokenType.voidToken)
 		{
-			Shell.error("Variables cannot be assigned nothing.", cs.getStatementNumber());
+			Shell.error("Variables cannot be assigned nothing.", cs.getStatementNumber(),cs.getFunction().getFile());
 			return false;
 		}
 		
@@ -354,7 +358,7 @@ public class Interpreter
 		
 		if(conditionValue.getType()!=TokenType.bool)
 		{
-			Shell.error("Conditional statements require boolean conditions.", cs.getStatementNumber());
+			Shell.error("Conditional statements require boolean conditions.", cs.getStatementNumber(),cs.getFunction().getFile());
 			return false;
 		}
 		

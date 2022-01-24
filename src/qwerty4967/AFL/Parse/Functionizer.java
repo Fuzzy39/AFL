@@ -41,8 +41,10 @@ public class Functionizer
 			
 			Statement s2 = new Statement(s.getStatementNumber(), main);
 			s2.addChild(c.getChild(0));
+			int sIndex = s.getID();
 			main.removeChild(s);
-			main.moveChild(s2.getStatementNumber()-1, s2);
+			main.moveChild(sIndex, s2);
+			
 		}
 		
 		return toReturn;

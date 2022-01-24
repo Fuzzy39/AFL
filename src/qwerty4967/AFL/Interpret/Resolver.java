@@ -62,7 +62,7 @@ public class Resolver
 			{
 				// we've got ourselves a problemo, kids!
 				// *cough* that must've been uncle Ross's ghost
-				Shell.error("Cannot call function '"+s+"' in this context.", f.getStatementNumber());
+				Shell.error("Cannot call function '"+s+"' in this context.", f.getStatementNumber(),f.getFunction().getFile());
 				return false;
 			}
 		}
@@ -79,11 +79,11 @@ public class Resolver
 				{
 					Shell.error("Uh-Oh! AFL couldn't find the help function!"
 							+ "\nThere might be a few reasons for this, including asking AFL to run code from a file."
-							+ "\nIn any case, documentation for AFL is available at qwerty4967.github.io/AFL/docs. ", f.getStatementNumber());
+							+ "\nIn any case, documentation for AFL is available at qwerty4967.github.io/AFL/docs. ", f.getStatementNumber(),f.getFunction().getFile());
 					return false;
 				}
 			}
-			Shell.error("No overload for function '"+functionName+"' exists with "+size+" parameters. ", f.getStatementNumber());
+			Shell.error("No overload for function '"+functionName+"' exists with "+size+" parameters. ", f.getStatementNumber(),f.getFunction().getFile());
 			return false;
 		}
 		
@@ -109,7 +109,7 @@ public class Resolver
 			
 			if(param == null)
 			{
-				Shell.error("The partial result of a statement cannot be void.", f.getStatementNumber());
+				Shell.error("The partial result of a statement cannot be void.", f.getStatementNumber(),f.getFunction().getFile());
 				return new Token ("Error", TokenType.error);
 			}
 			

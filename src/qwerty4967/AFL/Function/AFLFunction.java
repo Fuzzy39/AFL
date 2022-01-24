@@ -2,6 +2,7 @@ package qwerty4967.AFL.Function;
 
 import java.util.ArrayList;
 
+import qwerty4967.AFL.Main;
 import qwerty4967.AFL.Shell;
 import qwerty4967.AFL.Interpret.Interpreter;
 import qwerty4967.AFL.Interpret.Namespace;
@@ -16,19 +17,25 @@ public class AFLFunction extends Function implements qwerty4967.AFL.ParseTree.Ha
 		// It is also any bock of independent code, which for all intents and purposes is a void function with no perameters.
 		private static int nestedCalls = 0; // to prevent calamity (stack overflows)
 		private ArrayList<Element> children=new ArrayList<Element>();
+		private final int STATEMENT_NUMBER;
 		
-		public AFLFunction(String name, int parameters)
+		public AFLFunction(String name, int parameters, int statementNumber)
 		{
-			super(name,parameters);
+			super(name,parameters, Main.getCurrentFile());
+			this.STATEMENT_NUMBER=statementNumber;
 		}
 		
+		public int getStatementNumber()
+		{
+			return STATEMENT_NUMBER;
+		}
 		public Token call(Token[] parameters)
 		{
 			nestedCalls++;
 			if(nestedCalls>=Lang.MAXIMUM_DEPTH)
 			{
 				// UH OH! Stack Overflow!
-				Shell.error("Stack overflow on function '"+this.getName()+"'", 0);
+				Shell.error("Stack overflow on function '"+this.getName()+"'", 0, this.getFile());
 				return new Token("Error", TokenType.error);
 			}
 			// we need to make the parameters available to the AFL Code.

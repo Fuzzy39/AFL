@@ -71,7 +71,7 @@ public class GroupManager
 				}
 				if(t.getData().equals(")"))
 				{
-					Shell.error("Missing '(' or extraneous ')'.", c.getStatementNumber());
+					Shell.error("Missing '(' or extraneous ')'.", c.getStatementNumber(),c.getFunction().getFile());
 					return false;
 				}
 			}
@@ -111,7 +111,7 @@ public class GroupManager
 			}
 		}
 	
-		Shell.error("Missing ')' or extraneous '('.", c.getStatementNumber());
+		Shell.error("Missing ')' or extraneous '('.", c.getStatementNumber(), c.getFunction().getFile());
 		return -1;
 	}
 	

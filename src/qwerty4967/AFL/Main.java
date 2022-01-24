@@ -35,10 +35,11 @@ public class Main
 	
 
 
-	protected static final int BUILD = 567;
+	protected static final int BUILD = 592;
 	private static boolean usesShell = true;
 	private static boolean loadModules = true; // whether to load any modules
 	private static ArrayList<Path> toExecute;
+	private static String currentFile;
 	
 	public static void main(String[] args) 
 	{
@@ -67,6 +68,7 @@ public class Main
 			Shell.clear();
 			Shell.out("############### Arguably Functional Language v0.0."+BUILD+" | debug: "+Shell.getDebugLevel()+" ###############");
 			Shell.out("Use 'help()' for documentation and code examples.\n ");
+			currentFile="";
 			while(true)
 			{
 				 execute(Shell.getUserInput());
@@ -85,6 +87,11 @@ public class Main
 			return;
 		}
 		
+	}
+	
+	public static String getCurrentFile()
+	{
+		return currentFile;
 	}
 	
 	private static boolean interpretArgs(String[] args)
@@ -209,37 +216,37 @@ public class Main
 		
 		if(!loadModules)
 		{
-			Shell.out("Skipping loading AFL components for debugging purposes. ");
+			Shell.out("Skipping loading AFL core components for debugging purposes. ");
 			Shell.out("Press enter to continue launching AFL.");
 			Shell.in();
-			return true;
+		
 		}
-		
-		
-		// check if the lib/lang folder exists.
-		Path langPath = Paths.get("lib/lang");
-		if(!Files.exists(langPath))
+		else
 		{
-			Shell.out("AFL could not find any of its standard components.\nAFL can still run, but functionality will be reduced significantly.");
-			Shell.out("Press enter to continue launching AFL.");
-			Shell.in();
-			return true;
+			// check if the lib/lang folder exists.
+			Path langPath = Paths.get("lib/lang");
+			if(!Files.exists(langPath))
+			{
+				Shell.out("AFL could not find any of its standard components.\nAFL can still run, but functionality will be reduced significantly.");
+				Shell.out("Press enter to continue launching AFL.");
+				Shell.in();
+				return true;
+			}
+			
+			// check for and run lang.util
+			loadCoreComponent("util", "lib/lang/util.AFL", "much of AFL's functionality");
+			
+			// and lang.math
+			loadCoreComponent("math", "lib/lang/math.AFL", "some functions related to rounding and basic math");
+			
+			
+			// Now, if the situation demands, load the help function.
+			
+			if(usesShell)
+			{
+				loadCoreComponent("help", "lib/shell/help.AFL", "inbuilt documentation");
+			}
 		}
-		
-		// check for and run lang.util
-		loadCoreComponent("util", "lib/lang/util.AFL", "much of AFL's functionality");
-		
-		// and lang.math
-		loadCoreComponent("math", "lib/lang/math.AFL", "some functions related to rounding and basic math");
-		
-		
-		// Now, if the situation demands, load the help function.
-		
-		if(usesShell)
-		{
-			loadCoreComponent("help", "lib/shell/help.AFL", "inbuilt documentation");
-		}
-		
 		
 		// now attempt to load User Components.
 		// don't really understand how to use nio and all the guides I found were for io so...
@@ -343,6 +350,10 @@ public class Main
 		// and readAllLines returns a list, which is how I learned they exist
 		// no clue what the real difference is
 		// I don't understand java collections.
+		currentFile =p.getFileName().toString().split("\\.")[0];
+		
+		
+		
 		List<String> lines= new ArrayList<String>();
 		try 
 		{
@@ -360,9 +371,15 @@ public class Main
 		String toReturn = "";
 		for(String s : lines)
 		{
-			toReturn+=s;
+			toReturn+="\n"+s;
 		}
-		return toReturn;
+		
+		if(toReturn.length()<1)
+		{
+			return "";
+		}
+		
+		return toReturn.substring(1,toReturn.length());
 		
 	}
 }

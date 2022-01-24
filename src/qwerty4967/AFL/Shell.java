@@ -267,25 +267,44 @@ public class Shell
 	 * @param line the line number the message came from/
 	 * @return returns true if the message was displayed
 	 */
-	public static void error( String toOut, int line )
+	public static void error( String toOut, int line, String file )
 	{
+		if(file.equals(""))
+		{
+			file="[Shell Input]";
+		}
+		
 		if(line ==-2)
 		{
-			System.out.println( "AFL: Error on [Native Code]: "+toOut);
+			System.out.println( "AFL: Error in [Native Code]: "+toOut);
 			return;
 		}
+		
 		if(line == -1)
 		{
-			System.out.println( "AFL: Error on line [Unknown]: "+toOut);
+			System.out.println( "AFL: Error in [Unknown]: "+toOut);
 			return;
 		}
-		System.out.println( "AFL: Error on line "+line+": "+toOut);
+		
+		System.out.println( "AFL: Error in "+file+", line "+line+": "+toOut);
 		
 	}
 	
-	public static void errorAt(String name, int line)
+	public static void errorAt(String name, int line, String file)
 	{
-		System.out.println("AFL:    on line "+line+" of "+name);
+		if(file.equals(""))
+		{
+			file="[Shell Input]";
+		}
+		
+		if(name.equals("_main"))
+		{
+			System.out.println("AFL:    at: "+file+", line "+line);
+		}
+		else
+		{
+			System.out.println("AFL:    at: "+file+"."+name +" line "+line);
+		}
 	}
 	
 

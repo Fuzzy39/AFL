@@ -9,14 +9,14 @@ public class ControlFunction extends Function
 
 	public ControlFunction(String name, int params)
 	{
-		super(name,params);
+		super(name,params, "[I wonder if it's possible to ever see this text]");
 	}
 			
 	@Override
 	public Token call(Token[] Tokens) 
 	{
 		// no chance this ever happens, hopefully.
-		Shell.error("Control Function '"+this.getName()+"' cannot be called in this context. [This particular message is an internal error.]",-1);
+		Shell.error("Control Function '"+this.getName()+"' cannot be called in this context. [This particular message is an internal error.]",-1,"");
 		return new Token("Error", TokenType.error);
 	}
 

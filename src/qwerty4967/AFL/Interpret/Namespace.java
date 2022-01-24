@@ -107,7 +107,7 @@ public class Namespace
 			// huh, either we've got a problem, or we just need to make the variable.
 			if(variableHasInvalidScope(name, scope))
 			{
-				Shell.error("Variable '"+name+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber);
+				Shell.error("Variable '"+name+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber,scope.getFile());
 				return false;
 			}
 			
@@ -139,12 +139,12 @@ public class Namespace
 			
 			if(variableHasInvalidScope(varName, scope))
 			{
-				Shell.error("Variable '"+varName+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber);
+				Shell.error("Variable '"+varName+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber,scope.getFile());
 				return null;
 			}
 			if(!variableExists(varName,scope))
 			{
-				Shell.error("Variable '"+varName+"' is not defined.",lineNumber);
+				Shell.error("Variable '"+varName+"' is not defined.",lineNumber,scope.getFile());
 				return null;
 			}
 
@@ -269,7 +269,7 @@ public class Namespace
 	{
 		if(pointer.getType()!=TokenType.arrayPointer)
 		{
-			Shell.error("Invalid array pointer... This seems like an internal error? That seems bad.", -2);
+			Shell.error("Invalid array pointer... This seems like an internal error? That seems bad.", -2,"");
 			return null;
 		}
 		int index;
@@ -282,7 +282,7 @@ public class Namespace
 	{
 		if(index>=arrays.size())
 		{
-			Shell.error("Invalid array refrence... This seems like an internal error? That seems bad.", -2);
+			Shell.error("Invalid array refrence... This seems like an internal error? That seems bad.", -2,"");
 			return null;		
 		}
 		
@@ -294,7 +294,7 @@ public class Namespace
 	{
 		if(pointer.getType()!=TokenType.arrayPointer)
 		{
-			Shell.error("Invalid array pointer... This seems like an internal error? That seems bad.", -2);
+			Shell.error("Invalid array pointer... This seems like an internal error? That seems bad.", -2,"");
 			return false;
 		}
 		int index;
@@ -306,7 +306,7 @@ public class Namespace
 	{
 		if(index>=arrays.size())
 		{
-			Shell.error("Invalid array refrence... This seems like an internal error? That seems bad.", -2);
+			Shell.error("Invalid array refrence... This seems like an internal error? That seems bad.", -2,"");
 			return false;
 		}
 		
