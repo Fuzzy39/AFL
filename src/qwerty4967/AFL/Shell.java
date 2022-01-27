@@ -44,7 +44,7 @@ public class Shell
 		{
 			//Grab the input
 			String currentLine = Shell.in();
-			toReturn+=currentLine.strip();
+			toReturn+="\n"+currentLine;
 			
 			if(checkString(currentLine))
 			{

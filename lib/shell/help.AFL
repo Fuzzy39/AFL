@@ -1,1 +1,98 @@
+# In need of assistance, or just curious?
+;
+
+helpEntryNames = newArray();
+arrayAdd(helpEntryNames "Welcome to AFL!");
+arrayAdd(helpEntryNames "Another Entry");
+
+helpEntries = newArray();
+arrayAdd(helpEntries "This is sample text for a help entry.\nExciting!");
+arrayAdd(helpEntries "This is a different entry with different text!\nFascinating!");
+
+helpSeeAlso = newArray();
+
+hsa = newArray();
+arrayAdd(hsa 0);
+arrayAdd(hsa 1);
+arrayAdd(helpSeeAlso hsa);
+
+hsa = newArray();
+arrayAdd(hsa 0);
+arrayAdd(helpSeeAlso hsa);
+
+
+function("help"0);
+	help(0);
+end();
+
+function("help"1);
+	input=checkParam(arrayGet(params 0) num '0' "help");
+	
+	if(input%1!=0);
+		error("Parameter 0 of help must be an integer.");
+	end();
+	
+	bar = "-------------------------------------";
+	
+	# list all articles;
+	if(input == neg(1));
+		"[-1] List of Entries";
+		bar;
+		"This entry contains a list of all other entries in the help system.\n ";
+		i=0;
+		while(i<arraySize(helpEntryNames));
+			
+			"["+helpChopToInt(i)+"] "+arrayGet(helpEntryNames i);
+			i=i+1;
+		end();
+		bar;
+		return();
+	end();
+	 
+	if(input < neg(1) || input>=arraySize(helpEntryNames));
+	 	"No help entry with that ID. you can use 'help(neg(1))' to get a list of all available entries.";
+	 	return();
+	end();
+	 
+	# entry found;
+	"["+helpChopToInt(input)+"] "+arrayGet(helpEntryNames input);
+	bar;
+	arrayGet(helpEntries input);
+	"";
+	"See Also: ---------------------------";
+	list = arrayGet(helpSeeAlso input);
+	i=0;
+	while( i<arraySize(list));
+		x = arrayGet(list i);
+		"["+helpChopToInt(x)+"] "+arrayGet(helpEntryNames x);
+		
+		i=i+1;
+	end();
+	 
+	bar;
+	 
+	
+	
+end();
+
+function ("helpChopToInt"1);
+	input = arrayGet(params 0)+"";
+	i=0;
+	looksie = toCharArray(input);
+	toReturn = "";
+	while(i<length(input));
+		toCheck = arrayGet(looksie i);
+		if(toCheck != '.');
+			toReturn = toReturn+toCheck;
+		end();
+		else();
+			break();
+		end();
+		i=i+1;
+	end();
+	return(toReturn);
+		
+end();
+
+
 "Loaded help component."

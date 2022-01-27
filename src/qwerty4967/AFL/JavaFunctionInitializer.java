@@ -709,13 +709,13 @@ public class JavaFunctionInitializer
 			// check validity.
 			if(string.getType()!=TokenType.string)
 			{
-				Shell.error("Parameter 0 of 'isType' must be of type 'string'.", -2,"");
+				Shell.error("Parameter 0 of 'toType' must be of type 'string'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
 			if(type.getType()!=TokenType.type)
 			{
-				Shell.error("Parameter 1 of 'isType' must be of type 'type'.", -2,"");
+				Shell.error("Parameter 1 of 'toType' must be of type 'type'.", -2,"");
 				return new Token("Error",TokenType.error);
 			}
 			
