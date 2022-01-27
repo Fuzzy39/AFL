@@ -14,6 +14,7 @@ public class OperationManager
 		// this is actually fairly simple...
 		// after writing this all out, it's only a hundred lines of code, so it seems a bit silly to make it it's own class.
 		// oh well, can't really hurt.
+		//int lineNumber = c.getFunction()==null?GroupManager.getStatementNumber():c.getFunction().getStatementNumber();
 		
 		for(PRIORITY_GROUP g: PRIORITY_GROUP.values())
 		{
@@ -50,7 +51,7 @@ public class OperationManager
 			// we need to ensure that the container only has one child.
 			if(c.getSize()!=1)
 			{
-				Shell.error("Invalid Syntax.", c.getStatementNumber(), c.getFunction().getFile());
+				Shell.error("Invalid Syntax.", c.getStatementNumber(), c.getFile());
 				return false;
 			}
 		}
@@ -91,11 +92,11 @@ public class OperationManager
 		{
 			if(c.getSize()==1)
 			{
-				Shell.error("Operator '"+operator.getData()+"' doesn't have any operands. Expected two.", operator.getStatementNumber(), operator.getFunction().getFile());	
+				Shell.error("Operator '"+operator.getData()+"' doesn't have any operands. Expected two.", operator.getStatementNumber(), operator.getFile());	
 			}
 			else
 			{
-				Shell.error("Operator '"+operator.getData()+"' only has one operand. Expected two.", operator.getStatementNumber(), operator.getFunction().getFile());
+				Shell.error("Operator '"+operator.getData()+"' only has one operand. Expected two.", operator.getStatementNumber(), operator.getFile());
 			}
 			return false;
 		}
@@ -110,7 +111,7 @@ public class OperationManager
 			Token prev = (Token)c.getChild(opID-1);
 			if(prev.getType()==TokenType.operator)
 			{
-				Shell.error("Operator '"+operator.getData()+"' can't act on another operator.", operator.getStatementNumber(),operator.getFunction().getFile());
+				Shell.error("Operator '"+operator.getData()+"' can't act on another operator.", operator.getStatementNumber(),operator.getFile());
 				return false;
 			}
 		}
@@ -121,7 +122,7 @@ public class OperationManager
 			Token next = (Token)c.getChild(opID+1);
 			if(next.getType()==TokenType.operator)
 			{
-				Shell.error("Operator '"+operator.getData()+"' can't act on another operator.", operator.getStatementNumber(),operator.getFunction().getFile());
+				Shell.error("Operator '"+operator.getData()+"' can't act on another operator.", operator.getStatementNumber(),operator.getFile());
 				return false;
 			}
 		}

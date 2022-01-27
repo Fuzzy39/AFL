@@ -203,4 +203,31 @@ public abstract class Element
 	}
 	
 	
+	public String getFile()
+	{
+		HasChildren p;
+		
+		p=parent;
+		
+		
+		while (p instanceof Container)
+		{
+			if(p instanceof Statement)
+			{
+				return ((Statement)p).getFunction().getFile();
+			}
+			p=((Container)p).getParent();
+			
+		}
+		
+		if(p instanceof Group)
+		{
+			return GroupManager.getFile();
+		}
+		
+		return "[Unknown File]";
+		
+	}
+	
+	
 }

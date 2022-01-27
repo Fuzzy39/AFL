@@ -14,9 +14,11 @@ public class GroupManager
 	private static ArrayList<Group> Groups= new ArrayList<Group>();
 	private static ArrayList<Group> FunctionizedGroups= new ArrayList<Group>();
 	private static int statementNumber = -1;
+	private static String file = "[GroupManager could not get file]";
 	
 	protected static void reset()
 	{
+		file = "[GroupManager could not get file]";
 		statementNumber = -1;
 		Groups.clear();
 		FunctionizedGroups.clear();
@@ -27,6 +29,11 @@ public class GroupManager
 		return statementNumber;
 	}
 	
+	public static String getFile()
+	{
+		return file;
+	}
+	
 	private static void setStatementNumber(Element e)
 	{
 		// probably bad code, but, uh...
@@ -35,6 +42,7 @@ public class GroupManager
 		{
 			statementNumber = sn;
 		}
+		file = e.getFile();
 	}
 
 	protected static boolean findGroups(Container c)
