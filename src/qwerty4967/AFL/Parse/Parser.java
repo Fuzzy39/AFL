@@ -98,6 +98,7 @@ public class Parser
 		//
 		
 		ArrayList<String> toReturn = new ArrayList<String>();
+		code = removeComments(code);
 		
 		// why waste effort?
 		if(!code.contains(";"))
@@ -179,29 +180,39 @@ public class Parser
 				
 	}
 	
-	/*private static ArrayList<String> removeComments(ArrayList<String> toRemoveFrom)
-	{
-		// Comments are started with a #.
-		// they go for a single line.
-		ArrayList<String> toReturn = new ArrayList<String>();
-		for(String s : toRemoveFrom)
-		{
-			if(!s.contains("#"))
-			{
-				toReturn.add(s);
-				continue;
-			}
-			// if the entire thing is a comment, just plain remove it.
-			if(s.charAt(0)=='#')
-			{
-				continue;
-			}
-			// only remove part of the string.
-			String code = s.substring(0,s.indexOf('#'));
-			System.out.println(code);
-			toReturn.add(code);
-			
-		}
+	 public static String removeComments(String code)
+	 {
+		// Comments are started with a # and ended with a newline.
+		 
+		 String toReturn = "";
+		 boolean isComment=false;
+		 
+		 for(int i = 0; i<code.length();i++)
+		 {
+			 char c = code.charAt(i);
+			 
+			 if(isComment)
+			 {
+				if(c=='\n')
+				{
+					toReturn+=c+" ";
+					isComment=false;
+				}
+			 }
+			 else
+			 {
+				 if(c=='#')
+				 {
+					 isComment=true;
+				 }
+				 else
+				 {
+					 toReturn+=c;
+				 }
+			 }
+		 }
+		
+		
 		return toReturn;
-	}*/
+	}
 }

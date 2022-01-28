@@ -54,9 +54,12 @@ public class Shell
 			
 			break;
 		}
+		
 			//input is done.
 		out("Input Recieved: \""+toReturn+"\"", 1);
-		return toReturn;
+		
+		// get rid of the leading newline
+		return toReturn.substring(0,toReturn.length());
 			
 	
 	}
@@ -100,7 +103,8 @@ public class Shell
 		// Checks the string to see if it's last non-whitespace character is a semicolon.
 		// This is done to check whether the user is done typing their code.
 		
-		string=string.strip(); // removing whitespace, because there's no such thing as black and white, only grey.
+		string=string.strip();
+		string = Parser.removeComments(string);// removing whitespace, because there's no such thing as black and white, only grey.
 		// that joke was so bad it didn't make any sense
 		// well, here it stays, to eventually be read by my future self.
 		// hopefully this finds you well.

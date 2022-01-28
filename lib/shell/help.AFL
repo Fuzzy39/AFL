@@ -1,5 +1,5 @@
 # In need of assistance, or just curious?
-;
+
 
 helpEntryNames = newArray();
 arrayAdd(helpEntryNames "Welcome to AFL!");
@@ -91,7 +91,7 @@ function ("helpChopToInt"1);
 		i=i+1;
 	end();
 	return(toReturn);
-		
+			
 end();
 
 

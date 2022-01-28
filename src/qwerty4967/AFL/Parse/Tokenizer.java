@@ -23,7 +23,7 @@ public class Tokenizer
 		// the parsing of each line of code is separate, so we can just loop through each line
 		// and parse it individually.
 		int j=0;
-		lineNumber=1;
+		lineNumber=getFirstLineNumber(statements.get(0));
 		for( int i = 0; i<statements.size(); i++)
 		{
 			// if this method returns false, the user has made some kind of syntax error. 
@@ -40,12 +40,12 @@ public class Tokenizer
 			{
 				return null;
 			}
-			if(size==main.getSize())
+			/*if(size==main.getSize())
 			{
 				// the line was a comment.
 				lineNumber=nextLineNumber;
 				continue;
-			}
+			}*/
 		
 			locateFunctionCalls((Statement)main.getChild(j));
 			j++;
@@ -60,6 +60,26 @@ public class Tokenizer
 		return main;
 		
 	}
+	private static int getFirstLineNumber(String line)
+	{
+		// get all of the newlines before the first non whitespace character in the next line.
+		int toReturn=1;
+		
+		for(int i = 0; i<line.length(); i++)
+		{
+			char toCheck = line.charAt(i);
+			if(!Character.isWhitespace(toCheck))
+			{
+				break;
+			}
+			if(toCheck=='\n')
+			{
+				toReturn++;
+			}
+		}
+		return toReturn;
+	}
+	
 	private static int getNextLineNumber(int currentIndex, ArrayList<String> statements)
 	{
 		// To get the next line number, we must add all of the newlines after the first
@@ -127,7 +147,7 @@ public class Tokenizer
 		{
 			
 			 char currentChar=toTokenize.charAt(i);
-			 if(currentChar == '#')
+			/* if(currentChar == '#')
 			 {
 				// abort everything, fools!
 				// fly! fly!
@@ -145,7 +165,7 @@ public class Tokenizer
 				// I'm keeping that spelling.
 				
 				
-			 }
+			 }*/
 			 currentCharType=getCharType(currentChar);
 			 
 			 if(currentCharType!=currentTokenType)

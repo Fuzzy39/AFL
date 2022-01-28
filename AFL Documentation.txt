@@ -15,7 +15,7 @@ A list of all help topics is below.
 [5] Operators
 [6] Control Statements
 [7] Functions
-[?] Arrays
+[8] Arrays
 [?] Components
 [?] Escape Sequences
 [?] Command Line Arguments
@@ -44,7 +44,7 @@ IDs. If you want an index of all articles, type 'help(neg(1))'.
 [4] Variables 
 [6] Control Statements
 [7] Functions
-[?] Arrays
+[8] Arrays
 [?] Components
 [?] Command Line Arguments
 [?] Code Examples
@@ -74,7 +74,7 @@ it's a little grisly. Just head over to https://github.com/qwerty4967/AFL
 [4] Variables 
 [6] Control Statements
 [7] Functions
-[?] Arrays
+[8] Arrays
 [?] Components
 -----------------------
 
@@ -153,7 +153,7 @@ them and a list of all control statements, see the corresponding entry below.
 [?] Escape Sequences
 [4] Variables
 [?] pow(num num)
-[?] Arrays
+[8] Arrays
 [5] Operators
 [?] round(num) and round(num num)
 [?] random()
@@ -225,7 +225,7 @@ end()
 [?] toCharArray(string)
 [?] fromCharArray(array)
 [?] Escape Sequences
-[?] Arrays
+[8] Arrays
 [?] typeOf(value)
 -----------------------
 
@@ -277,9 +277,8 @@ b()
 -- See also: ----------
 [5] Operators
 [?] Math Component
-[?] sqrt(num)
 [7] Functions
-[?] Arrays
+[8] Arrays
 
 
 
@@ -468,12 +467,27 @@ increment(true); # produces an error;
 -----
  
 The last example produces an error, because the increment function didn't handle receiving 
-parameters of types other than num. For some cases this might be fine, but if you want to 
+parameters of unexpected types. For some cases this might be fine, but if you want to 
 create a more robust system, AFL provides a function that simplifies the ordeal, called
 checkParam. Check out the reference for the util component for more information.
 
 See Also: --------------------
-[] Data Types
-[] Control Statements
-[] Util Component
-[] Base Component
+[3] Data Types
+[6] Control Statements
+[?] Util Component
+[?] Base Component
+
+
+[8] Arrays
+--------------------
+Arrays are special types that contain multiple values in a list like structure. Arrays are
+manipulated and created through special methods, which are detailed below.
+
+newArray()
+newArray returns an empty array. Arrays must be created with this method before they can be 
+utilized.
+
+arrayAdd(array value)
+array Add adds an item to the end of a specified array. the value can be anything, but an
+array cannot contain itself.
+ 
