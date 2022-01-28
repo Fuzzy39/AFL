@@ -16,17 +16,16 @@ A list of all help topics is below.
 [6] Control Statements
 [7] Functions
 [8] Arrays
-[?] Components
-[?] Escape Sequences
-[?] Command Line Arguments
+[9] Components
+[10] Escape Sequences
+[11] Command Line Arguments
 [?] Code Examples
 [Reference]
-[?] Default AFL Components
 [?] Function Index
 [?] Core Functions
 [?] Math Component
 [?] Util Component
-[?] Help Component
+
 
 
 [0] Welcome To AFL!
@@ -45,7 +44,7 @@ IDs. If you want an index of all articles, type 'help(neg(1))'.
 [6] Control Statements
 [7] Functions
 [8] Arrays
-[?] Components
+[9] Components
 [?] Command Line Arguments
 [?] Code Examples
 [?] Default AFL Components
@@ -75,7 +74,7 @@ it's a little grisly. Just head over to https://github.com/qwerty4967/AFL
 [6] Control Statements
 [7] Functions
 [8] Arrays
-[?] Components
+[9] Components
 -----------------------
 
 
@@ -149,14 +148,11 @@ them and a list of all control statements, see the corresponding entry below.
 
 -- See also: ----------
 [3] Data Types
-[?] error(string)
-[?] Escape Sequences
+[10] Escape Sequences
 [4] Variables
-[?] pow(num num)
 [8] Arrays
 [5] Operators
-[?] round(num) and round(num num)
-[?] random()
+[?] Math Component
 [7] Functions
 [5] Control Statements
 -----------------------
@@ -220,13 +216,10 @@ end()
 -- See also: ----------
 [4] Variables
 [?] Math Component
-[?] neg(num)
 [5] Operators
-[?] toCharArray(string)
-[?] fromCharArray(array)
-[?] Escape Sequences
+[?] Util Component
+[10] Escape Sequences
 [8] Arrays
-[?] typeOf(value)
 -----------------------
 
 
@@ -480,14 +473,94 @@ See Also: --------------------
 
 [8] Arrays
 --------------------
-Arrays are special types that contain multiple values in a list like structure. Arrays are
-manipulated and created through special methods, which are detailed below.
+Arrays are special types that contain multiple values in an ordered list. Arrays are
+manipulated and created through special functions, which are detailed below.
 
 newArray()
 newArray returns an empty array. Arrays must be created with this method before they can be 
 utilized.
 
 arrayAdd(array value)
-array Add adds an item to the end of a specified array. the value can be anything, but an
+arrayAdd adds an item to the end of a specified array. the value can be anything, but an
 array cannot contain itself.
+
+arrayGet(array index)
+arrayGet returns the item at the specified index of the array, provided that it exists.
+Arrays are indexed from 0.
+
+arraySize(array)
+returns the number of items in the array.
+
+arraySet(array index value)
+arraySet sets the index of a particular array to the specified value, provided the array
+already has an value at the specifed index.
+
+arrayRemove(array)
+removes the last item from the array.
+
+arrayRemove(array index)
+removes the item at the specified index from the array.
+
+See Also: ------------
+[7] Functions
+[3] Data Types
+-------------------------
+
+[9] Components
+-----------------------
+AFL provides methods to introduce utility and other functions and variables into the 
+namespace at startup, in order to provide a more convenient coding experience. These are
+called components, and are essentially files of AFL code. by default, AFL comes with 3
+'core components', which are explicitly checked for when AFL starts. These components are
+called Math, Util, and Help. 
+It should be noted that the Help component is not initialized if AFL is to be running files.
+For more information on this, check out the entry on command line arguments.
+You can create a component by placing a file of AFL code into AFL's 'lib' folder. Placing
+components in any subfolder of lib will not be executed.
+
+See Also: -------------
+[11] Command Line arguments
+[?] Math Component
+[?] Util Component
+-----------------------
+
+
+[10] Escape Sequences
+-----------------------
+Some characters cannot be easily input into strings, so AFL provides escape sequences to
+more easily produce them.
+AFL provides 4 escape sequences, as follows:
+\; produces a semicolon without ending a code statement.
+\n produces a line break
+\' produces a single quote, which is ignored for the purposes of defining characters.
+\" produces a double quote, which is ignored for the purposes of defining strings.
+
+Note that \; can be used outside of strings and characters, though there is no use for this
+behavior.
+
+See Also: ---------------
+[3] Data Types
+[11] Command Line arguments
+-------------------------
+
+[11] Command Line Arguments
+------------------------------
+AFL, when launched via the command line, provides a couple command line arguments.
+the typical method to run AFL is as follows
+-----
+java -jar path/to/AFL.jar
+-----
+but up to 2 command line arguments can be added.
+
+first: debug, followed by an integer between 0 and 4. having debug at a nonzero value will
+display information about code being parsed, with higher values describing more details.
+no additional output is produced when code is executed, only when it is parsed.
+
+second: run, followed by any number of file paths. this will have afl parse and execute each
+file as AFL code, in sequence.
+
+debug must always come before run, if both are used.
+
+See Also:-----------
+--------------------
  
