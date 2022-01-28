@@ -1,14 +1,3 @@
-Wait, so I can just do more or less anything, as long as it involves energy or is energetic?
-Well, in that case, I'm going to keep putting energy into the thing I was doing earlier today.
-Sorry if it's a bit esoterric.
-Hopefullly this isn't skirting the lines of the assignment or anything.
-
-I expected to get this like half done but I've spent a bit more than an hour and it's like
-15% or something, so...
-
-
-
-
 This document is basically documentation for a 'programming language' I'm making called AFL.
 [?] means that the entry has not yet be written (most of them, jeez)
 Eventually I'll feed all of this into the help utility code.
@@ -46,7 +35,7 @@ Arguably Functional Language is a relatively simple programming language made to
 programming languages work. It has a few features, including functions, (limited) variable 
 scoping, and arrays. If you would like to know more, you can recall a specific entry by 
 typing 'help(EntryID)'. An index of helpful starting points is listed below with their 
-IDs. If you want an index of all articles, type 'help(-1)'.
+IDs. If you want an index of all articles, type 'help(neg(1))'.
 
 -- See also: ---------
 [1] General Info 
@@ -409,7 +398,7 @@ See also:
 [7] Functions
 --------------------
 Functions are ways to easily group a bunch of code together to run at once, on command.
-This is incredibly powerful, and makes code shorter and easier to read.
+This is incredibly powerful because it makes code shorter and easier to read.
 Function syntax involves two parts: creating functions and calling (running) them.
 
 Calling functions:
@@ -422,7 +411,7 @@ every function has a certain number of parameters it expects, and needs to be gi
 amount. parameters are separated by spaces (if required). Here are some examples:
 the function 'clear' expects no parameters, and can be called as 'clear()'
 the function 'pow' expects two parameters and could be called like 'pow(3 3)'
-It should be noted that function calls can both contain epressions in their parameters and
+It should be noted that function calls can both contain expressions in their parameters and
 be part of expressions.
 
 Creating functions:
@@ -435,6 +424,11 @@ be any combination of letters, and it cannot include any numbers, spaces, or sym
 params is of num type, and is the amount of parameters your function expects. Note that
 expressions cannot be used in the parameters for the function function. Only constants.
 here is an example of a function.
+
+Also note that function definitions ignore other code blocks, and whether code in a 
+specific block is run does not effect whether the function is defined. It is customary to 
+define functions outside of any other code blocks to make code more understandable. 
+
 ------
 function("example" 0);
 	"hello there!";
@@ -444,6 +438,42 @@ end()
 -----
 this function can then be called with 'example()'.
 
-blah lnah
+Each function comes with an array called 'params', which holds all of the parameters
+that the function has been called with. It is accessed with array related functions as
+normal. See the entry on arrays for information about handling them.
 
+Functions can also return values. this is accomplished through the return function.
+the return function can have zero or one parameters. If it has 0, it ends the function's
+execution and returns nothing. if it has 1, it ends the functions's execution and produces
+that value.
 
+Here is an example function that increments by 1 the number that is put into it.
+-----
+function("increment"1);
+
+	# get the first parameter;
+	toReturn = arrayGet(params 0);
+	
+	# increment and return it;
+	toReturn = toReturn + 1;
+	return(toReturn);
+	
+end();
+
+# some test cases;
+increment(1); # prints 2;
+4*increment(4); # prints 20;
+increment("zebra fish"); # prints 'zebra fish1';
+increment(true); # produces an error;
+-----
+ 
+The last example produces an error, because the increment function didn't handle receiving 
+parameters of types other than num. For some cases this might be fine, but if you want to 
+create a more robust system, AFL provides a function that simplifies the ordeal, called
+checkParam. Check out the reference for the util component for more information.
+
+See Also: --------------------
+[] Data Types
+[] Control Statements
+[] Util Component
+[] Base Component

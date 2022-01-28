@@ -107,7 +107,8 @@ public class Namespace
 			// huh, either we've got a problem, or we just need to make the variable.
 			if(variableHasInvalidScope(name, scope))
 			{
-				Shell.error("Variable '"+name+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber,scope.getFile());
+				String file = scope==null?"":scope.getFile();
+				Shell.error("Variable '"+name+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber,file);
 				return false;
 			}
 			
@@ -139,6 +140,7 @@ public class Namespace
 			
 			if(variableHasInvalidScope(varName, scope))
 			{
+				// this never runs?
 				Shell.error("Variable '"+varName+"' has already been defined in a local scope. It cannot be used in a global scope.",lineNumber,scope.getFile());
 				return null;
 			}
