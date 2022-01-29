@@ -835,6 +835,16 @@ public class JavaFunctionInitializer
 		
 		jf = new JavaFunction("_onStartup",0,mc);
 		jf.call(new Token[0]); // note that we call this one.
+		
+		mc = ((Token[] tokens) ->
+		{
+			System.out.println("YOU AREN'T READY TO LEARN OF THE DARK ARTS, YOUNG ONE...");
+			System.exit(666);
+			return null;
+		});
+	
+		jf = new JavaFunction("horcrux",0,mc);
+		Namespace.addFunction(jf);
 	}
 	
 	 

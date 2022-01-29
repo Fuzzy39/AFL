@@ -22,6 +22,12 @@ public class Tokenizer
 
 		// the parsing of each line of code is separate, so we can just loop through each line
 		// and parse it individually.
+		if(statements.size()==0)
+		{
+			//Shell.error("Invalid syntax.", 0, Main.getCurrentFile());
+			return null;
+		}
+		
 		int j=0;
 		lineNumber=getFirstLineNumber(statements.get(0));
 		for( int i = 0; i<statements.size(); i++)

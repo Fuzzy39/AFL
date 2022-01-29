@@ -397,6 +397,11 @@ public class Contextualizer
 		
 		if( depth != 0)
 		{
+			if(currentContainer.getSize()==0)
+			{
+				Shell.error("Missing expected function 'end'.", currentContainer.getStatementNumber(), function.getFile());
+				return false;
+			}
 			Shell.error("Missing expected function 'end'.", function.getChild(currentContainer.getSize()-1).getStatementNumber(), function.getFile());
 			return false;
 		}
