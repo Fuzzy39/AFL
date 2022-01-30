@@ -35,7 +35,7 @@ public class Main
 	
 
 
-	protected static final int BUILD = 597;
+	protected static final int BUILD = 604;
 	private static boolean usesShell = true;
 	private static boolean loadModules = true; // whether to load any modules
 	private static ArrayList<Path> toExecute;
@@ -205,7 +205,7 @@ public class Main
 
 	private static boolean initializeFunctions()
 	{
-		Lang.controlFunctions=new ArrayList<ControlFunction>();
+	
 		
 		// this is pretty important, for a single line of code.
 		// be rest assured there's more than one in that function.
@@ -217,8 +217,7 @@ public class Main
 		if(!loadModules)
 		{
 			Shell.out("Skipping loading AFL core components for debugging purposes. ");
-			Shell.out("Press enter to continue launching AFL.");
-			Shell.in();
+			
 		
 		}
 		else
@@ -338,6 +337,9 @@ public class Main
 		{
 			return null;
 		}
+		
+		
+		
 		Token returned = Interpreter.interpret(toExecute, new Token[0] );
 		return returned;
 	}

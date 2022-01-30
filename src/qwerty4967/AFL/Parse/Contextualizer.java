@@ -167,6 +167,7 @@ public class Contextualizer
 			return false;
 		}
 		
+		
 		return true;
 				
 	}
@@ -210,22 +211,21 @@ public class Contextualizer
 		
 		String functionName = name.getData();
 		
-		// check the name
-		for(ControlFunction f: Lang.controlFunctions)
-		{
-			String str = f.getName();
-			if(str.equals(functionName))
-			{
-				Shell.error("Invalid function definition. \'"+str+"\' is a protected function, and it cannot be overloaded."
-, s.getStatementNumber(),s.getFunction().getFile());
-				return false;
-			}
-		}
-		
+
 		if(!onlyHasLetters(functionName))
 		{
 			Shell.error("Invalid function definition. Valid function names only contain letters.", s.getStatementNumber(),s.getFunction().getFile());
 			return false;
+		}
+		
+		// check that the name doesn't match controlFunctions.
+		for(String controlFunction: Lang.CONTROL_FUNCTIONS)
+		{
+			if(controlFunction.equals(functionName))
+			{
+				Shell.error("Functions cannot have the same name as '"+controlFunction+"'. Because it is reserved for AFL. ", s.getStatementNumber(),s.getFunction().getFile());
+				return false;
+			}
 		}
 		
 		String parameterString=parameters.getData();
@@ -397,13 +397,10 @@ public class Contextualizer
 		
 		if( depth != 0)
 		{
-			if(currentContainer.getSize()==0)
-			{
-				Shell.error("Missing expected function 'end'.", currentContainer.getStatementNumber(), function.getFile());
-				return false;
-			}
-			Shell.error("Missing expected function 'end'.", function.getChild(currentContainer.getSize()-1).getStatementNumber(), function.getFile());
+			
+			Shell.error("Missing expected function 'end'.", currentContainer.getStatementNumber(), function.getFile());
 			return false;
+
 		}
 		Shell.out("Produced Function:\n"+function,4);
 		return true;

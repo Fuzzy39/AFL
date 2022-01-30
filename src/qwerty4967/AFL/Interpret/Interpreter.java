@@ -30,7 +30,7 @@ public class Interpreter
 		
 		if(toInterpret.getSize()==0)
 		{
-			return null;
+			return new Token("Void", TokenType.voidToken);
 		}
 		
 		// this would work, if it weren't a control statement.
@@ -314,6 +314,7 @@ public class Interpreter
 		if(variableValue.getType()==TokenType.voidToken)
 		{
 			Shell.error("Variables cannot be assigned nothing.", cs.getStatementNumber(),cs.getFunction().getFile());
+			toAFLReturn = new Token("Error", TokenType.error);
 			return false;
 		}
 		

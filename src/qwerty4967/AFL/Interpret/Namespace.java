@@ -25,9 +25,9 @@ public class Namespace
 		String name = toAdd.getName();
 		
 		// first check that the function's name isn't restricted.
-		for( ControlFunction f : Lang.controlFunctions)
+		for( String s : Lang.CONTROL_FUNCTIONS)
 		{
-			String s = f.getName();
+			
 			if(name.equals(s))
 			{
 				// hopefully whoever has to actually deal with it shouts an error message.

@@ -246,7 +246,7 @@ public class GroupManager
 		Groups.set(ID, null);
 		// I'm a bit wary that using add instead of set might break something,
 		// but set crashes things...
-		FunctionizedGroups.add(ID, null);
+		FunctionizedGroups.add( null);
 		return toReturn;
 	}
 	

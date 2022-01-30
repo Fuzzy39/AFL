@@ -2,7 +2,7 @@ package qwerty4967.AFL.Lang;
 
 import java.util.ArrayList;
 
-import qwerty4967.AFL.Function.ControlFunction;
+
 
 public class Lang 
 {
@@ -23,8 +23,10 @@ public class Lang
 		public static final int MAXIMUM_DEPTH =500; //  wanted the int limit, but that gave me errors...
 		
 		//public static final String[] CONTROL_FUNCTIONS = {"if","else","while","=","return","end"};
-		// set by main
-		public static ArrayList<ControlFunction> controlFunctions;
+
+		// Names of reserved functions, that cannot be used by an AFL user.
+		// note that for is reserved, despite not being a control function (at the time of writing).
+		public static final String[] CONTROL_FUNCTIONS= {"=","if","while","return","continue","break","function","end","for"};
 		
 		// this list doesn't include semicolons, because those are dealt with stupidly.
 		public static final char[] ESCAPED_CHARS = {'n','\'','\"','\\'};

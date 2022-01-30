@@ -38,7 +38,7 @@ public class Tokenizer
 			
 			
 			
-			int size = main.getSize();
+			//int size = main.getSize();
 			
 			String statementString = statements.get(i).strip();
 			

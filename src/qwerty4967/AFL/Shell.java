@@ -59,7 +59,7 @@ public class Shell
 		out("Input Recieved: \""+toReturn+"\"", 1);
 		
 		// get rid of the leading newline
-		return toReturn.substring(1,toReturn.length());
+		return toReturn.strip();
 			
 	
 	}

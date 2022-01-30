@@ -55,9 +55,9 @@ public class Resolver
 	{
 		// first check that the function doesn't have a resereved name, then check that the function exists.
 		String functionName = f.getFunctionName();
-		for(ControlFunction cf : Lang.controlFunctions)
+		for(String s : Lang.CONTROL_FUNCTIONS)
 		{
-			String s = cf.getName();
+			
 			if(functionName.equals(s))
 			{
 				// we've got ourselves a problemo, kids!
@@ -107,7 +107,7 @@ public class Resolver
 			Element e = f.getChild(i);
 			Token param = resolve(e);
 			
-			if(param == null)
+			if(param == null || param.getType()==TokenType.voidToken)
 			{
 				Shell.error("The partial result of a statement cannot be void.", f.getStatementNumber(),f.getFunction().getFile());
 				return new Token ("Error", TokenType.error);
