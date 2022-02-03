@@ -35,7 +35,7 @@ public class Main
 	
 
 
-	protected static final int BUILD = 604;
+	protected static final int BUILD = 606;
 	private static boolean usesShell = true;
 	private static boolean loadModules = true; // whether to load any modules
 	private static ArrayList<Path> toExecute;

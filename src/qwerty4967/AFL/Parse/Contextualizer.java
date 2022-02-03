@@ -373,11 +373,13 @@ public class Contextualizer
 					
 					addToContainer(cs, currentContainer);
 					break;
+				case "error":
 				case "return":
 				case "=":
 					cs =transformToControlStatement(s);
 					addToContainer(cs, currentContainer);
 					break;
+					
 				case "else":
 					
 					cs = transformElseToControlStatement(s, currentContainer);
@@ -428,6 +430,7 @@ public class Contextualizer
 		{
 			case "if":
 			case "while":
+			case "error":
 				if(size!=1)
 				{
 					return true;
@@ -452,6 +455,7 @@ public class Contextualizer
 					return true;
 				}
 				break;
+				
 			
 		}
 		

@@ -754,8 +754,9 @@ public class JavaFunctionInitializer
 		jf = new JavaFunction("random",0,mc);
 		Namespace.addFunction(jf);
 		
-		// Error(message)
-		mc = ((Token[] tokens) ->
+		// Error is now a control statement to allow for displaying line numbers more properly. This code remains for posterity or something.
+		// Error(message) 
+		/*mc = ((Token[] tokens) ->
 		{
 			Token string = tokens[0];
 			if(string.getType()!=TokenType.string)
@@ -770,7 +771,7 @@ public class JavaFunctionInitializer
 		});
 	
 		jf = new JavaFunction("error",1,mc);
-		Namespace.addFunction(jf);
+		Namespace.addFunction(jf);*/
 		
 		mc = ((Token[] tokens) ->
 		{

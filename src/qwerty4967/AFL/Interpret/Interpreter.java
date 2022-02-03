@@ -250,6 +250,9 @@ public class Interpreter
 		}
 	}
 	
+	
+	// the boolean here isn't an error condition.
+	// I've forgotten what it is though
 	private static boolean interpretControlStatement(ControlStatement cs)
 	{
 		// have you ever consumed a spicy gremlin?
@@ -274,6 +277,9 @@ public class Interpreter
 			case "continue":
 				processContinue(cs);
 				return true;
+			case "error":
+				processError(cs);
+				return false;
 			default:
 				Shell.error("AFL does not yet support control statement '"+name+"'.", cs.getStatementNumber(), cs.getFunction().getFile());
 				return false;
@@ -293,6 +299,7 @@ public class Interpreter
 		Token variable;
 		if(!(toAssignTo instanceof Token))
 		{
+			toAFLReturn = new Token("Error", TokenType.error);
 			Shell.error("Cannot assign values to expressions.", cs.getStatementNumber(),cs.getFunction().getFile());
 			return false;
 		}
@@ -300,6 +307,7 @@ public class Interpreter
 		
 		if(variable.getType()!=TokenType.variable)
 		{
+			toAFLReturn = new Token("Error", TokenType.error);
 			Shell.error("Cannot assign values to constants.", cs.getStatementNumber(),cs.getFunction().getFile());
 			return false;
 		}
@@ -313,6 +321,7 @@ public class Interpreter
 		}
 		if(variableValue.getType()==TokenType.voidToken)
 		{
+			
 			Shell.error("Variables cannot be assigned nothing.", cs.getStatementNumber(),cs.getFunction().getFile());
 			toAFLReturn = new Token("Error", TokenType.error);
 			return false;
@@ -359,6 +368,7 @@ public class Interpreter
 		
 		if(conditionValue.getType()!=TokenType.bool)
 		{
+			toAFLReturn = new Token("Error", TokenType.error);
 			Shell.error("Conditional statements require boolean conditions.", cs.getStatementNumber(),cs.getFunction().getFile());
 			return false;
 		}
@@ -446,6 +456,40 @@ public class Interpreter
 		}
 		
 	}
+	
+	
+	private static void processError(ControlStatement cs)
+	{
+		// By the time I added Error as a control Statement, I've entirely forgotten how this is supposed to work...
+		// not ideal.
+		
+		// This should get the container or element that ought to be the error message, though we've got to check to know for sure.
+		Element param = cs.getParameters().getChild(0);
+		
+		toAFLReturn = new Token("Error", TokenType.error);
+		// We resolve it, ideally it's a string, but we need to check.
+		Token errorMessage = Resolver.resolve(param);
+		
+		if(errorMessage.getType()!=TokenType.string)
+		{
+			// We gonna tussle now, big boi
+			// *ahem
+			// We've got an error with our error.
+			if(errorMessage.getType()!=TokenType.error)
+			{
+				Shell.error("Parameter 0 of 'error' should be of type 'string'. ", cs.getStatementNumber(), cs.getFunction().getFile());
+			}
+			
+			return;
+		}
+		
+		// okay, so we know that the error message is valid.
+		// should be a peice of cake.
+		
+		Shell.error(errorMessage.getData(), cs.getStatementNumber(), cs.getFunction().getFile());
+		
+	}
+	
 	
 }
 

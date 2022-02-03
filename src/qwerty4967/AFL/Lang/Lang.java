@@ -26,7 +26,7 @@ public class Lang
 
 		// Names of reserved functions, that cannot be used by an AFL user.
 		// note that for is reserved, despite not being a control function (at the time of writing).
-		public static final String[] CONTROL_FUNCTIONS= {"=","if","while","return","continue","break","function","end","for"};
+		public static final String[] CONTROL_FUNCTIONS= {"=","if","while","return","continue","break","function","end","for","error"};
 		
 		// this list doesn't include semicolons, because those are dealt with stupidly.
 		public static final char[] ESCAPED_CHARS = {'n','\'','\"','\\'};

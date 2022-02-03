@@ -45,7 +45,7 @@ IDs. If you want an index of all articles, type 'help(neg(1))'.
 [7] Functions
 [8] Arrays
 [9] Components
-[?] Command Line Arguments
+[11] Command Line Arguments
 [?] Code Examples
 [?] Default AFL Components
 [?] Function Index
