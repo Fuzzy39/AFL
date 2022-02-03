@@ -22,9 +22,10 @@ A list of all help topics is below.
 [12] Code Examples
 [Reference]
 [13] Function Index
-[?] Core Functions
-[?] Math Component
-[?] Util Component
+[14] Core Functions
+[15] Util Component
+[16] Math Component
+
 
 
 
@@ -46,8 +47,7 @@ IDs. If you want an index of all articles, type 'help(neg(1))'.
 [8] Arrays
 [9] Components
 [11] Command Line Arguments
-[?] Code Examples
-[?] Default AFL Components
+[12] Code Examples
 [13] Function Index
 -----------------------
 
@@ -156,7 +156,7 @@ them and a list of all control statements, see the corresponding entry below.
 [4] Variables
 [8] Arrays
 [5] Operators
-[?] Math Component
+[16] Math Component
 [7] Functions
 [5] Control Statements
 -----------------------
@@ -219,9 +219,9 @@ end()
 
 -- See also: ----------
 [4] Variables
-[?] Math Component
+[16] Math Component
 [5] Operators
-[?] Util Component
+[15] Util Component
 [10] Escape Sequences
 [8] Arrays
 -----------------------
@@ -273,7 +273,7 @@ b()
 
 -- See also: ----------
 [5] Operators
-[?] Math Component
+[16] Math Component
 [7] Functions
 [8] Arrays
 
@@ -383,11 +383,14 @@ continue():
 	The continue function only works inside of loops, and when called, returns to the start
 	of the loop.
 
+error(string):
+	The error function causes AFL to report an error with a description provided by its parameter.
+
 See also:
 --------------------
 [3] Data Types
 [7] Functions
-[?] Math Component
+[16] Math Component
 --------------------
 
 
@@ -460,10 +463,10 @@ end();
 increment(1); # prints 2;
 4*increment(4); # prints 20;
 increment("zebra fish"); # prints 'zebra fish1';
-increment(true); # produces an error;
+increment(true); # prints 'true1'
 -----
  
-The last example produces an error, because the increment function didn't handle receiving 
+The last examples produce some interesting behavior, because the increment function didn't handle receiving 
 parameters of unexpected types. For some cases this might be fine, but if you want to 
 create a more robust system, AFL provides a function that simplifies the ordeal, called
 checkParam. Check out the reference for the util component for more information.
@@ -471,8 +474,8 @@ checkParam. Check out the reference for the util component for more information.
 See Also: --------------------
 [3] Data Types
 [6] Control Statements
-[?] Util Component
-[?] Base Component
+[15] Util Component
+[14] Base Component
 
 
 [8] Arrays
@@ -524,8 +527,8 @@ components in any subfolder of lib will not be executed.
 
 See Also: -------------
 [11] Command Line arguments
-[?] Math Component
-[?] Util Component
+[15] Util Component
+[16] Math Component
 -----------------------
 
 
@@ -717,9 +720,9 @@ Maybe.
 
 See Also:-----------
 [13] Function Index
-[?] Core Functions
-[?] Math Component
-[?] Util Component
+[14] Core Functions
+[15] Util Component
+[16] Math Component
 --------------------
 
 [13] Function Index
@@ -727,9 +730,9 @@ See Also:-----------
 This text should not be visible under normal conditions.
 If you are seeing it while using the help function, then somebody made a mistake.
 See Also:-----------
-[?] Core Functions
-[?] Math Component
-[?] Util Component
+[14] Core Functions
+[15] Util Component
+[16] Math Component
 --------------------
 
 [14] Core Functions
@@ -762,65 +765,244 @@ arraySize(1)
 	Returns: num size
 	
 arraySet(3)
-	Parameters: 
+	Parameters: array arr, num index, value val
 	Description:
-	Returns:
+		sets the value in arr at index to val. the value at index must already be defined.
+	Returns: nothing
 	
 arrayRemove(1)
-	Parameters: 
-	Description:
-	Returns:
+	Parameters: array arr
+	Description: 
+		removes the last element from arr. If arr has no elements, nothing happens.
+	Returns: nothing
 	
 arrayRemove(2)
-	Parameters: 
+	Parameters: array arr, num index
 	Description:
-	Returns:
+		removes the value at index from arr. the index must already correspond to a value.
+	Returns: nothing
 	
 input(0)
-	Parameters: 
+	Parameters: none
 	Description:
-	Returns:
+		prompts the user for one line of input. Returns what the user entered.
+	Returns: string
 	
 typeOf(1)
-	Parameters: 
+	Parameters: value val
 	Description:
-	Returns:
+		returns the type of val.
+	Returns: type
 	
 toCharArray(1)
-	Parameters: 
+	Parameters: string str
 	Description:
-	Returns:
+		Returns an array of every char from str, in their original order.
+	Returns: array
 	
 isType(2)
-	Parameters: 
+	Parameters: string str, type tp
 	Description:
-	Returns:
+		Returns whether str could be converted to type tp. Arrays are not a valid type to
+		check for.
+	Returns: bool
 	
 toType(2)
-	Parameters: 
+	Parameters: string str, type tp
 	Description:
-	Returns:
+		Converts str to type tp, if possible.
+	Returns: a value tp's type
 	
 random(0)
-	Parameters: 
+	Parameters: none
 	Description:
-	Returns:
+		Returns a random decimal from 0 to 1.
+	Returns: num
 	
 clear(0)
-	Parameters: 
+	Parameters: none
 	Description:
-	Returns:
+		Clears the console.
+	Returns: nothing
 	
 sleep(1)
-	Parameters: 
+	Parameters: num ms
 	Description:
-	Returns:
+		Halts execution for ms miliseconds.
+	Returns: nothing
 	
 printCompleteNamespace(0)
-	Parameters: 
+	Parameters: none
 	Description:
-	Returns:
+		Prints every function currently defined in AFL, excluding control functions.
+	Returns: nothing
 
 See Also:-----------
 [13] Function Index
 --------------------
+
+
+[15] Util Component
+--------------------
+This entry contains descriptions for all normal functions that are part of the Util
+component.
+util.checkParam(4)
+	Parameters: value toCheck, type checkAgainst, val parameter, string funct
+	Description:
+		checkParam is intended to make robust type checks in functions easier.
+		toCheck is the parameter of your function you want to check,
+		checkAgainst is the type you expect it to be,
+		parameter is some identifier of the parameter (usually a char that matches it's
+		index in params)
+		and funct is the name of your function.
+		
+		if the value is correct, checkParam returns it.
+		if it is not, it will happily throw up a reasonably formatted error.
+		
+		you could imagine it being used like so:
+		number =checkParam( arrayGet(params 0) num '0' "numberFunction");
+		
+	Returns: value
+	
+util.not(1)
+	Parameters:	bool b
+	Description:
+		negates b.
+	Returns: bool
+	
+util.numInput(0)
+	Parameters: none
+	Description: 
+		Prompts the user for a number, and will not stop prompting the user until
+		a num value is entered. Returns this value.
+	Returns: num
+	
+util.isWhitespace(1)
+	Parameters: char ch
+	Description:
+		if ch is ' ' or '\n', returns true. Otherwise, returns false.
+	Returns: bool
+	
+util.fromCharArray(1)
+	Parameters: array arr
+	Description:
+		if arr consists only of char values, it will return a string of all of the values
+		concatenated together.
+	Returns: string
+	
+util.strip(1)
+	Parameters: string str
+	Description:
+		returns str, but remove any leading or trailing whitespace. (' ' or '\n' 
+		characters)
+	Returns: str
+ 	
+util.length(1)
+	Parameters: string str
+	Description:
+		returns the number of characters in str.
+	Returns: num
+	
+util.substring(3)
+	Parameters: string str, num start, num end
+	Description:
+		returns a section of str from index start (inclusive) to index end (exclusive).
+	Returns: str
+	
+util.split(2)
+	Parameters: string str, char splitBy
+	Description:
+		Returns an array where every instance of splitBy in str creates a new element.
+	Returns: array
+	
+util.contains(2)
+	Parameters: string str, char c
+	Description:
+		Returns true if at least one instance of c is in str, false otherwise.
+	Returns: bool
+	
+See Also:-----------
+[13] Function Index
+--------------------
+
+
+
+[16] Math Component
+--------------------
+This entry contains descriptions for all normal functions that are part of the Math
+component.
+
+math.pi(0)
+	Parameters: none
+	Description:
+		Returns the mathematical constant pi.
+	Returns: num
+	
+math.e(0)
+	Parameters: none
+	Description:
+		Returns the mathematical constant e.
+	Returns: num
+	
+math.neg(1)
+	Parameters: num n
+	Description:
+		returns n times -1.
+	Returns: num
+	
+math.abs(1)
+	Parameters: num n
+	Description:
+		Returns the absolute value of n. It will always be positive.
+	Returns: num
+	
+math.sqrt(1)
+	Parameters: num n
+	Description:
+		Retuns the square root of n.
+	Returns: num
+	
+math.pow(2)
+	Parameters: num x, num y
+	Description:
+		returns x^y. y must be an integer.
+	Returns: num
+	
+math.random(2)
+	Parameters: num lower, num higher
+	Description:
+		Returns a random decimal between lower and higher.
+	Returns: num
+	
+math.round(2)
+	Parameters: num toRound, num places
+	Description:
+		rounds toRound to places decimal places out. If a negative number is used for
+		places, round will round to tens, hundreds, etc. places must be an integer.
+	Returns: num
+	
+math.round(1)
+	Parameters: num n
+	Description:
+		rounds n to an integer.
+	Returns: num
+	
+math.truncate(1)
+	Parameters: num n
+	Description:
+		Returns n as an integer, without rounding it first.
+	Returns:
+	
+math.truncate(2)
+	Parameters:  num toTruncate, num places
+	Description:
+		truncates toTruncate to places decimal places. if a negative number is used for
+		places, round will truncate to tens, hundreds, etc. places must be an integer.
+	Returns: num
+	
+
+See Also:-----------
+[13] Function Index
+--------------------
+
+

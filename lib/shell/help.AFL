@@ -168,12 +168,16 @@ function("help"1);
 	 	"No help entry with that ID. you can use 'help(neg(1))' to get a list of all available entries.";
 	 	return();
 	end();
-	 
-	# entry found;
+	
+	
+	# entry found
 	"["+helpChopToInt(input)+"] "+arrayGet(helpEntryNames input);
 	bar;
 	arrayGet(helpEntries input);
 	"";
+	
+	
+	# See Also:
 	"See Also: ---------------------------";
 	list = arrayGet(helpSeeAlso input);
 	i=0;
