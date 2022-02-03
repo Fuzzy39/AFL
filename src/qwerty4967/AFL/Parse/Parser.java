@@ -186,9 +186,11 @@ public class Parser
 		 
 		 String toReturn = "";
 		 boolean isComment=false;
+		 boolean possibleEscape=false;
 		 
 		 for(int i = 0; i<code.length();i++)
 		 {
+			 
 			 char c = code.charAt(i);
 			 
 			 if(isComment)
@@ -201,13 +203,30 @@ public class Parser
 			 }
 			 else
 			 {
+				 if(c=='\\')
+				 {
+					 possibleEscape=true;
+					 toReturn+=c;
+					 continue;
+				 }
+				 
 				 if(c=='#')
 				 {
-					 isComment=true;
+					 if(possibleEscape)
+					 {
+						 possibleEscape=false;
+						 toReturn+=c;
+						 continue;
+					 }
+					 else
+					 {
+						 isComment=true;
+					 }
 				 }
 				 else
 				 {
 					 toReturn+=c;
+					 possibleEscape=false;
 				 }
 			 }
 		 }

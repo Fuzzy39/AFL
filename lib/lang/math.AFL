@@ -1,6 +1,7 @@
 # some useful constants;
-pi = 3.14159265359;
-e = 2.71828;
+function("pi"0); return(3.14159265359); end();
+function("e"0); return(2.71828); end();
+
 
 function("neg" 1);
 	# Verify Things;

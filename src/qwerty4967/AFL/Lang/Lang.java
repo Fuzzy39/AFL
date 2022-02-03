@@ -29,7 +29,7 @@ public class Lang
 		public static final String[] CONTROL_FUNCTIONS= {"=","if","while","return","continue","break","function","end","for","error"};
 		
 		// this list doesn't include semicolons, because those are dealt with stupidly.
-		public static final char[] ESCAPED_CHARS = {'n','\'','\"','\\'};
+		public static final char[] ESCAPED_CHARS = {'n','\'','\"','\\','#'};
 		
 		// I wasn't sure whether it would make more sense to make a series of enums or just do a two dimensional array, so
 		// feel free to laugh at me, future self, if this was a bad decision 

@@ -3,11 +3,126 @@
 
 helpEntryNames = newArray();
 arrayAdd(helpEntryNames "Welcome to AFL!");
-arrayAdd(helpEntryNames "Another Entry");
+arrayAdd(helpEntryNames "General Info");
+arrayAdd(helpEntryNames "AFL Basics");
+arrayAdd(helpEntryNames "Data Types");
+arrayAdd(helpEntryNames "Variables");
+arrayAdd(helpEntryNames "Operators");
+arrayAdd(helpEntryNames "Control Statements");
+arrayAdd(helpEntryNames "Functions");
+arrayAdd(helpEntryNames "Arrays");
+arrayAdd(helpEntryNames "Components");
+arrayAdd(helpEntryNames "Escape Sequences");
+arrayAdd(helpEntryNames "Command Line Arguments");
+arrayAdd(helpEntryNames "Code Examples");
+
+
 
 helpEntries = newArray();
-arrayAdd(helpEntries "This is sample text for a help entry.\nExciting!");
-arrayAdd(helpEntries "This is a different entry with different text!\nFascinating!");
+
+
+
+
+
+arrayAdd(helpEntries "Arguably Functional Language is a relatively simple programming language made to learn how 
+programming languages work. It has a few features, including functions, (limited) variable 
+scoping, and arrays. If you would like to know more, you can recall a specific entry by 
+typing 'help(EntryID)'. An index of helpful starting points is listed below with their 
+IDs. If you want an index of all articles, type 'help(neg(1))'.");
+
+
+
+
+
+arrayAdd(helpEntries "Arguably Functional Language is an (arguably) interpreted programming language written in
+Java. AFL is a dynamically and strongly typed language. AFL notably supports variables 
+with limited scoping, functions, arrays, and separating code into files, called components.
+AFL was built as a learning project, and as such is probably not efficient or properly 
+useful, though it should work as expected in most cases. 
+
+There are probably some situations in which AFL doesn't work as expected. If you find a 
+problem, I'd love to hear about it! Email me at jmcraft126@gmail.com, though I wouldn't hold
+your breath for it to get fixed.
+
+If you want to look at AFL's source code, you're welcome to, though fair warning,
+it's a little grisly. Just head over to https://github.com/qwerty4967/AFL");
+
+
+
+
+
+arrayAdd(helpEntries "This help entry contains a broad overview for a number of basic topics required to 
+understand most AFL code. Hopefully most of it is relatively straightforward.\n
+Data Types:\n
+AFL has various types of data that you can manipulate, and has specific ways of writing them
+as constants. The various types are num, string, char, bool, array, and type. For more 
+information on data types, see their corresponding entry.\n
+Printing:\n
+AFL has no print statement. If you want to print something to the console, just type it out!
+Here are some examples:
+-------
+\"Hello, World!\"
+1+1
+round(1.1)
+------\n
+Multiple Statements: \n
+Statements in an AFL program are separated by semicolons. This is always the case, no matter
+where the semicolon is in AFL code. Because statements are separated by semicolons, and not 
+ended by them, AFL expects the last statement in a piece of code to not be ended by a 
+semicolon. If you want to use a semicolon in a way that does not denote a new statement,
+you can escape them with a backslash. See the entry on escape sequences to learn more about
+escaping other characters.\n
+If you are typing a program in the shell, pressing enter after typing a semicolon will let
+you write multiple lines of code, though putting multiple statements in a single line is 
+also valid.\n
+Variables & Arrays:\n
+AFL supports variables, which are used to store values. Assigning a variable is fairly 
+simple:
+--------
+name = value
+-------- 
+Using a variable is also fairly simple. Just write out it's name. Try out this example:
+--------
+x = 2+1\;
+\"x squared:\"\;
+x*x
+--------
+If you want more specific information on variables and variable scoping, check out the 
+entry on variables below.
+
+AFL also supports arrays, which are special variables that can store multiple values. Check
+out the entry on arrays for more information.
+
+Comments:
+
+AFL provides ways to insert comments that are not executed into your code, usually to
+explain the function of your code. AFL uses \# to denote a comment for a single line, though
+note that semicolons in comments have to be escaped.
+
+Operators and Functions:
+
+AFL provides various ways to modify values. These include operators such as +, *, and ==,
+and functions, such as round(num) and random(). Functions in particular do not have to
+output any value, however. You can also create your own functions. To learn how to make and
+call functions, see the corresponding entry on functions below.
+
+Control Statements:
+
+AFL also supports what it calls control statements, which are functions that modify the flow
+of code execution. These include the commonplace if(bool) and while(bool). To see syntax for 
+them and a list of all control statements, see the corresponding entry below.
+");
+
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+arrayAdd(helpEntries "");
+
 
 helpSeeAlso = newArray();
 

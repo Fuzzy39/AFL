@@ -43,7 +43,7 @@ public class Shell
 		while(true)
 		{
 			//Grab the input
-			String currentLine = Shell.in();
+			String currentLine = Parser.removeComments(Shell.in()).strip();
 			toReturn+="\n"+currentLine;
 			
 			if(checkString(currentLine))

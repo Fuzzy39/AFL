@@ -19,9 +19,9 @@ A list of all help topics is below.
 [9] Components
 [10] Escape Sequences
 [11] Command Line Arguments
-[?] Code Examples
+[12] Code Examples
 [Reference]
-[?] Function Index
+[13] Function Index
 [?] Core Functions
 [?] Math Component
 [?] Util Component
@@ -48,7 +48,7 @@ IDs. If you want an index of all articles, type 'help(neg(1))'.
 [11] Command Line Arguments
 [?] Code Examples
 [?] Default AFL Components
-[?] Function Index
+[13] Function Index
 -----------------------
 
 [1] General Info
@@ -107,6 +107,10 @@ ended by them, AFL expects the last statement in a piece of code to not be ended
 semicolon. If you want to use a semicolon in a way that does not denote a new statement,
 you can escape them with a backslash. See the entry on escape sequences to learn more about
 escaping other characters.
+
+If you are typing a program in the shell, pressing enter after typing a semicolon will let
+you write multiple lines of code, though putting multiple statements in a single line is 
+also valid.
 
 Variables & Arrays:
 
@@ -534,6 +538,7 @@ AFL provides 4 escape sequences, as follows:
 \n produces a line break
 \' produces a single quote, which is ignored for the purposes of defining characters.
 \" produces a double quote, which is ignored for the purposes of defining strings.
+\# produces a #, which is useful for allowing them within strings.
 
 Note that \; can be used outside of strings and characters, though there is no use for this
 behavior.
@@ -564,3 +569,258 @@ debug must always come before run, if both are used.
 See Also:-----------
 --------------------
  
+ 
+[12] Code Examples
+-----------------------
+This entry contains a few examples of AFL code, to show what AFL is capable of.
+
+Parrot:
+-----
+# This program asks for the user's name and repeats it.
+
+"What's your name?";
+name=input(); # Get input from the user
+
+# output
+"Hi, "+name+". It's nice to meet you!"
+-----
+
+Guessing game:
+-----
+# This program lets you play a guessing game.
+# it demonstrates functions and some utility functions
+
+function("guess"1);
+
+	limit = arrayGet(params 0); # get the high bound for our game
+	
+	number = truncate(random(1 limit+1)); # figure out the number we are thinking of
+	
+	# get the game started!
+	"I'm thinking of a number between 1 and "+limit+"...";
+	guess=neg(1);
+	
+	# keep asking for guesses until the player gets it right
+	while(guess!=number);
+		
+		# prompt the player for a guess
+		"Make a guess!";
+		guess = truncate(numInput());
+		
+		# the player won! congratulate them
+		if(guess==number);
+			"Good job!";
+			break();
+		end();
+		
+		# nudge the player in the right direction
+		if(guess>number);
+			"Your guess was bigger than the number...";
+		end();
+		else();
+			"Your guess was less than the number...";
+		end();
+		
+	end();
+end()
+-----
+Play the guessing game with guess(num), where the num is the high limit on the number!
+
+
+
+Prime Numbers:
+-----
+# This program prints prime numbers smaller than 100.
+
+limit = 100; # if you want more numbers, you can just adjust this variable.
+
+# toCheck represents the current number we are looking at, which may or may not be prime.
+toCheck = 2;
+
+# toCheckBy represents a number we are using to check whether toCheck is prime.
+toCheckBy = 2;
+
+"Here are the prime numbers smaller than "+limit+":";
+
+while(toCheck< limit);
+	toCheckBy = 2;
+	
+	isPrime = true; # whether the number in question is prime. We start off assuming it is.
+	
+	while(toCheckBy < toCheck);
+		# Check whether toCheck/toCheckBy is a whole number.
+		# if it is, the number is not prime.
+		
+		if((toCheck/toCheckBy)%1==0);
+			isPrime=false; # Nope, it's not. 
+			break();
+		end();
+		
+		toCheckBy= toCheckBy+1;
+		
+		end();
+		
+	if(isPrime);
+		# write the numbers we know to be prime, and not the ones that aren't.
+		toCheck;
+	end();
+	toCheck= toCheck+1;
+end()
+-----
+
+Silly Bar:
+-----
+# How does this work? Magic!
+# This was written a while ago.
+
+function("drawBar"1);
+	# draw the bar, I guess...
+	str="|";
+	filled = arrayGet(params 0);
+	unfilled=16-filled;
+	while(filled>0);
+		str=str+"#";
+		filled=filled-1;
+	end();
+	while(unfilled>0);
+		str=str+" ";
+		unfilled=unfilled-1;
+	end();
+	str=str+"|";
+	clear();
+	str;
+end()
+
+progress=0;
+while(true);
+
+	# the bar is growing
+	while(progress<16);
+		drawBar(progress);
+		progress=progress+1;
+		sleep(50);
+	end();
+
+	# the bar is shrinking
+	while(progress>0);
+		drawBar(progress);
+		progress=progress-1;
+		sleep(50);
+	end();
+end()
+-----
+
+Now you can see the power of AFL.
+Not that much, to be honest, but AFL is capable of more things than this limited selection
+shows. Try exploring the reference pages, maybe something interesting is in there.
+Maybe.
+
+See Also:-----------
+[13] Function Index
+[?] Core Functions
+[?] Math Component
+[?] Util Component
+--------------------
+
+[13] Function Index
+-----------------------
+This text should not be visible under normal conditions.
+If you are seeing it while using the help function, then somebody made a mistake.
+See Also:-----------
+[?] Core Functions
+[?] Math Component
+[?] Util Component
+--------------------
+
+[14] Core Functions
+--------------------
+This entry contains descriptions for all normal functions that are not part of any 
+component.
+
+newArray(0)
+	Parameters: None
+	Description:
+		Returns a new, empty array.
+	Returns: array
+	
+arrayAdd(2)
+	Parameters: array arr, value toAdd
+	Description:
+		Adds toAdd to the end of arr.
+	Returns: nothing
+	
+arrayGet(2)
+	Parameters: array arr, num Address
+	Description:
+		gets the value at Address in arr, and returns it.
+	Returns: value
+	
+arraySize(1)
+	Parameters: array arr
+	Description:
+		returns the number of elements in arr.
+	Returns: num size
+	
+arraySet(3)
+	Parameters: 
+	Description:
+	Returns:
+	
+arrayRemove(1)
+	Parameters: 
+	Description:
+	Returns:
+	
+arrayRemove(2)
+	Parameters: 
+	Description:
+	Returns:
+	
+input(0)
+	Parameters: 
+	Description:
+	Returns:
+	
+typeOf(1)
+	Parameters: 
+	Description:
+	Returns:
+	
+toCharArray(1)
+	Parameters: 
+	Description:
+	Returns:
+	
+isType(2)
+	Parameters: 
+	Description:
+	Returns:
+	
+toType(2)
+	Parameters: 
+	Description:
+	Returns:
+	
+random(0)
+	Parameters: 
+	Description:
+	Returns:
+	
+clear(0)
+	Parameters: 
+	Description:
+	Returns:
+	
+sleep(1)
+	Parameters: 
+	Description:
+	Returns:
+	
+printCompleteNamespace(0)
+	Parameters: 
+	Description:
+	Returns:
+
+See Also:-----------
+[13] Function Index
+--------------------
