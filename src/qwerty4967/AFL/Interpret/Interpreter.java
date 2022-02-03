@@ -124,6 +124,7 @@ public class Interpreter
 			}
 			else
 			{
+				toAFLReturn=result;
 				return result;
 			}
 		}

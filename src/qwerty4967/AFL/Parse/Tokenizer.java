@@ -579,12 +579,14 @@ public class Tokenizer
 				return '\n';
 			case '\\':
 				return '\\';
-			case '\'':
+			/*case '\'':
 				return '\'';
 			case '"':
-				return '"';
+				return '"';*/
+			default:
+				return c;
 		}
-		return '?';
+		
 	}
 	
 	// returns length of string.

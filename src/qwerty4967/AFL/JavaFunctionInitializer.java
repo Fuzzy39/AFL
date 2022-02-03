@@ -838,6 +838,7 @@ public class JavaFunctionInitializer
 		
 		mc = ((Token[] tokens) ->
 		{
+			Shell.clear();
 			System.out.println("YOU AREN'T READY TO LEARN OF THE DARK ARTS, YOUNG ONE...");
 			System.exit(666);
 			return null;

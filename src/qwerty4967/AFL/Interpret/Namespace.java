@@ -343,14 +343,14 @@ public class Namespace
 
 	public static String debug() 
 	{
-		String toReturn = "AFL Namespace:";
-		toReturn+="\n    Functions:";
+		String toReturn = "Functions:";
+		//toReturn+="\n    Functions:";
 		for(Function f: functions)
 		{
-			toReturn+="\n        Function '"+f.getName()+"' "+f.getParameters()+" Parameter(s)";		
+			toReturn+="\n        "+f.getFile()+"."+f.getName()+"("+f.getParameters()+")";		
 		}
-		toReturn+="\n    Variables:";
-		for(Variable v: variables)
+		//toReturn+="\n    Variables:";
+		/*for(Variable v: variables)
 		{
 			toReturn+="\n        "+v;
 		}
@@ -358,7 +358,7 @@ public class Namespace
 		for(ArrayList<Token> a: arrays)
 		{
 			toReturn+="\n        "+a;
-		}
+		}*/
 		return toReturn;
 	}
 	

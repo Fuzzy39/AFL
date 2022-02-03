@@ -43,6 +43,7 @@ public class Resolver
 			Token toReturn=Namespace.getVariableValue(t, t.getFunction());
 			if(toReturn==null)
 			{
+				
 				//Shell.error("Variable '"+t.getData()+"' is not defined in this context.", t.getStatementNumber());
 				return new Token("Error",TokenType.error);
 			}
