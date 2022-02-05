@@ -23,6 +23,7 @@ public class Resolver
 		// basically anything that exists, unless it's a CONTROL FUNCTION!
 		if(!functionIsValid(f))
 		{
+			Interpreter.toAFLReturn= new Token("Error", TokenType.error);
 			return new Token("Error", TokenType.error);
 		}
 		
@@ -45,6 +46,7 @@ public class Resolver
 			{
 				
 				//Shell.error("Variable '"+t.getData()+"' is not defined in this context.", t.getStatementNumber());
+				Interpreter.toAFLReturn= new Token("Error", TokenType.error);
 				return new Token("Error",TokenType.error);
 			}
 			return toReturn;
@@ -63,6 +65,7 @@ public class Resolver
 			{
 				// we've got ourselves a problemo, kids!
 				// *cough* that must've been uncle Ross's ghost
+				Interpreter.toAFLReturn= new Token("Error", TokenType.error);
 				Shell.error("Cannot call function '"+s+"' in this context.", f.getStatementNumber(),f.getFunction().getFile());
 				return false;
 			}
@@ -73,6 +76,8 @@ public class Resolver
 		int size = f.getSize();
 		if(Namespace.getFunction(functionName, size)==null)
 		{
+			Interpreter.toAFLReturn= new Token("Error", TokenType.error);
+			
 			// check for help.
 			if(functionName.equals("help"))
 			{
@@ -110,12 +115,14 @@ public class Resolver
 			
 			if(param == null || param.getType()==TokenType.voidToken)
 			{
+				Interpreter.toAFLReturn= new Token("Error", TokenType.error);
 				Shell.error("The partial result of a statement cannot be void.", f.getStatementNumber(),f.getFunction().getFile());
 				return new Token ("Error", TokenType.error);
 			}
 			
 			if(param.getType() == TokenType.error)
 			{
+				Interpreter.toAFLReturn= new Token("Error", TokenType.error);
 				return param;
 			}
 			parameters[i]=param;
@@ -124,6 +131,11 @@ public class Resolver
 		// now we should have are parameter array all filled up.
 		// that's good.
 		// call the function and ship off it's result!
-		return toCall.call(parameters);
+		Token toReturn = toCall.call(parameters);
+		if(toReturn.getType()==TokenType.error)
+		{
+			Interpreter.toAFLReturn= new Token("Error", TokenType.error);
+		}
+		return toReturn;
 	}
 }

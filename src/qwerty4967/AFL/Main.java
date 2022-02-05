@@ -67,7 +67,7 @@ public class Main
 					+ "experience, try running AFL from the command line, or use the provided script. Thanks!\n ");
 			Shell.clear();
 			Shell.out("############### Arguably Functional Language v0.0."+BUILD+" | debug: "+Shell.getDebugLevel()+" ###############");
-			Shell.out("Use 'help()' for documentation and code examples.\n ");
+			Shell.out("Use 'help()' for documentation and code examples, or check out qwerty4967.github.io/AFL/docs online.\n ");
 			currentFile="";
 			while(true)
 			{
