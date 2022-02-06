@@ -35,7 +35,7 @@ public class Main
 	
 
 
-	protected static final int BUILD = 621;
+	protected static final int BUILD = 622;
 	private static boolean usesShell = true;
 	private static boolean loadModules =true; // whether to load any modules
 	private static ArrayList<Path> toExecute;
@@ -66,7 +66,7 @@ public class Main
 					+ "\nUnfortunately, Clearing the console isn't possible in an IDE, so for a better\n"
 					+ "experience, try running AFL from the command line, or use the provided script. Thanks!\n ");
 			Shell.clear();
-			Shell.out("############### Arguably Functional Language v0.0."+BUILD+" | debug: "+Shell.getDebugLevel()+" ###############");
+			Shell.out("############### Arguably Functional Language v1.0."+BUILD+" | debug: "+Shell.getDebugLevel()+" ###############");
 			Shell.out("Use 'help()' for documentation and code examples, or check out qwerty4967.github.io/AFL/docs online.\n ");
 			currentFile="";
 			while(true)
@@ -250,7 +250,7 @@ public class Main
 		// now attempt to load User Components.
 		// don't really understand how to use nio and all the guides I found were for io so...
 		File lib = Paths.get("lib").toFile();
-	    for (final File component : lib.listFiles()) 
+	    for ( File component : lib.listFiles()) 
 	    {
 	        if (!component.isDirectory()) 
 	        {

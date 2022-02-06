@@ -1,0 +1,181 @@
+# some useful constants;
+function("pi"0); return(3.14159265359); end();
+function("e"0); return(2.71828); end();
+
+
+function("neg" 1);
+	# Verify Things;
+	toReturn = arrayGet(params 0);
+	
+	if(typeOf(toReturn)!=num);
+		error("Parameter 0 of 'neg' must be of type 'num'.");
+	end();
+	
+	# And negate;
+	return((0-1)*toReturn);
+end();
+
+
+# absolute value;
+function("abs" 1);
+
+	# Verify Things;
+	toReturn = arrayGet(params 0);
+	void = checkParam(toReturn num '0' "abs");
+	
+	# pretty easy;
+	if(toReturn<0);
+		return(neg(toReturn));
+	end();
+	
+	return(toReturn);
+		
+end();
+
+# Square roots?;
+# This sounds like a headache;
+# I'm gonna use what wikipedia calls the 'Babylonian method';
+# primarily because it was the first I read;
+# this will be over complicated;
+function("sqrt" 1);
+	
+	# Get data and verify, as is done;
+	input=arrayGet(params 0);
+	void = checkParam(input num '0' "sqrt");
+	
+	# can't be negative;
+	if(input<0);
+		error("Square root of "+input+" is not real.");
+	end();
+	
+	# grab 0;
+	if(input==0);
+		return(0);
+	end();
+	
+	# okay, we actually have to do a square root now...
+	# let's start with an awful arbitrary linear equation.
+	# chose it fairly arbitrarily, wikipedia's math babble made no sense to me
+	# it kinda looks similar to square roots, if you look between like 0-75;
+	
+	
+	approx = (.12*input)+1.2;
+	# tested it out, it's not very accurate at all;
+	# as expected;
+	
+	
+	
+	
+	iter=approx;
+	i=0;
+	while(i<10);
+		
+		#"iteration "+i+": "+iter+" square:"+(iter*iter);
+		
+		# better value?;
+		iter= (iter+(input/iter))/2;
+		i=i+1;
+		
+		if(iter*iter==input);
+			break();
+		end();
+	end();
+	
+	return(iter);
+
+end();
+
+function("pow"2);
+
+	# I've reduced this annoying part to a one-liner now. that's good!;
+	input=checkParam(arrayGet(params 0) num '0' "pow");
+	power=checkParam(arrayGet(params 1) num '1' "pow");
+	
+	# Now, power must be an integer;
+	if(power%1!=0);
+		error("Parameter 1 of 'pow' must be an integer.");
+	end();
+	
+	# Alright, fairly simple procedure;
+	
+	i = 0;
+	absPower=abs(power);
+	toReturn=1;	
+	
+	while(i<absPower);
+	
+		toReturn=toReturn*input;	
+		i=i+1;
+		
+	end();
+	
+	if(absPower!=power);
+		return(1/toReturn);
+	end();
+	
+	return(toReturn);
+	
+end();
+
+function("random" 2);
+	lower=checkParam(arrayGet(params 0) num '0' "random");
+	upper=checkParam(arrayGet(params 1) num '1' "random");
+
+	if(upper<lower);
+		error("Upper bound of function 'random' cannot be lower than it's lower bound.");
+	end();
+	
+	if(upper==lower);
+		return(upper);
+	end();
+	
+	# things must be kinda valid...;
+	diff=upper-lower;
+	rand=random();
+	rand=rand*diff;
+	
+	return(lower+rand);
+end();
+
+function("round" 2);
+	toRound=checkParam(arrayGet(params 0) num '0' "round");
+	places=checkParam(arrayGet(params 1) num '1' "round");
+	
+	if(places%1!=0);
+		error("Parameter 1 of 'round' must be an integer.");
+	end();
+	
+	minUnit = pow(10 neg(places));
+	
+	roundable= (toRound%minUnit);
+	
+	if(roundable>=minUnit/2);
+		return(toRound-roundable+minUnit);
+	end();
+	return(toRound-roundable);
+end();
+
+function("round" 1);
+	return(round(arrayGet(params 0) 0));
+end();
+
+function("truncate" 1);
+	toReturn=checkParam(arrayGet(params 0) num '0' "truncate");
+	return(toReturn-(toReturn%1));
+end();
+
+function("truncate" 2);
+	toReturn=checkParam(arrayGet(params 0) num '0' "truncate");
+	places=checkParam(arrayGet(params 1) num '1' "truncate");
+	
+	# check that places is an integer;
+	if(places%1!=0);
+		error("Parameter 1 of 'round' must be an integer.");
+	end();
+	
+	# get the factor;
+	factor = pow(10 places);
+	return(toReturn-(toReturn%factor));
+end();
+	
+"Loaded math component."

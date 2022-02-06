@@ -1,0 +1,306 @@
+# Utility Functions;
+
+# check parameter, param, type, id, functionName;
+
+function("checkParam" 4);
+	# Oh no, 4 parameters? this is gonna be a nightmare;
+	# good thing we can skip the first;
+	
+	param = arrayGet(params 0);
+	toCheck = arrayGet(params 1);
+	id = arrayGet(params 2);
+	functionName=arrayGet(params 3);
+	
+	if(typeOf(toCheck)!=type);
+		error("Parameter 1 of 'checkParam' must be of type 'type'.");
+	end();
+	if(typeOf(functionName)!=string);
+		error("Parameter 3 of 'checkParam' must be of type 'string'.");
+	end();
+	
+	# Okay, this part is real simple;
+	if(typeOf(param)!=toCheck);
+		error("Parameter "+id+" of '"+functionName+"' must be of type '"+toCheck+"'.");
+	end();
+	return(param);
+end();
+	
+ 
+# invert boolean;
+function("not" 1);
+
+	toReturn=arrayGet(params 0);
+	
+	if(typeOf(toReturn)!=bool);
+		error("Parameter 0 of 'not' must be of type 'bool'.");
+	end();
+	
+	return(toReturn==false);
+	
+end();
+
+#Get a number from the user;
+function("numInput"0);
+
+	while(true);
+	
+		input=input();
+		
+		if(not(isType(input num)));
+			"Expecting number.";
+			continue();
+			
+		end();
+		break();
+		
+	end();
+	
+	toReturn =toType(input num);
+	return(toReturn);
+	
+end();
+
+
+# Check whether the character is ' ' or '\n';
+# This doesn't really guarantee that the character is whitespace, but honestly;
+# Who will really use this and care? Nobody, I think;
+
+function("isWhitespace"1);
+
+	toCheck= arrayGet(params 0);
+	
+	if(typeOf(toCheck)!=char);
+		error("Parameter 0 of 'isWhitespace' must be of type 'char'.");
+	end();
+	
+	# toCheck is a char, we can proceed;
+	if( toCheck==' ' || toCheck=='\n');
+		return(true);
+	end();
+	
+	return(false);
+	
+end();
+
+
+# take an array of chars, and turn it into a string;
+# the opposite of toCharArray;
+function("fromCharArray"1);
+
+	charArray = arrayGet(params 0);
+	
+	if(typeOf(charArray)!=array);
+		error("Parameter 0 of 'fromCharArray' must be of type 'array'.");
+	end();
+	
+	# char array is indeed an array. Is it a char Array?;
+	max = arraySize(charArray);
+	i = 0;
+	toReturn = "";
+	
+	while(i<max);
+	
+		toAdd = arrayGet(charArray i);
+		
+		if(typeOf(toAdd)!=char);
+			error("'fromCharArray' expected element "+i+" to be of type 'char', Got '"+typeOf(toAdd)+"' instead.");
+		end();
+		
+		toReturn=toReturn+toAdd;
+		i=i+1;
+	end();
+	
+	return(toReturn);
+end();
+
+
+# strip a string of whitespace;
+function("strip"1);
+
+	toStrip = arrayGet(params 0);
+	
+	if(typeOf(toStrip)!=string);
+		error("Parameter 0 of 'strip' must be of type 'string'.");
+	end();
+	
+	# Okay, so we loop at the begining and the end;
+	charArr=toCharArray(toStrip);
+	
+	while(arraySize(charArr)>0);
+	
+		# check for leading whitespace;
+		toCheck = arrayGet(charArr 0);
+		
+		if(not(isWhitespace(toCheck)));
+			break();
+		end();
+		
+		# Remove the offending character;
+		arrayRemove(charArr 0);
+		
+	end();
+	
+	# The end;
+	while(arraySize(charArr)>0);
+	
+		toCheck = arrayGet(charArr arraySize(charArr)-1);
+		
+		if(not(isWhitespace(toCheck)));
+			break();
+		end();
+		
+		# Remove the offending character;
+		arrayRemove(charArr arraySize(charArr)-1);
+		
+	end();
+	
+	# Return a string;
+	return( fromCharArray(charArr));
+end();
+
+# length(string);
+# gets the length of a string;
+
+function("length"1);
+
+	# verify input;
+	inputString = arrayGet(params 0);
+	
+	if(typeOf(inputString)!=string);
+		error("Parameter 0 of 'length' must be of type 'string'.");
+	end();
+	
+	# get the length;
+	charArr = toCharArray(inputString);
+	return(arraySize(charArr));
+end();
+
+# substring(string, start, end);
+# start is inclusive, end is exclusive;
+function("substring"3);
+
+	# get and validate input;
+	inputString = arrayGet(params 0);
+	start = arrayGet(params 1);
+	end = arrayGet(params 2);
+	
+	if(typeOf(inputString)!=string);
+		error("Parameter 0 of 'substring' must be of type 'string'.");
+	end();
+	if(typeOf(start)!=num);
+		error("Parameter 1 of 'substring' must be of type 'num'.");
+	end();
+	if(typeOf(end)!=num);
+		error("Parameter 2 of 'substring' must be of type 'num'.");
+	end();
+	
+	# ensure that start and end are ints;		
+	if(start%1!=0 || start<0);
+		error("Parameter 1 of 'substring' must be a whole number.");
+	end();
+	if(end%1!=0 || end<1);
+		error("Parameter 2 of 'substring' must be a whole number.");
+	end();
+	
+	# Man, this code is bad;
+	# I should've made functions better, when I had the chance;
+	# Anyways, start throwing things at the wall, see if they stick;
+	# first check that the bounds make sense;
+	
+	if(end<=start);
+		error("Starting index of 'substring' cannot be greater than or equal to ending index.");
+	end();
+	
+	stringSize=length(inputString);
+	
+	if(start>=stringSize || end>stringSize);
+		error("Index of 'substring' out of bounds for string \""+inputString+"\".");
+	end();
+	
+	# Okay, time to find the substring?;
+	charArr=toCharArray(inputString);
+	
+	index=start;
+	toReturn="";
+	while(index<end);
+		toReturn=toReturn+arrayGet(charArr index);
+		index=index+1;
+	end();
+	return(toReturn);
+end();
+
+# Wow, this file is already 200 lines
+# that's a ton of AFL code, though addmittedly most of it is verifying parameters;
+# that was a bad design decision;
+
+function("split" 2);
+
+	# As usual, verify everything;
+	inputString = arrayGet(params 0);
+	splitBy = arrayGet(params 1);
+	
+	if(typeOf(inputString)!=string);
+		error("Parameter 0 of 'split' must be of type 'string'.");
+	end();
+	if(typeOf(splitBy)!=char);
+		error("Parameter 1 of 'split' must be of type 'char'.");
+	end();
+	
+	# les a go;
+	toReturn=newArray();
+	charArr = toCharArray(inputString);
+	currentToken="";
+	i=0;
+	while(i<arraySize(charArr));
+	
+		currentChar=arrayGet(charArr i);
+		if(currentChar==splitBy);
+		
+			# Splitting Time, boys;
+			arrayAdd(toReturn currentToken);
+			currentToken="";
+			
+		end();
+		else();
+			currentToken=currentToken+currentChar;
+		end();
+		
+		i=i+1;
+	end();
+	arrayAdd(toReturn currentToken);
+	return(toReturn);
+end();	
+
+
+function("contains" 2);
+
+	# As usual, verify everything;
+	inputString = arrayGet(params 0);
+	checkFor = arrayGet(params 1);
+	
+	if(typeOf(inputString)!=string);
+		error("Parameter 0 of 'contains' must be of type 'string'.");
+	end();
+	if(typeOf(checkFor)!=char);
+		error("Parameter 1 of 'contains' must be of type 'char'.");
+	end();
+	
+	# check if the thing is contained;
+	# high quality comment;
+	
+	charArr = toCharArray(inputString);
+	i=0;
+	while(i<arraySize(charArr));
+	
+		currentChar=arrayGet(charArr i);
+		if(currentChar==checkFor);
+			return(true);
+		end();
+		i=i+1;
+	end();
+	return(false);
+end();
+	
+	
+# Just a message to say that the module has loaded;
+"Loaded util component."
